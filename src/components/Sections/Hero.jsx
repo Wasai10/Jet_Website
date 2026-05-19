@@ -26,25 +26,44 @@ const slides = [
 export default function Hero() {
     const [current, setCurrent] = useState(0)
     const [fading, setFading] = useState(false)
+    const timeoutRef = React.useRef(null)
+    const intervalRef = React.useRef(null)
 
-    useEffect(() => {
-        const interval = setInterval(() => {
+    const resetInterval = () => {
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current)
+        }
+        intervalRef.current = setInterval(() => {
             setFading(true)
-            setTimeout(() => {
+            timeoutRef.current = setTimeout(() => {
                 setCurrent((prev) => (prev + 1) % slides.length)
                 setFading(false)
             }, 700)
         }, 5000)
-        return () => clearInterval(interval)
+    }
+
+    useEffect(() => {
+        resetInterval()
+        return () => {
+            if (intervalRef.current) clearInterval(intervalRef.current)
+            if (timeoutRef.current) clearTimeout(timeoutRef.current)
+        }
     }, [])
 
     const goTo = (index) => {
         if (index === current) return
+        
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current)
+        }
+        
         setFading(true)
-        setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
             setCurrent(index)
             setFading(false)
         }, 700)
+        
+        resetInterval()
     }
 
     return (
@@ -103,6 +122,7 @@ export default function Hero() {
                         <button
                             key={i}
                             onClick={() => goTo(i)}
+                            onMouseEnter={() => goTo(i)}
                             style={{
                                 ...styles.dot,
                                 backgroundColor: i === current ? '#0096FF' : 'rgba(255,255,255,0.45)',
