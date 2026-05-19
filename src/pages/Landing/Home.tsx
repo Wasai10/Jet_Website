@@ -1,6 +1,8 @@
 import React from 'react'
 import Navbar from "@/components/Layouts/Navbar"
 import Hero from "@/components/Sections/Hero"
+import About from "@/components/Sections/About"
+import Footer from "@/components/Layouts/Footer"
 
 export default function Home() {
     return (
@@ -8,7 +10,9 @@ export default function Home() {
             <Navbar />
             <main>
                 <Hero />
+                <About />
             </main>
+            <Footer />
         </div>
     )
 }

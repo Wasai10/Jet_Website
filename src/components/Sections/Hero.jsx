@@ -1,9 +1,26 @@
 import React, { useState, useEffect } from 'react'
 
 const slides = [
-    { image: 'https://media.istockphoto.com/id/1333641112/photo/bible-study-multi-ethnic-group-multi-ethnic-group-of-friends-meet-for-a-bible-study-group.jpg?b=1&s=612x612&w=0&k=20&c=ZmwA6uaqXPpl_0D2pmMFtd5DfElmNXOsfTUCCrminWI=' },
-    { image: 'https://images.pexels.com/photos/2774576/pexels-photo-2774576.jpeg' },
-    { image: 'https://images.pexels.com/photos/19392550/pexels-photo-19392550.jpeg' },
+    { 
+        image: 'https://res.cloudinary.com/dvkt0lsqb/image/upload/v1778832280/JET_LOGO.jpg_v0evon.jpg',
+        headline: 'Welcome to JET Ministries International',
+        subheadline: 'A place where faith comes alive and community thrives'
+    },
+    { 
+        image: 'https://media.istockphoto.com/id/1333641112/photo/bible-study-multi-ethnic-group-multi-ethnic-group-of-friends-meet-for-a-bible-study-group.jpg?b=1&s=612x612&w=0&k=20&c=ZmwA6uaqXPpl_0D2pmMFtd5DfElmNXOsfTUCCrminWI=',
+        headline: 'Grow Together in Fellowship',
+        subheadline: 'Join our vibrant Bible study and community groups as we grow in God\'s Word.'
+    },
+    { 
+        image: 'https://images.pexels.com/photos/2774576/pexels-photo-2774576.jpeg',
+        headline: 'Heartfelt Worship & Praise',
+        subheadline: 'Experience the presence of God in our spirit-filled worship services.'
+    },
+    { 
+        image: 'https://images.pexels.com/photos/19392550/pexels-photo-19392550.jpeg',
+        headline: 'Nurturing Faith Across Generations',
+        subheadline: 'Empowering children, youth, and families to walk in love, hope, and truth.'
+    },
 ]
 
 export default function Hero() {
@@ -34,11 +51,16 @@ export default function Hero() {
         <section style={styles.hero}>
             {/* Background Images */}
             {slides.map((slide, i) => (
-                <div
+                <img
                     key={i}
+                    src={slide.image}
+                    alt={`Worship Slide ${i + 1}`}
                     style={{
                         ...styles.slide,
-                        backgroundImage: `url(${slide.image})`,
+                        objectFit: slide.image.includes('JET_LOGO')
+                            ? 'contain'
+                            : 'cover',
+                        backgroundColor: '#00111F',
                         opacity: i === current ? (fading ? 0 : 1) : 0,
                         transition: 'opacity 0.7s ease-in-out',
                     }}
@@ -50,11 +72,23 @@ export default function Hero() {
 
             {/* Content */}
             <div style={styles.content}>
-                <h1 style={styles.headline}>
-                    Welcome to JET Ministries International
+                <h1 
+                    style={{
+                        ...styles.headline,
+                        opacity: fading ? 0 : 1,
+                        transition: 'opacity 0.7s ease-in-out',
+                    }}
+                >
+                    {slides[current].headline}
                 </h1>
-                <p style={styles.subheadline}>
-                    A place where faith comes alive and community thrives
+                <p 
+                    style={{
+                        ...styles.subheadline,
+                        opacity: fading ? 0 : 1,
+                        transition: 'opacity 0.7s ease-in-out',
+                    }}
+                >
+                    {slides[current].subheadline}
                 </p>
 
                 {/* CTA Buttons */}
@@ -97,9 +131,10 @@ const styles = {
     slide: {
         position: 'absolute',
         inset: 0,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        objectPosition: 'center',
     },
     overlay: {
         position: 'absolute',
@@ -134,7 +169,7 @@ const styles = {
         fontSize: 'clamp(1rem, 2.2vw, 1.25rem)',
         color: 'rgba(255,255,255,0.82)',
         lineHeight: 1.65,
-        marginBottom: '2.2rem',
+        marginBottom: '3.5rem',
         fontWeight: 400,
     },
     buttons: {
@@ -142,7 +177,7 @@ const styles = {
         gap: '1rem',
         justifyContent: 'center',
         flexWrap: 'wrap',
-        marginBottom: '2.8rem',
+        marginBottom: '4.2rem',
     },
     btnPrimary: {
         display: 'inline-block',
