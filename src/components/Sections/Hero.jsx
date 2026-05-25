@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 
 const slides = [
     { 
@@ -91,30 +92,51 @@ export default function Hero() {
 
             {/* Content */}
             <div style={styles.content}>
-                <h1 
-                    style={{
-                        ...styles.headline,
-                        opacity: fading ? 0 : 1,
-                        transition: 'opacity 0.7s ease-in-out',
+                <motion.div
+                    initial="hidden"
+                    animate={fading ? "hidden" : "visible"}
+                    variants={{
+                        hidden: { 
+                            opacity: 0,
+                            transition: { staggerChildren: 0.1, staggerDirection: -1 }
+                        },
+                        visible: {
+                            opacity: 1,
+                            transition: { staggerChildren: 0.3, delayChildren: 0.2 }
+                        }
                     }}
                 >
-                    {slides[current].headline}
-                </h1>
-                <p 
-                    style={{
-                        ...styles.subheadline,
-                        opacity: fading ? 0 : 1,
-                        transition: 'opacity 0.7s ease-in-out',
-                    }}
-                >
-                    {slides[current].subheadline}
-                </p>
+                    <motion.h1 
+                        style={styles.headline}
+                        variants={{
+                            hidden: { opacity: 0, x: -30, transition: { duration: 0.5, ease: "easeInOut" } },
+                            visible: { opacity: 1, x: 0, transition: { duration: 1.2, ease: [0.25, 1, 0.5, 1] } }
+                        }}
+                    >
+                        {slides[current].headline}
+                    </motion.h1>
+                    <motion.p 
+                        style={styles.subheadline}
+                        variants={{
+                            hidden: { opacity: 0, x: -30, transition: { duration: 0.5, ease: "easeInOut" } },
+                            visible: { opacity: 1, x: 0, transition: { duration: 1.2, ease: [0.25, 1, 0.5, 1] } }
+                        }}
+                    >
+                        {slides[current].subheadline}
+                    </motion.p>
 
-                {/* CTA Buttons */}
-                <div style={styles.buttons}>
-                    <a href="#about" style={styles.btnPrimary}>Learn More</a>
-                    <a href="#events" style={styles.btnSecondary}>Upcoming Events</a>
-                </div>
+                    {/* CTA Buttons */}
+                    <motion.div 
+                        style={styles.buttons}
+                        variants={{
+                            hidden: { opacity: 0, x: -30, transition: { duration: 0.5, ease: "easeInOut" } },
+                            visible: { opacity: 1, x: 0, transition: { duration: 1.2, ease: [0.25, 1, 0.5, 1] } }
+                        }}
+                    >
+                        <a href="#about" style={styles.btnPrimary}>Learn More</a>
+                        <a href="#events" style={styles.btnSecondary}>Upcoming Events</a>
+                    </motion.div>
+                </motion.div>
 
                 {/* Dot indicators */}
                 <div style={styles.dots}>

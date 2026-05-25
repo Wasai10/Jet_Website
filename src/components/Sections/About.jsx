@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import { Eye, Target, Users, Heart } from 'lucide-react'
 
 export default function About() {
@@ -7,7 +8,7 @@ export default function About() {
             {/* Background design elements */}
             <div className="absolute top-1/4 right-0 w-96 h-96 bg-[radial-gradient(circle,rgba(0,150,255,0.05),transparent_60%)] pointer-events-none" />
             <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-[radial-gradient(circle,rgba(135,206,235,0.05),transparent_60%)] pointer-events-none" />
-            
+
             {/* Subtle textured grid background for depth */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{
                 backgroundImage: `radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)`,
@@ -28,10 +29,24 @@ export default function About() {
 
             <div className="relative max-w-7xl mx-auto px-6">
                 {/* FIRST ROW: Visuals / Image & Narrative */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-8 md:mb-10">
+                <motion.div 
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
+                    variants={{
+                        visible: { transition: { staggerChildren: 0.2 } }
+                    }}
+                    className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-8 md:mb-10"
+                >
 
                     {/* LEFT COLUMN: Visuals / Image Group */}
-                    <div className="lg:col-span-5 relative">
+                    <motion.div 
+                        variants={{
+                            hidden: { opacity: 0, x: -40 },
+                            visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                        className="lg:col-span-5 relative"
+                    >
                         {/* Main Image Frame */}
                         <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
                             <div className="absolute inset-0 bg-gradient-to-t from-[#001726]/80 via-transparent to-transparent z-10 opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
@@ -55,8 +70,16 @@ export default function About() {
                         </div>
                     </div>
 
+                    </motion.div>
+
                     {/* RIGHT COLUMN: Content */}
-                    <div className="lg:col-span-7 flex flex-col space-y-6">
+                    <motion.div 
+                        variants={{
+                            hidden: { opacity: 0, x: 40 },
+                            visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
+                        }}
+                        className="lg:col-span-7 flex flex-col space-y-6"
+                    >
                         {/* Eyebrow tag */}
                         <span className="text-[#87CEEB] text-xs font-semibold uppercase tracking-widest">
                             About JET Ministries
@@ -100,12 +123,26 @@ export default function About() {
                                 </p>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
                 {/* Service Cards Layout */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 max-w-6xl mx-auto">
+                <motion.div 
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
+                    variants={{
+                        visible: { transition: { staggerChildren: 0.15 } }
+                    }}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 max-w-6xl mx-auto"
+                >
                     {/* CARD 1 */}
-                    <button className="flex items-center space-x-4 bg-white/5 backdrop-blur-sm border border-white/5 p-4 rounded-xl shadow-lg transition-all duration-300 hover:bg-white/10 hover:border-white/15 hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(0,150,255,0.06)] w-full text-left group">
+                    <motion.button 
+                        variants={{
+                            hidden: { opacity: 0, y: 30 },
+                            visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+                        }}
+                        className="flex items-center space-x-4 bg-white/5 backdrop-blur-sm border border-white/5 p-4 rounded-xl shadow-lg transition-all duration-300 hover:bg-white/10 hover:border-white/15 hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(0,150,255,0.06)] w-full text-left group"
+                    >
                         {/* Icon Container */}
                         <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:bg-[#0096FF]/10 group-hover:border-[#0096FF]/20 flex-shrink-0">
                             <svg className="w-5 h-5 text-[#87CEEB] transition-colors duration-300 group-hover:text-[#0096FF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -127,10 +164,16 @@ export default function About() {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                             </svg>
                         </div>
-                    </button>
+                    </motion.button>
 
                     {/* CARD 2 */}
-                    <button className="flex items-center space-x-4 bg-white/5 backdrop-blur-sm border border-white/5 p-4 rounded-xl shadow-lg transition-all duration-300 hover:bg-white/10 hover:border-white/15 hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(0,150,255,0.06)] w-full text-left group">
+                    <motion.button 
+                        variants={{
+                            hidden: { opacity: 0, y: 30 },
+                            visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+                        }}
+                        className="flex items-center space-x-4 bg-white/5 backdrop-blur-sm border border-white/5 p-4 rounded-xl shadow-lg transition-all duration-300 hover:bg-white/10 hover:border-white/15 hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(0,150,255,0.06)] w-full text-left group"
+                    >
                         {/* Icon Container */}
                         <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:bg-[#0096FF]/10 group-hover:border-[#0096FF]/20 flex-shrink-0">
                             <svg className="w-5 h-5 text-[#87CEEB] transition-colors duration-300 group-hover:text-[#0096FF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -152,10 +195,16 @@ export default function About() {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                             </svg>
                         </div>
-                    </button>
+                    </motion.button>
 
                     {/* CARD 3 */}
-                    <button className="flex items-center space-x-4 bg-white/5 backdrop-blur-sm border border-white/5 p-4 rounded-xl shadow-lg transition-all duration-300 hover:bg-white/10 hover:border-white/15 hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(0,150,255,0.06)] w-full text-left group">
+                    <motion.button 
+                        variants={{
+                            hidden: { opacity: 0, y: 30 },
+                            visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+                        }}
+                        className="flex items-center space-x-4 bg-white/5 backdrop-blur-sm border border-white/5 p-4 rounded-xl shadow-lg transition-all duration-300 hover:bg-white/10 hover:border-white/15 hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(0,150,255,0.06)] w-full text-left group"
+                    >
                         {/* Icon Container */}
                         <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:bg-[#0096FF]/10 group-hover:border-[#0096FF]/20 flex-shrink-0">
                             <svg className="w-5 h-5 text-[#87CEEB] transition-colors duration-300 group-hover:text-[#0096FF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -177,10 +226,16 @@ export default function About() {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                             </svg>
                         </div>
-                    </button>
+                    </motion.button>
 
                     {/* CARD 4 */}
-                    <button className="flex items-center space-x-4 bg-white/5 backdrop-blur-sm border border-white/5 p-4 rounded-xl shadow-lg transition-all duration-300 hover:bg-white/10 hover:border-white/15 hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(0,150,255,0.06)] w-full text-left group">
+                    <motion.button 
+                        variants={{
+                            hidden: { opacity: 0, y: 30 },
+                            visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+                        }}
+                        className="flex items-center space-x-4 bg-white/5 backdrop-blur-sm border border-white/5 p-4 rounded-xl shadow-lg transition-all duration-300 hover:bg-white/10 hover:border-white/15 hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(0,150,255,0.06)] w-full text-left group"
+                    >
                         {/* Icon Container */}
                         <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:bg-[#0096FF]/10 group-hover:border-[#0096FF]/20 flex-shrink-0">
                             <svg className="w-5 h-5 text-[#87CEEB] transition-colors duration-300 group-hover:text-[#0096FF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -205,8 +260,8 @@ export default function About() {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                             </svg>
                         </div>
-                    </button>
-                </div>
+                    </motion.button>
+                </motion.div>
             </div>
         </section>
     )
