@@ -1,13 +1,14 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Button } from "@/components/ui/button"
 import { useTheme } from "@/components/theme-provider"
 import { Sun, Moon, Menu, X } from "lucide-react"
 
 const navItems = [
-    { name: 'Home', href: '#' },
+    { name: 'Home', href: '/' },
     { name: 'About', href: '#' },
     { name: 'Events', href: '#' },
-    { name: 'Gallery', href: '#' },
+    { name: 'Gallery', href: '/gallery' },
     { name: 'LiveStream', href: '#' },
     { name: 'Blogs', href: '#' },
 ]
@@ -22,24 +23,26 @@ export default function Navbar() {
                 <div className="flex h-14 items-center justify-between">
                     {/* Logo */}
                     <div className="flex flex-shrink-0 items-center">
-                        <img
-                            className="h-10 w-auto rounded-md shadow-sm transition-transform hover:scale-105"
-                            src="https://res.cloudinary.com/dvkt0lsqb/image/upload/v1778832280/JET_LOGO.jpg_v0evon.jpg"
-                            alt="JET Logo"
-                        />
+                        <Link to="/">
+                            <img
+                                className="h-10 w-auto rounded-md shadow-sm transition-transform hover:scale-105"
+                                src="https://res.cloudinary.com/dvkt0lsqb/image/upload/v1778832280/JET_LOGO.jpg_v0evon.jpg"
+                                alt="JET Logo"
+                            />
+                        </Link>
                     </div>
 
                     {/* Centered Menu Items (Desktop) */}
                     <div className="hidden md:block absolute left-1/2 -translate-x-1/2">
                         <div className="flex items-center space-x-8">
                             {navItems.map((item) => (
-                                <a
+                                <Link
                                     key={item.name}
-                                    href={item.href}
+                                    to={item.href}
                                     className="text-sm font-medium text-foreground/70 transition-colors hover:text-primary"
                                 >
                                     {item.name}
-                                </a>
+                                </Link>
                             ))}
                         </div>
                     </div>
@@ -81,14 +84,14 @@ export default function Navbar() {
                 <div className="md:hidden animate-in slide-in-from-top-4 duration-200">
                     <div className="space-y-1 px-4 pb-3 pt-2 bg-background border-b shadow-lg">
                         {navItems.map((item) => (
-                            <a
+                            <Link
                                 key={item.name}
-                                href={item.href}
+                                to={item.href}
                                 className="block rounded-md px-3 py-2 text-base font-medium text-foreground/70 hover:bg-accent hover:text-foreground"
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 {item.name}
-                            </a>
+                            </Link>
                         ))}
                         <div className="pt-4 pb-2">
                             <Button size="sm" className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-xs">

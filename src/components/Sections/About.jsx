@@ -55,7 +55,7 @@ export default function About() {
                                 alt="JET Ministries Team"
                                 className="w-full h-[450px] object-cover object-center transform transition-transform duration-700 group-hover:scale-105"
                             />
-                        </div>
+                        
 
                         {/* Floating Glassmorphic Stats Card */}
                         <div className="absolute -bottom-6 -right-4 md:right-6 bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-2xl shadow-xl max-w-[200px] animate-fade-in hover:border-white/20 transition-all duration-300">
@@ -68,7 +68,8 @@ export default function About() {
                             <h4 className="text-2xl font-bold text-white mb-0.5">10+ Years</h4>
                             <p className="text-xs text-white/70">Of sharing faith, hope, and love in Christ.</p>
                         </div>
-                    </div>
+                        </div>
+                    </motion.div>
 
                     </motion.div>
 
@@ -124,7 +125,6 @@ export default function About() {
                             </div>
                         </div>
                     </motion.div>
-                </motion.div>
                 {/* Service Cards Layout */}
                 <motion.div 
                     initial="hidden"
