@@ -71,8 +71,6 @@ export default function About() {
                         </div>
                     </motion.div>
 
-                    </motion.div>
-
                     {/* RIGHT COLUMN: Content */}
                     <motion.div 
                         variants={{
@@ -125,6 +123,8 @@ export default function About() {
                             </div>
                         </div>
                     </motion.div>
+                </motion.div>
+
                 {/* Service Cards Layout */}
                 <motion.div 
                     initial="hidden"
