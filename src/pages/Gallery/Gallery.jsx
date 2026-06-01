@@ -1,77 +1,6 @@
 import React, { useState } from 'react'
 import { X, ZoomIn, ChevronLeft, ChevronRight, Images, PlayCircle } from 'lucide-react'
-
-const categories = ['All', 'Worship', 'Community', 'Youth', 'Outreach']
-
-const galleryItems = [
-    {
-        id: 1,
-        category: 'Worship',
-        src: 'https://res.cloudinary.com/dxeuvtxys/image/upload/q_auto/f_auto/v1779704206/DSC_8773_g6sbce.jpg',
-        alt: 'Gallery Image 1',
-        title: 'Worship Moment',
-        span: 'row-span-2',
-    },
-    {
-        id: 2,
-        category: 'Community',
-        src: 'https://res.cloudinary.com/dxeuvtxys/image/upload/q_auto/f_auto/v1779704205/DSC_8761_we9dyd.jpg',
-        alt: 'Gallery Image 2',
-        title: 'Fellowship Gathering',
-        span: '',
-    },
-    {
-        id: 3,
-        category: 'Youth',
-        src: 'https://res.cloudinary.com/dxeuvtxys/image/upload/q_auto/f_auto/v1779704204/DSC_8716_vofpcq.jpg',
-        alt: 'Gallery Image 3',
-        title: 'Youth Night Out',
-        span: '',
-    },
-    {
-        id: 4,
-        category: 'Outreach',
-        src: 'https://res.cloudinary.com/dxeuvtxys/image/upload/q_auto/f_auto/v1779704202/DSC_8480_q6ug2x.jpg',
-        alt: 'Gallery Image 4',
-        title: 'Outreach Day',
-        span: 'row-span-2',
-    },
-    {
-        id: 5,
-        category: 'Worship',
-        src: 'https://res.cloudinary.com/dxeuvtxys/image/upload/q_auto/f_auto/v1779704198/DSC_8083_vw2xnv.jpg',
-        alt: 'Gallery Image 5',
-        title: 'Praise Night',
-        span: '',
-    },
-    {
-        id: 6,
-        category: 'Community',
-        src: 'https://res.cloudinary.com/dxeuvtxys/image/upload/q_auto/f_auto/v1779704197/DSC_8086_vl3c6e.jpg',
-        alt: 'Gallery Image 6',
-        title: 'Community Time',
-        span: '',
-    },
-    {
-        id: 7,
-        category: 'Youth',
-        src: 'https://res.cloudinary.com/dxeuvtxys/image/upload/q_auto/f_auto/v1779704196/DSC_0084_h8dnud.jpg',
-        alt: 'Gallery Image 7',
-        title: 'Youth Group',
-        span: '',
-    },
-    {
-        id: 8,
-        category: 'Outreach',
-        src: 'https://res.cloudinary.com/dxeuvtxys/image/upload/q_auto/f_auto/v1779704183/DSC_0066_saiccv.jpg',
-        alt: 'Gallery Image 8',
-        title: 'Mission Outreach',
-        span: '',
-    },
-]
-
-import Navbar from "@/components/Layouts/Navbar"
-import Footer from "@/components/Layouts/Footer"
+import { galleryItems, galleryCategories } from '@/data/galleryPhotos'
 import { motion } from 'framer-motion'
 
 export default function Gallery() {
@@ -101,7 +30,6 @@ export default function Gallery() {
 
     return (
         <motion.div className="min-h-screen bg-background font-sans antialiased">
-            <Navbar />
             <main>
                 <section id="gallery" className="relative w-full py-20 md:py-28 bg-[#001726] text-white overflow-hidden">
                     {/* Background glow blobs */}
@@ -136,7 +64,7 @@ export default function Gallery() {
 
                         {/* Filter Tabs */}
                         <div className="flex flex-wrap gap-2 mb-10">
-                            {categories.map(cat => (
+                            {galleryCategories.map(cat => (
                                 <button
                                     key={cat}
                                     onClick={() => setActiveFilter(cat)}

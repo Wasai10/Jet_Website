@@ -6,11 +6,11 @@ import { Sun, Moon, Menu, X } from "lucide-react"
 
 const navItems = [
     { name: 'Home', href: '/' },
-    { name: 'About', href: '#' },
-    { name: 'Events', href: '#' },
+    { name: 'About', href: '/about' },
+    { name: 'Events', href: '/events' },
     { name: 'Gallery', href: '/gallery' },
     { name: 'LiveStream', href: '#' },
-    { name: 'Blogs', href: '#' },
+    { name: 'Blogs', href: '/blog' },
 ]
 
 export default function Navbar() {
