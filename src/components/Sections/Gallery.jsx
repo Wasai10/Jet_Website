@@ -154,16 +154,7 @@ export default function Gallery() {
                     ))}
                 </div>
 
-                {/* View More Button */}
-                <div className="flex justify-center mt-6">
-                    <Link
-                        to="/gallery"
-                        className="flex items-center space-x-3 px-7 py-3 rounded-full bg-white/5 border border-white/10 text-sm font-semibold text-white/70 hover:bg-[#0096FF]/10 hover:border-[#0096FF]/30 hover:text-[#87CEEB] transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,150,255,0.15)]"
-                    >
-                        <span>View Full Gallery</span>
-                        <ChevronRight className="w-4 h-4" />
-                    </Link>
-                </div>
+
 
                 {/* Livestream Featured Card */}
                 <div className="mt-20">

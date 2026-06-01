@@ -33,7 +33,10 @@ const blogPosts = [
 
 export default function Blogs() {
     return (
-        <section id="blogs" className="relative w-full py-20 md:py-28 bg-[#00111F] text-white overflow-hidden">
+        <section
+            id="blogs"
+            className="relative w-full py-20 md:py-28 bg-[#00111F] text-white overflow-hidden"
+        >
             {/* Background glow blobs */}
             <div className="absolute top-1/4 left-0 w-96 h-96 bg-[radial-gradient(circle,rgba(0,150,255,0.04),transparent_60%)] pointer-events-none -translate-x-1/2" />
             <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-[radial-gradient(circle,rgba(135,206,235,0.03),transparent_60%)] pointer-events-none translate-x-1/2" />
@@ -46,11 +49,14 @@ export default function Blogs() {
                         <BookOpen className="w-4 h-4" />
                         <span>Words of Life</span>
                     </span>
+
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-4">
                         Latest Blogs & Devotionals
                     </h2>
+
                     <p className="text-white/60 max-w-2xl mx-auto text-sm md:text-base font-light">
-                        Explore our latest articles, pastoral messages, and updates from the community. Stay inspired and connected throughout the week.
+                        Explore our latest articles, pastoral messages, and updates from the community.
+                        Stay inspired and connected throughout the week.
                     </p>
                 </div>
 
@@ -69,6 +75,7 @@ export default function Blogs() {
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                     loading="lazy"
                                 />
+
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#00111F] to-transparent opacity-80" />
 
                                 {/* Category Badge */}
@@ -85,23 +92,29 @@ export default function Blogs() {
                                         <Calendar className="w-3.5 h-3.5" />
                                         <span>{post.date}</span>
                                     </div>
+
                                     <div className="flex items-center space-x-1.5">
                                         <User className="w-3.5 h-3.5" />
                                         <span>{post.author}</span>
                                     </div>
                                 </div>
 
-                                {/* Title & Excerpt */}
+                                {/* Title */}
                                 <h3 className="text-xl font-bold text-white leading-tight mb-3 group-hover:text-[#87CEEB] transition-colors duration-300 line-clamp-2">
                                     {post.title}
                                 </h3>
+
+                                {/* Excerpt */}
                                 <p className="text-sm text-white/60 leading-relaxed font-light mb-6 flex-grow line-clamp-3">
                                     {post.excerpt}
                                 </p>
 
-                                {/* Read More Link */}
+                                {/* Read More */}
                                 <div className="mt-auto pt-4 border-t border-white/5">
-                                    <a href="#" className="inline-flex items-center space-x-2 text-sm font-semibold text-white hover:text-[#0096FF] transition-colors duration-300 group/link">
+                                    <a
+                                        href="#"
+                                        className="inline-flex items-center space-x-2 text-sm font-semibold text-white hover:text-[#0096FF] transition-colors duration-300 group/link"
+                                    >
                                         <span>Read Article</span>
                                         <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/link:translate-x-1" />
                                     </a>
@@ -111,12 +124,7 @@ export default function Blogs() {
                     ))}
                 </div>
 
-                {/* View All Button */}
-                <div className="flex justify-center mt-16">
-                    <button className="px-8 py-3.5 rounded-full bg-transparent border border-[#0096FF]/40 text-sm font-semibold text-white hover:bg-[#0096FF] hover:border-[#0096FF] transition-all duration-300 shadow-[0_0_15px_rgba(0,150,255,0)] hover:shadow-[0_0_20px_rgba(0,150,255,0.4)]">
-                        View All Posts
-                    </button>
-                </div>
+
 
             </div>
         </section>

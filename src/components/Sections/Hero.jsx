@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 const slides = [
@@ -160,8 +161,7 @@ export default function Hero() {
                                 visible: { opacity: 1, x: 0, transition: { duration: 1.2, ease: [0.25, 1, 0.5, 1] } }
                             }}
                         >
-                            <a href="#about" style={styles.btnPrimary}>Learn More</a>
-                            <a href="#events" style={styles.btnSecondary}>Upcoming Events</a>
+                            <Link to="/login" style={styles.btnPrimary}>Learn More</Link>
                         </motion.div>
                     </motion.div>
 
