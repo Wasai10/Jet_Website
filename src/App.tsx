@@ -7,6 +7,7 @@ import Events from "@/pages/Events/Events"
 import Blog from "@/pages/Blog/Blog"
 import DefaultLayout from "@/components/Layouts/DefaultLayout"
 
+
 export function App() {
   return (
     <Router>
