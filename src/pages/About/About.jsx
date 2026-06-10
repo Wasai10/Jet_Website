@@ -99,7 +99,52 @@ export default function About() {
                 </motion.div>
             </section>
 
-            {/* 4. Department Leaders */}
+            {/* 4. What We Believe */}
+            <section className="bg-[#001726] py-20">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="text-center mb-12">
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">What We Believe</h2>
+                        <p className="text-white/60 max-w-2xl mx-auto">
+                            Our doctrine is centered on the authority of Scripture, the triune nature of God, the person of Jesus Christ, salvation by grace, and the purpose of the Church.
+                        </p>
+                    </div>
+
+                    <div className="space-y-10 text-white">
+                        <div>
+                            <h3 className="text-2xl font-semibold mb-3">The Bible</h3>
+                            <p className="text-white/70 leading-relaxed">
+                                We believe the Bible is the inspired and authoritative Word of God, without error in its original manuscripts, and is the final authority for faith and practice.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-semibold mb-3">God</h3>
+                            <p className="text-white/70 leading-relaxed">
+                                We believe in one God, eternally existing in three persons: Father, Son, and Holy Spirit, equal in power and glory.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-semibold mb-3">Jesus Christ</h3>
+                            <p className="text-white/70 leading-relaxed">
+                                We believe in the deity of Jesus Christ, His virgin birth, His sinless life, His miracles, His substitutionary death, His bodily resurrection, His ascension to heaven, and His personal return in power and glory.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-semibold mb-3">Salvation</h3>
+                            <p className="text-white/70 leading-relaxed">
+                                We believe that salvation is a gift of God's grace, received through faith in Jesus Christ alone, and not by works. It includes forgiveness of sins, eternal life, and transformation by the Holy Spirit.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-semibold mb-3">The Church</h3>
+                            <p className="text-white/70 leading-relaxed">
+                                We believe the Church is the body of Christ, composed of all believers, called to worship God, edify one another, and proclaim the Gospel to the world.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 5. Department Leaders */}
             <section className="bg-[#001726] py-20">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="text-center mb-16">

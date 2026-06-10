@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { ArrowRight, Calendar, User, BookOpen } from 'lucide-react'
 
 const blogPosts = [
@@ -124,7 +125,16 @@ export default function Blogs() {
                     ))}
                 </div>
 
-
+                {/* Learn More Button */}
+                <div className="flex justify-center mt-12 md:mt-16">
+                    <Link
+                        to="/blog"
+                        className="inline-flex items-center space-x-2 bg-[#0096FF] hover:bg-[#0085E5] text-white font-semibold px-8 py-3.5 rounded-full shadow-lg hover:shadow-[0_10px_25px_rgba(0,150,255,0.3)] transition-all duration-300 transform hover:-translate-y-0.5"
+                    >
+                        <span>Learn More</span>
+                        <ArrowRight className="w-4 h-4" />
+                    </Link>
+                </div>
 
             </div>
         </section>

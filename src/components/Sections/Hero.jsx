@@ -153,16 +153,7 @@ export default function Hero() {
                             {slides[current].subheadline}
                         </motion.p>
 
-                        {/* CTA Buttons */}
-                        <motion.div 
-                            style={styles.buttons}
-                            variants={{
-                                hidden: { opacity: 0, x: -30, transition: { duration: 0.5, ease: "easeInOut" } },
-                                visible: { opacity: 1, x: 0, transition: { duration: 1.2, ease: [0.25, 1, 0.5, 1] } }
-                            }}
-                        >
-                            <Link to="/login" style={styles.btnPrimary}>Learn More</Link>
-                        </motion.div>
+
                     </motion.div>
 
                     {/* Dot indicators */}
