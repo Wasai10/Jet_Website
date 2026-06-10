@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -9,6 +9,7 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
 
     // The button lights up if all fields have some input and password is >= 8 chars.
     const isValid = firstName.trim().length > 0 && email.trim().length > 0 && password.length >= 8;
@@ -16,8 +17,9 @@ export default function Login() {
     const handleLogin = (e) => {
         e.preventDefault();
         if (isValid) {
-            // For now, simple navigation back to home assuming successful login
-            navigate('/');
+            // Redirect to the location they came from, or default to home
+            const from = location.state?.from || '/';
+            navigate(from);
         }
     };
 
