@@ -83,20 +83,7 @@ export default function Hero() {
                 }
             `}</style>
             
-            {/* Left Pane - Logo Background */}
-            <div className="left-pane" style={styles.leftPane}>
-                <img 
-                    src="https://res.cloudinary.com/dvkt0lsqb/image/upload/v1778832280/JET_LOGO.jpg_v0evon.jpg"
-                    alt="JET Ministries Logo"
-                    style={styles.leftPaneBg}
-                />
-                <div style={styles.leftPaneOverlay} />
-                <div style={styles.leftContent}>
-                    <h1 style={styles.mainTitle}>Welcome to JET Ministries International</h1>
-                    <p style={styles.mainSubtitle}>A place where faith comes alive and community thrives</p>
-                </div>
-            </div>
-
+           
             {/* Right Pane - Slider */}
             <div className="right-pane" style={styles.rightPane}>
                 {/* Background Images */}
