@@ -2,6 +2,7 @@ const express = require("express");
 
 const cors = require("cors");
 const authRoutes = require("./src/routes/auth.route");
+const eventsRoutes = require("./src/routes/Events.routes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/events", eventsRoutes);
 
 // Global Error Handler
 app.use((err, req, res, next) => {

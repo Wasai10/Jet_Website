@@ -22,3 +22,20 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  location    String
+  date        DateTime
+  time        String?  // e.g. "10:00 AM – 1:00 PM"
+  tag         String?  // e.g. "Featured", "Youth", "Prayer", "Community"
+  color       String?  // e.g. "#0096FF"
+  featured    Boolean  @default(false)
+  images      Json?    // Array of image URLs for past events
+  type        String   @default("UPCOMING") // "UPCOMING", "PAST", "HOME_FELLOWSHIP"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
