@@ -5,16 +5,20 @@ const { authenticateJWT, requireAdmin } = require("../middlewares/auth.middlewar
 
 const router = express.Router();
 
-// Public Auth routes
+// Public
 router.post("/signup", authValidator.validateSignup, authController.signup);
 router.post("/signin", authValidator.validateSignin, authController.signin);
+router.post("/refresh", authController.refresh);
+router.post("/logout", authController.logout);
 
-// Authenticated user routes (JWT required)
+// Authenticated
+router.post("/logout-all", authenticateJWT, authController.logoutAll);
 router.get("/me", authenticateJWT, authController.getCurrentUser);
 router.patch("/users/:id", authenticateJWT, authValidator.validateUserUpdate, authController.updateUser);
 router.delete("/users/:id", authenticateJWT, authController.deleteUser);
 
-// Admin-only user management routes
+// Admin only
 router.get("/users", authenticateJWT, requireAdmin, authController.getAllUsers);
+router.post("/admin/users", authenticateJWT, requireAdmin, authController.adminCreateUser);
 
 module.exports = router;

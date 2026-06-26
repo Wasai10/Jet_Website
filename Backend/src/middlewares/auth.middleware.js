@@ -1,11 +1,7 @@
 const jwt = require("jsonwebtoken");
-const prisma = require("../configs/db");
+const config = require("../configs");
+const authRepository = require("../repository/auth.repository");
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-fallback-jwt-secret-key";
-
-/**
- * Middleware to verify JWT token and attach user to request object.
- */
 const authenticateJWT = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -16,34 +12,20 @@ const authenticateJWT = async (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.id },
-      select: {
-        id: true,
-        fullName: true,
-        email: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+    const decoded = jwt.verify(token, config.jwt.secret);
 
+    const user = await authRepository.findUserById(decoded.id);
     if (!user) {
       return res.status(401).json({ error: "User not found or account deactivated." });
     }
 
     req.user = user;
     next();
-  } catch (error) {
+  } catch {
     return res.status(401).json({ error: "Invalid or expired token." });
   }
 };
 
-/**
- * Middleware to verify that the authenticated user is an ADMIN.
- */
 const requireAdmin = (req, res, next) => {
   if (!req.user) {
     return res.status(401).json({ error: "Authentication required." });
@@ -56,8 +38,4 @@ const requireAdmin = (req, res, next) => {
   next();
 };
 
-module.exports = {
-  authenticateJWT,
-  requireAdmin,
-  JWT_SECRET,
-};
+module.exports = { authenticateJWT, requireAdmin };

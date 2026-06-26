@@ -1,31 +1,29 @@
+const config = require("./src/configs"); 
 const express = require("express");
-
 const cors = require("cors");
 const authRoutes = require("./src/routes/auth.route");
-const eventsRoutes = require("./src/routes/Events.routes");
+const eventsRoutes = require("./src/routes/events.routes");
+const galleryRoutes = require("./src/routes/gallery.routes");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = config.server.port;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Routes
 app.get("/", (req, res) => {
-  res.send("Hello, Express!");
+  res.send("JET Ministries API is running.");
 });
 
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventsRoutes);
+app.use("/api/gallery", galleryRoutes);
 
-// Global Error Handler
 app.use((err, req, res, next) => {
   console.error("Unhandled Error:", err);
   res.status(500).json({ error: "Something went wrong on the server." });
 });
 
-// Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT} [${config.server.nodeEnv}]`);
 });

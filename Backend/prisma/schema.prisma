@@ -1,12 +1,11 @@
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "mysql"
-
+  url      = env("DATABASE_URL")
 }
 enum Role {
   ADMIN
@@ -14,13 +13,23 @@ enum Role {
 }
 
 model User {
+  id            String         @id @default(uuid())
+  fullName      String
+  email         String         @unique
+  password      String
+  role          Role           @default(USER)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
   id        String   @id @default(uuid())
-  fullName  String
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
+  token     String   @unique  // stored as SHA-256 hash of the raw token
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Event {
@@ -37,5 +46,17 @@ model Event {
   type        String   @default("UPCOMING") // "UPCOMING", "PAST", "HOME_FELLOWSHIP"
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Photo {
+  id        String   @id @default(uuid())
+  url       String   // Cloudinary secure URL
+  publicId  String   @unique // Cloudinary public_id — needed for deletion
+  title     String
+  alt       String
+  category  String   @default("General")
+  featured  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 

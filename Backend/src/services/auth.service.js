@@ -1,160 +1,131 @@
+const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const prisma = require("../configs/db");
-const { JWT_SECRET } = require("../middlewares/auth.middleware");
+const config = require("../configs");
+const authRepository = require("../repository/auth.repository");
 
-/**
- * Service to register a new user. Self registration assigns role as USER.
- */
+const hashToken = (raw) => crypto.createHash("sha256").update(raw).digest("hex");
+
+const generateTokens = async (user) => {
+  const accessToken = jwt.sign(
+    { id: user.id, email: user.email, role: user.role },
+    config.jwt.secret,
+    { expiresIn: config.jwt.expiresIn }
+  );
+
+  const rawRefreshToken = crypto.randomBytes(64).toString("hex");
+  const hashedRefreshToken = hashToken(rawRefreshToken);
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+
+  await authRepository.createRefreshToken(user.id, hashedRefreshToken, expiresAt);
+
+  return { accessToken, refreshToken: rawRefreshToken };
+};
+
+// ── Public auth ──────────────────────────────────────────────────────────────
+
 const createUser = async (userData) => {
   const { fullName, email, password } = userData;
 
-  // Check if email already exists
-  const existingUser = await prisma.user.findUnique({
-    where: { email },
-  });
+  const existing = await authRepository.findUserByEmail(email);
+  if (existing) throw new Error("Email is already registered.");
 
-  if (existingUser) {
-    throw new Error("Email is already registered.");
-  }
-
-  // Hash password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  // Determine if it is the first user overall. If there are no users at all,
-  // we could optionally assign ADMIN to bootstrap the system, but the user explicitly requested:
-  // "Self registration automatically assigns role as a normal USER."
-  // So we strictly use USER.
-  const user = await prisma.user.create({
-    data: {
-      fullName,
-      email,
-      password: hashedPassword,
-      role: "USER",
-    },
-    select: {
-      id: true,
-      fullName: true,
-      email: true,
-      role: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
-
-  return user;
+  return authRepository.createUser({ fullName, email, password: hashedPassword, role: "USER" });
 };
 
-/**
- * Service to authenticate user and generate JWT token.
- */
-const loginUser = async (email, password) => {
-  const user = await prisma.user.findUnique({
-    where: { email },
-  });
+const createUserAsAdmin = async (userData) => {
+  const { fullName, email, password, role = "USER" } = userData;
 
-  if (!user) {
-    throw new Error("Invalid email or password.");
-  }
+  if (!["ADMIN", "USER"].includes(role)) throw new Error("Invalid role.");
+
+  const existing = await authRepository.findUserByEmail(email);
+  if (existing) throw new Error("Email is already registered.");
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  return authRepository.createUser({ fullName, email, password: hashedPassword, role });
+};
+
+const loginUser = async (email, password) => {
+  const user = await authRepository.findUserByEmail(email);
+  if (!user) throw new Error("Invalid email or password.");
 
   const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    throw new Error("Invalid email or password.");
-  }
+  if (!isMatch) throw new Error("Invalid email or password.");
 
-  const token = jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
-    JWT_SECRET,
-    { expiresIn: "24h" }
-  );
+  const { accessToken, refreshToken } = await generateTokens(user);
 
   return {
-    user: {
-      id: user.id,
-      fullName: user.fullName,
-      email: user.email,
-      role: user.role,
-    },
-    token,
+    user: { id: user.id, fullName: user.fullName, email: user.email, role: user.role },
+    accessToken,
+    refreshToken,
   };
 };
 
-/**
- * Get all users (ADMIN only).
- */
-const getAllUsers = async () => {
-  return await prisma.user.findMany({
-    select: {
-      id: true,
-      fullName: true,
-      email: true,
-      role: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+const refreshAccessToken = async (rawRefreshToken) => {
+  if (!rawRefreshToken) throw new Error("Refresh token is required.");
+
+  const hashedToken = hashToken(rawRefreshToken);
+  const stored = await authRepository.findRefreshToken(hashedToken);
+
+  if (!stored) throw new Error("Invalid refresh token.");
+  if (stored.expiresAt < new Date()) {
+    await authRepository.deleteRefreshToken(hashedToken);
+    throw new Error("Refresh token has expired. Please log in again.");
+  }
+
+  const user = await authRepository.findUserById(stored.userId);
+  if (!user) throw new Error("User not found.");
+
+  // Rotate: delete old token and issue a fresh pair
+  await authRepository.deleteRefreshToken(hashedToken);
+  const { accessToken, refreshToken: newRefreshToken } = await generateTokens(user);
+
+  return { accessToken, refreshToken: newRefreshToken };
 };
 
-/**
- * Update user details.
- */
+const logoutUser = async (rawRefreshToken) => {
+  if (!rawRefreshToken) throw new Error("Refresh token is required.");
+  await authRepository.deleteRefreshToken(hashToken(rawRefreshToken));
+};
+
+const logoutAllDevices = async (userId) => {
+  await authRepository.deleteAllUserRefreshTokens(userId);
+};
+
+// ── User management ──────────────────────────────────────────────────────────
+
+const getAllUsers = async () => authRepository.findAllUsers();
+
 const updateUser = async (userId, updateData) => {
   const data = { ...updateData };
 
-  // Hash password if updating password
   if (data.password) {
     const salt = await bcrypt.genSalt(10);
     data.password = await bcrypt.hash(data.password, salt);
   }
 
-  // Check unique email if email is being updated
   if (data.email) {
-    const existing = await prisma.user.findFirst({
-      where: {
-        email: data.email,
-        NOT: { id: userId },
-      },
-    });
-    if (existing) {
-      throw new Error("Email is already in use by another user.");
-    }
+    const conflict = await authRepository.findUserByEmailExcludingId(data.email, userId);
+    if (conflict) throw new Error("Email is already in use by another user.");
   }
 
-  return await prisma.user.update({
-    where: { id: userId },
-    data,
-    select: {
-      id: true,
-      fullName: true,
-      email: true,
-      role: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
+  return authRepository.updateUser(userId, data);
 };
 
-/**
- * Delete a user from the system.
- */
-const deleteUser = async (userId) => {
-  return await prisma.user.delete({
-    where: { id: userId },
-    select: {
-      id: true,
-      fullName: true,
-      email: true,
-    },
-  });
-};
+const deleteUser = async (userId) => authRepository.deleteUser(userId);
 
 module.exports = {
   createUser,
+  createUserAsAdmin,
   loginUser,
+  refreshAccessToken,
+  logoutUser,
+  logoutAllDevices,
   getAllUsers,
   updateUser,
   deleteUser,
