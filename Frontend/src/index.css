@@ -92,32 +92,32 @@
 .dark {
     --background: #002238;
     --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
+    --card: #001e33;
     --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
+    --popover: #001e33;
     --popover-foreground: oklch(0.985 0 0);
     --primary: #0096FF;
-    --primary-foreground: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
     --secondary: #87CEEB;
     --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
+    --muted: #002d47;
     --muted-foreground: oklch(0.708 0 0);
     --accent: #87CEEB;
     --accent-foreground: oklch(0.985 0 0);
     --destructive: oklch(0.704 0.191 22.216);
     --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
+    --input: oklch(1 0 0 / 12%);
     --ring: oklch(0.556 0 0);
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
+    --sidebar: #001e33;
     --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary: #0096FF;
     --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent: #002d47;
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
@@ -133,6 +133,198 @@
   html {
     @apply font-sans;
     }
+}
+
+/* ── Froala Editor theme overrides ──────────────────────────────────────────── */
+
+/* Dark mode — content area */
+.dark .fr-box .fr-wrapper {
+  background: #002238 !important;
+  border-color: oklch(1 0 0 / 10%) !important;
+}
+.dark .fr-box .fr-element,
+.dark .fr-box .fr-element.fr-view {
+  background: #002238 !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+  caret-color: #0096FF;
+}
+
+/* froala_style.min.css sets explicit colours on child elements — override them */
+.dark .fr-element p,
+.dark .fr-element h1,
+.dark .fr-element h2,
+.dark .fr-element h3,
+.dark .fr-element h4,
+.dark .fr-element h5,
+.dark .fr-element h6,
+.dark .fr-element li,
+.dark .fr-element td,
+.dark .fr-element th,
+.dark .fr-element blockquote,
+.dark .fr-element pre,
+.dark .fr-element span:not([style*="color"]),
+.dark .fr-element a {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+.dark .fr-element a {
+  color: #0096FF !important;
+}
+.dark .fr-element blockquote {
+  border-left-color: #0096FF !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+.dark .fr-element pre,
+.dark .fr-element code {
+  background: rgba(0, 0, 0, 0.3) !important;
+  color: #93C5FD !important;
+  border-color: oklch(1 0 0 / 10%) !important;
+}
+.dark .fr-element table td,
+.dark .fr-element table th {
+  border-color: oklch(1 0 0 / 12%) !important;
+}
+.dark .fr-element table th {
+  background: rgba(0, 150, 255, 0.08) !important;
+}
+.dark .fr-element hr {
+  border-color: oklch(1 0 0 / 15%) !important;
+}
+.dark .fr-placeholder {
+  color: rgba(255, 255, 255, 0.28) !important;
+}
+
+/* Dark mode — toolbar */
+.dark .fr-toolbar,
+.dark .fr-box.fr-basic .fr-toolbar {
+  background: #001e33 !important;
+  border-color: oklch(1 0 0 / 10%) !important;
+}
+
+/* Button base — color drives SVG currentColor */
+.dark .fr-toolbar .fr-btn,
+.dark .fr-toolbar .fr-more-toolbar .fr-btn {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+.dark .fr-toolbar .fr-btn:hover,
+.dark .fr-toolbar .fr-more-toolbar .fr-btn:hover {
+  background: oklch(1 0 0 / 8%) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+.dark .fr-toolbar .fr-btn.fr-active,
+.dark .fr-toolbar .fr-btn.fr-selected {
+  color: #0096FF !important;
+  background: rgba(0, 150, 255, 0.12) !important;
+}
+
+/* SVG path/shape fills — override Froala's hardcoded dark colours */
+.dark .fr-toolbar .fr-btn svg path,
+.dark .fr-toolbar .fr-btn svg rect,
+.dark .fr-toolbar .fr-btn svg polygon,
+.dark .fr-toolbar .fr-btn svg circle,
+.dark .fr-toolbar .fr-btn svg line,
+.dark .fr-toolbar .fr-btn svg polyline {
+  fill: rgba(255, 255, 255, 0.65) !important;
+  stroke: rgba(255, 255, 255, 0.65) !important;
+}
+.dark .fr-toolbar .fr-btn:hover svg path,
+.dark .fr-toolbar .fr-btn:hover svg rect,
+.dark .fr-toolbar .fr-btn:hover svg polygon,
+.dark .fr-toolbar .fr-btn:hover svg circle {
+  fill: rgba(255, 255, 255, 0.95) !important;
+  stroke: rgba(255, 255, 255, 0.95) !important;
+}
+.dark .fr-toolbar .fr-btn.fr-active svg path,
+.dark .fr-toolbar .fr-btn.fr-active svg rect,
+.dark .fr-toolbar .fr-btn.fr-active svg polygon,
+.dark .fr-toolbar .fr-btn.fr-active svg circle {
+  fill: #0096FF !important;
+  stroke: #0096FF !important;
+}
+
+/* Dropdown arrow chevrons on toolbar buttons */
+.dark .fr-toolbar .fr-btn i,
+.dark .fr-toolbar .fr-btn span.fr-sr-only {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.dark .fr-separator {
+  background: oklch(1 0 0 / 10%) !important;
+}
+
+/* Dark mode — second toolbar row / expanded groups */
+.dark .fr-toolbar .fr-more-toolbar {
+  background: #001e33 !important;
+  border-top-color: oklch(1 0 0 / 10%) !important;
+}
+.dark .fr-toolbar .fr-more-toolbar .fr-btn svg path,
+.dark .fr-toolbar .fr-more-toolbar .fr-btn svg rect,
+.dark .fr-toolbar .fr-more-toolbar .fr-btn svg polygon,
+.dark .fr-toolbar .fr-more-toolbar .fr-btn svg circle {
+  fill: rgba(255, 255, 255, 0.65) !important;
+  stroke: rgba(255, 255, 255, 0.65) !important;
+}
+.dark .fr-toolbar .fr-more-toolbar .fr-btn:hover svg path,
+.dark .fr-toolbar .fr-more-toolbar .fr-btn:hover svg rect,
+.dark .fr-toolbar .fr-more-toolbar .fr-btn:hover svg polygon,
+.dark .fr-toolbar .fr-more-toolbar .fr-btn:hover svg circle {
+  fill: rgba(255, 255, 255, 0.95) !important;
+  stroke: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Dark mode — counter bar */
+.dark .fr-counter,
+.dark .fr-word-counter {
+  background: #001e33 !important;
+  color: oklch(0.708 0 0) !important;
+  border-top-color: oklch(1 0 0 / 10%) !important;
+}
+
+/* Dark mode — popups / dropdowns */
+.dark .fr-popup {
+  background: #001e33 !important;
+  border-color: oklch(1 0 0 / 12%) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+.dark .fr-popup .fr-input-line input,
+.dark .fr-popup .fr-input-line textarea {
+  background: #002238 !important;
+  border-color: oklch(1 0 0 / 12%) !important;
+  color: oklch(0.985 0 0) !important;
+}
+.dark .fr-popup .fr-input-line label {
+  color: oklch(0.708 0 0) !important;
+  background: #001e33 !important;
+}
+.dark .fr-popup .fr-action-buttons button {
+  background: #0096FF !important;
+  color: #fff !important;
+}
+.dark .fr-popup .fr-checkbox input:checked + span {
+  background: #0096FF !important;
+  border-color: #0096FF !important;
+}
+.dark .fr-popup .fr-separator {
+  background: oklch(1 0 0 / 10%) !important;
+}
+.dark .fr-popup .fr-color-set .fr-select-color:hover {
+  outline-color: oklch(1 0 0 / 40%) !important;
+}
+
+/* Dark mode — dropdown lists */
+.dark .fr-dropdown-menu,
+.dark .fr-dropdown-content {
+  background: #001e33 !important;
+  border-color: oklch(1 0 0 / 12%) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+.dark .fr-dropdown-menu .fr-dropdown-item:hover,
+.dark .fr-dropdown-content li:hover a {
+  background: oklch(1 0 0 / 8%) !important;
+  color: oklch(0.985 0 0) !important;
+}
+.dark .fr-dropdown-menu .fr-dropdown-item,
+.dark .fr-dropdown-content li a {
+  color: oklch(0.85 0 0) !important;
 }
 
 /* ── SweetAlert2 dark glass theme ───────────────────────────────────────────── */
@@ -206,4 +398,90 @@
 .swal2-icon.swal2-success .swal2-success-ring { border-color: rgba(34, 197, 94, 0.3) !important; }
 .swal2-icon.swal2-error { border-color: #ef4444 !important; color: #ef4444 !important; }
 .swal2-icon.swal2-error [class^='swal2-x-mark-line'] { background: #ef4444 !important; }
+
+/* ── Blog post reader (fr-view rendered HTML) ─────────────────────────────── */
+.blog-content {
+  color: var(--foreground);
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  word-break: break-word;
+}
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+  color: var(--foreground);
+  font-weight: 800;
+  line-height: 1.3;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+.blog-content h1 { font-size: 2rem; }
+.blog-content h2 { font-size: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+.blog-content h3 { font-size: 1.25rem; }
+.blog-content h4 { font-size: 1.1rem; }
+.blog-content p  { margin-bottom: 1.25rem; color: color-mix(in srgb, var(--foreground) 85%, transparent); }
+.blog-content a  { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
+.blog-content a:hover { opacity: 0.8; }
+.blog-content strong, .blog-content b { font-weight: 700; color: var(--foreground); }
+.blog-content em, .blog-content i { font-style: italic; }
+.blog-content ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; }
+.blog-content ol { list-style: decimal; padding-left: 1.5rem; margin-bottom: 1.25rem; }
+.blog-content li { margin-bottom: 0.4rem; }
+.blog-content blockquote {
+  border-left: 3px solid var(--primary);
+  padding: 0.5rem 1.25rem;
+  margin: 1.5rem 0;
+  color: var(--muted-foreground);
+  font-style: italic;
+  background: color-mix(in srgb, var(--primary) 6%, transparent);
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+.blog-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  margin: 1.5rem auto;
+  display: block;
+}
+.blog-content pre, .blog-content code {
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+}
+.blog-content pre {
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.blog-content :not(pre) > code {
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  padding: 0.1em 0.4em;
+  font-size: 0.85em;
+}
+.blog-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+.blog-content th, .blog-content td {
+  border: 1px solid var(--border);
+  padding: 0.6rem 0.9rem;
+  text-align: left;
+}
+.blog-content th { background: var(--muted); font-weight: 700; }
+.blog-content hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+.blog-content figure { margin: 1.5rem 0; text-align: center; }
+.blog-content figcaption { font-size: 0.8rem; color: var(--muted-foreground); margin-top: 0.5rem; }
 .swal2-loader { border-color: #0096FF transparent #0096FF transparent !important; }

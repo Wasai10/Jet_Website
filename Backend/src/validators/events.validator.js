@@ -2,6 +2,11 @@
  * Validator module for event endpoints.
  */
 
+const VALID_TYPES = [
+  "UPCOMING", "PAST", "HOME_FELLOWSHIP",
+  "WORSHIP", "CONFERENCE", "OUTREACH", "YOUTH", "PRAYER", "SPECIAL",
+];
+
 const validateEventCreate = (req, res, next) => {
   const { title, description, location, date, type } = req.body;
 
@@ -29,9 +34,9 @@ const validateEventCreate = (req, res, next) => {
     });
   }
 
-  if (type !== undefined && !["UPCOMING", "PAST", "HOME_FELLOWSHIP"].includes(type)) {
+  if (type !== undefined && !VALID_TYPES.includes(type)) {
     return res.status(400).json({
-      error: "Invalid type. Must be UPCOMING, PAST, or HOME_FELLOWSHIP.",
+      error: `Invalid type. Must be one of: ${VALID_TYPES.join(", ")}.`,
     });
   }
 
@@ -65,9 +70,9 @@ const validateEventUpdate = (req, res, next) => {
     });
   }
 
-  if (type !== undefined && !["UPCOMING", "PAST", "HOME_FELLOWSHIP"].includes(type)) {
+  if (type !== undefined && !VALID_TYPES.includes(type)) {
     return res.status(400).json({
-      error: "Invalid type. Must be UPCOMING, PAST, or HOME_FELLOWSHIP.",
+      error: `Invalid type. Must be one of: ${VALID_TYPES.join(", ")}.`,
     });
   }
 

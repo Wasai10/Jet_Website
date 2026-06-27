@@ -6,12 +6,11 @@ import {
   PHOTO_CATEGORIES,
   type Photo,
   type PhotoCategory,
-  type UploadPhotoMetadata,
   type UpdatePhotoPayload,
 } from "@/api/gallery.service";
 import jetSwal from "@/lib/swal";
 import PhotoGrid from "./components/PhotoGrid";
-import PhotoModal from "./components/PhotoModal";
+import PhotoModal, { type UploadItem } from "./components/PhotoModal";
 
 type ModalTarget = Photo | "new" | null;
 
@@ -35,14 +34,18 @@ export default function AdminGallery() {
     fetchPhotos();
   }, []);
 
-  const handleUpload = async (file: File, metadata: UploadPhotoMetadata) => {
-    await galleryService.upload(file, metadata);
+  const handleUpload = async (items: UploadItem[]) => {
+    for (const { file, metadata } of items) {
+      await galleryService.upload(file, metadata);
+    }
     setModalTarget(null);
     await fetchPhotos();
     jetSwal.fire({
       icon: "success",
-      title: "Photo Uploaded!",
-      text: "The image has been added to the gallery.",
+      title: items.length > 1 ? `${items.length} Photos Uploaded!` : "Photo Uploaded!",
+      text: items.length > 1
+        ? `${items.length} images have been added to the gallery.`
+        : "The image has been added to the gallery.",
       timer: 2200,
       showConfirmButton: false,
     });
@@ -126,20 +129,20 @@ export default function AdminGallery() {
         className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
       >
         <div>
-          <h2 className="text-xl font-bold text-white">Gallery</h2>
-          <p className="text-white/40 text-sm mt-0.5">{photos.length} photos</p>
+          <h2 className="text-xl font-bold text-foreground">Gallery</h2>
+          <p className="text-muted-foreground text-sm mt-0.5">{photos.length} photos</p>
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
           {/* Search */}
-          <div className="flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] rounded-xl px-3 py-2.5 w-48">
-            <Search className="w-4 h-4 text-white/30 shrink-0" />
+          <div className="flex items-center gap-2 bg-card border border-border rounded-xl px-3 py-2.5 w-48">
+            <Search className="w-4 h-4 text-muted-foreground/60 shrink-0" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search photos…"
-              className="bg-transparent text-sm text-white placeholder-white/30 outline-none w-full"
+              className="bg-transparent text-sm text-foreground placeholder-muted-foreground/40 outline-none w-full"
             />
           </div>
 
@@ -147,7 +150,7 @@ export default function AdminGallery() {
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value as PhotoCategory | "ALL")}
-            className="bg-[#001726] border border-white/[0.08] rounded-xl px-3 py-2.5 text-sm text-white/70 outline-none cursor-pointer hover:border-white/20 transition-colors"
+            className="bg-card border border-border rounded-xl px-3 py-2.5 text-sm text-foreground/70 outline-none cursor-pointer hover:border-border transition-colors"
           >
             <option value="ALL">All Categories</option>
             {PHOTO_CATEGORIES.map((cat) => (
@@ -159,7 +162,7 @@ export default function AdminGallery() {
           <button
             onClick={fetchPhotos}
             title="Refresh"
-            className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white/40 hover:text-white hover:bg-white/[0.07] transition-all cursor-pointer"
+            className="w-10 h-10 rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all cursor-pointer"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
           </button>
@@ -180,7 +183,7 @@ export default function AdminGallery() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.07] rounded-2xl overflow-hidden min-h-[200px]"
+        className="bg-card backdrop-blur-xl border border-border rounded-2xl overflow-hidden min-h-[200px]"
       >
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
@@ -188,7 +191,7 @@ export default function AdminGallery() {
               <div className="absolute inset-0 border-2 border-[#0096FF]/15 rounded-full" />
               <div className="absolute inset-0 border-2 border-transparent border-t-[#0096FF] rounded-full animate-spin" />
             </div>
-            <p className="text-white/30 text-sm">Loading gallery…</p>
+            <p className="text-muted-foreground/60 text-sm">Loading gallery…</p>
           </div>
         ) : (
           <PhotoGrid
@@ -199,8 +202,8 @@ export default function AdminGallery() {
         )}
 
         {!loading && filtered.length > 0 && (
-          <div className="px-4 py-3 border-t border-white/[0.06]">
-            <p className="text-white/30 text-xs">
+          <div className="px-4 py-3 border-t border-border">
+            <p className="text-muted-foreground/60 text-xs">
               Showing {filtered.length} of {photos.length} photos
             </p>
           </div>

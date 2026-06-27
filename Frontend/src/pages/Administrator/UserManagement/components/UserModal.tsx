@@ -75,32 +75,32 @@ export default function UserModal({ open, user, currentUserRole, onClose, onSave
             transition={{ type: "spring", stiffness: 300, damping: 28 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
-            <div className="bg-[#001726] border border-white/[0.1] rounded-3xl p-7 w-full max-w-md shadow-[0_40px_80px_rgba(0,0,0,0.6)] pointer-events-auto">
+            <div className="bg-card border border-border rounded-3xl p-7 w-full max-w-md shadow-[0_40px_80px_rgba(0,0,0,0.6)] pointer-events-auto">
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-2xl flex items-center justify-center border ${
                     isCreate
-                      ? "bg-[#0096FF]/15 border-[#0096FF]/25"
-                      : "bg-white/[0.06] border-white/[0.1]"
+                      ? "bg-primary/15 border-primary/30"
+                      : "bg-input border-border"
                   }`}>
                     {isCreate
-                      ? <UserPlus className="w-4.5 h-4.5 text-[#0096FF]" />
-                      : <Save className="w-4 h-4 text-white/50" />
+                      ? <UserPlus className="w-4.5 h-4.5 text-primary" />
+                      : <Save className="w-4 h-4 text-muted-foreground" />
                     }
                   </div>
                   <div>
-                    <h3 className="text-white font-bold text-lg leading-none">
+                    <h3 className="text-foreground font-bold text-lg leading-none">
                       {isCreate ? "New User" : "Edit User"}
                     </h3>
-                    <p className="text-white/40 text-xs mt-0.5">
+                    <p className="text-muted-foreground text-xs mt-0.5">
                       {isCreate ? "Add a new member to the system" : "Update account details"}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 rounded-xl bg-white/[0.06] hover:bg-white/[0.10] text-white/40 hover:text-white flex items-center justify-center transition-all cursor-pointer"
+                  className="w-8 h-8 rounded-xl bg-input hover:bg-muted/50 text-muted-foreground hover:text-foreground flex items-center justify-center transition-all cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -116,20 +116,20 @@ export default function UserModal({ open, user, currentUserRole, onClose, onSave
               <div className="space-y-4">
                 {/* Full Name */}
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold text-white/40 uppercase tracking-widest">
+                  <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
                     Full Name <span className="text-red-400">*</span>
                   </label>
                   <input
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="John Doe"
-                    className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/20 text-sm outline-none focus:border-[#0096FF]/60 focus:shadow-[0_0_0_3px_rgba(0,150,255,0.1)] transition-all"
+                    className="w-full bg-input border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted-foreground/40 text-sm outline-none focus:border-primary/50 focus:shadow-[0_0_0_3px_rgba(0,150,255,0.1)] transition-all"
                   />
                 </div>
 
                 {/* Email */}
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold text-white/40 uppercase tracking-widest">
+                  <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
                     Email <span className="text-red-400">*</span>
                   </label>
                   <input
@@ -137,17 +137,17 @@ export default function UserModal({ open, user, currentUserRole, onClose, onSave
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="john@example.com"
-                    className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/20 text-sm outline-none focus:border-[#0096FF]/60 focus:shadow-[0_0_0_3px_rgba(0,150,255,0.1)] transition-all"
+                    className="w-full bg-input border border-border rounded-xl px-4 py-3 text-foreground placeholder-muted-foreground/40 text-sm outline-none focus:border-primary/50 focus:shadow-[0_0_0_3px_rgba(0,150,255,0.1)] transition-all"
                   />
                 </div>
 
                 {/* Password */}
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold text-white/40 uppercase tracking-widest">
+                  <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
                     {isCreate ? (
                       <>Password <span className="text-red-400">*</span></>
                     ) : (
-                      <>New Password <span className="normal-case text-white/20">(leave blank to keep)</span></>
+                      <>New Password <span className="normal-case text-muted-foreground/40">(leave blank to keep)</span></>
                     )}
                   </label>
                   <div className="relative">
@@ -156,12 +156,12 @@ export default function UserModal({ open, user, currentUserRole, onClose, onSave
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white/[0.05] border border-white/[0.08] rounded-xl px-4 py-3 pr-12 text-white placeholder-white/20 text-sm outline-none focus:border-[#0096FF]/60 focus:shadow-[0_0_0_3px_rgba(0,150,255,0.1)] transition-all"
+                      className="w-full bg-input border border-border rounded-xl px-4 py-3 pr-12 text-foreground placeholder-muted-foreground/40 text-sm outline-none focus:border-primary/50 focus:shadow-[0_0_0_3px_rgba(0,150,255,0.1)] transition-all"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors cursor-pointer"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground/60 hover:text-muted-foreground transition-colors cursor-pointer"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -171,7 +171,7 @@ export default function UserModal({ open, user, currentUserRole, onClose, onSave
                 {/* Role — admins always see this */}
                 {currentUserRole === "ADMIN" && (
                   <div className="space-y-1.5">
-                    <label className="text-[11px] font-semibold text-white/40 uppercase tracking-widest">Role</label>
+                    <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Role</label>
                     <div className="flex gap-3">
                       {(["USER", "ADMIN"] as const).map((r) => (
                         <button
@@ -180,8 +180,8 @@ export default function UserModal({ open, user, currentUserRole, onClose, onSave
                           onClick={() => setRole(r)}
                           className={`flex-1 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider border transition-all cursor-pointer ${
                             role === r
-                              ? "bg-[#0096FF]/15 border-[#0096FF]/40 text-[#0096FF]"
-                              : "bg-white/[0.04] border-white/[0.08] text-white/40 hover:text-white hover:bg-white/[0.07]"
+                              ? "bg-primary/15 border-primary/40 text-primary"
+                              : "bg-card border-border text-muted-foreground hover:text-foreground hover:bg-muted/50"
                           }`}
                         >
                           {r}
@@ -197,7 +197,7 @@ export default function UserModal({ open, user, currentUserRole, onClose, onSave
                 <button
                   onClick={onClose}
                   disabled={loading}
-                  className="flex-1 py-3 rounded-xl border border-white/[0.08] text-white/50 hover:text-white hover:border-white/20 disabled:opacity-40 text-sm font-medium transition-all cursor-pointer"
+                  className="flex-1 py-3 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:border-border disabled:opacity-40 text-sm font-medium transition-all cursor-pointer"
                 >
                   Cancel
                 </button>

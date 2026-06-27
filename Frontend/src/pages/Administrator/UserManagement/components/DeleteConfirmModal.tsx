@@ -40,25 +40,25 @@ export default function DeleteConfirmModal({ open, user, onClose, onConfirm }: P
             transition={{ type: "spring", stiffness: 300, damping: 28 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
-            <div className="bg-[#001726] border border-white/[0.1] rounded-3xl p-7 w-full max-w-sm shadow-[0_40px_80px_rgba(0,0,0,0.6)] pointer-events-auto">
+            <div className="bg-card border border-border rounded-3xl p-7 w-full max-w-sm shadow-[0_40px_80px_rgba(0,0,0,0.6)] pointer-events-auto">
               <div className="flex items-start justify-between mb-5">
                 <div className="w-11 h-11 rounded-2xl bg-red-500/15 border border-red-500/20 flex items-center justify-center">
                   <AlertTriangle className="w-5 h-5 text-red-400" />
                 </div>
-                <button onClick={onClose} className="w-8 h-8 rounded-xl bg-white/[0.06] hover:bg-white/[0.10] text-white/40 hover:text-white flex items-center justify-center transition-all cursor-pointer">
+                <button onClick={onClose} className="w-8 h-8 rounded-xl bg-input hover:bg-muted/50 text-muted-foreground hover:text-foreground flex items-center justify-center transition-all cursor-pointer">
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
-              <h3 className="text-white font-bold text-lg mb-2">Delete User</h3>
-              <p className="text-white/50 text-sm leading-relaxed">
+              <h3 className="text-foreground font-bold text-lg mb-2">Delete User</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 Are you sure you want to delete{" "}
-                <span className="text-white font-semibold">{user?.fullName}</span>?
+                <span className="text-foreground font-semibold">{user?.fullName}</span>?
                 This action cannot be undone.
               </p>
 
               <div className="flex gap-3 mt-7">
-                <button onClick={onClose} className="flex-1 py-3 rounded-xl border border-white/[0.08] text-white/50 hover:text-white hover:border-white/20 text-sm font-medium transition-all cursor-pointer">
+                <button onClick={onClose} className="flex-1 py-3 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:border-border text-sm font-medium transition-all cursor-pointer">
                   Cancel
                 </button>
                 <button

@@ -1,8 +1,12 @@
-import { request } from "./auth.service";
+import { request, tokenStore } from "./auth.service";
+
+const API_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? "http://localhost:3000/api";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-export type EventType = "UPCOMING" | "PAST" | "HOME_FELLOWSHIP";
+export type EventType =
+  | "UPCOMING" | "PAST" | "HOME_FELLOWSHIP"
+  | "WORSHIP" | "CONFERENCE" | "OUTREACH" | "YOUTH" | "PRAYER" | "SPECIAL";
 
 export interface Event {
   id: string;
@@ -72,5 +76,21 @@ export const eventsService = {
   async remove(id: string): Promise<Event> {
     const data = await request<{ message: string; event: Event }>("DELETE", `/events/${id}`);
     return data.event;
+  },
+
+  async uploadImage(file: File): Promise<{ url: string; publicId: string }> {
+    const form = new FormData();
+    form.append("cover", file);
+    const res = await fetch(`${API_URL}/blog/admin/cover`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${tokenStore.getAccess() ?? ""}` },
+      body: form,
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error((err as { error?: string }).error ?? "Upload failed.");
+    }
+    const data = await res.json() as { url: string; publicId: string };
+    return data;
   },
 };

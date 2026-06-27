@@ -12,6 +12,13 @@ enum Role {
   USER
 }
 
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  SCHEDULED
+}
+
 model User {
   id            String         @id @default(uuid())
   fullName      String
@@ -21,6 +28,7 @@ model User {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   refreshTokens RefreshToken[]
+  blogs         Blog[]
 }
 
 model RefreshToken {
@@ -58,5 +66,92 @@ model Photo {
   featured  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Blog {
+  id                   String     @id @default(uuid())
+
+  // Core content
+  title                String
+  slug                 String     @unique
+  excerpt              String     @db.Text
+  content              String     @db.LongText
+  coverImage           String?
+  coverImageAlt        String?
+  coverImagePublicId   String?
+
+  // Authorship
+  authorId             String
+  author               User       @relation(fields: [authorId], references: [id])
+
+  // Classification
+  category             String     @default("General")
+  tags                 Json       @default("[]")
+
+  // Status & scheduling
+  status               BlogStatus @default(DRAFT)
+  publishedAt          DateTime?
+  scheduledAt          DateTime?
+  featured             Boolean    @default(false)
+
+  // Engagement
+  viewCount            Int        @default(0)
+  readingTime          Int        @default(0)
+
+  // Rank Math-compatible SEO fields
+  seoTitle             String?
+  seoDescription       String?    @db.Text
+  focusKeyword         String?
+  additionalKeywords   Json       @default("[]")
+  canonicalUrl         String?
+
+  // Open Graph
+  ogTitle              String?
+  ogDescription        String?    @db.Text
+  ogImage              String?
+
+  // Twitter Card
+  twitterCard          String     @default("summary_large_image")
+  twitterTitle         String?
+  twitterDescription   String?    @db.Text
+
+  // Robots directives
+  noIndex              Boolean    @default(false)
+  noFollow             Boolean    @default(false)
+
+  // JSON-LD structured data
+  structuredData       Json?
+
+  // Computed scores (recalculated on save)
+  seoScore             Int?
+  readabilityScore     Int?
+
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+}
+
+model Leadership {
+  id            String       @id @default(uuid())
+  name          String
+  role          String
+  image         String       // Cloudinary URL
+  imagePublicId String       @unique
+  order         Int          @default(0)
+  departments   Department[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Department {
+  id              String     @id @default(uuid())
+  name            String
+  description     String     @db.Text
+  backgroundImage String?    // Cloudinary URL for ministry card background
+  bgImagePublicId String?    @unique
+  leaderId        String
+  leader          Leadership @relation(fields: [leaderId], references: [id])
+  order           Int        @default(0)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 }
 

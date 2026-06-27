@@ -12,11 +12,11 @@ export default function PhotoGrid({ photos, onEdit, onDelete }: Props) {
   if (photos.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
-        <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mb-4">
-          <ImageIcon className="w-6 h-6 text-white/20" />
+        <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center mb-4">
+          <ImageIcon className="w-6 h-6 text-muted-foreground/40" />
         </div>
-        <p className="text-white/50 font-medium">No photos found</p>
-        <p className="text-white/25 text-sm mt-1">Upload some images to get started</p>
+        <p className="text-muted-foreground font-medium">No photos found</p>
+        <p className="text-muted-foreground/50 text-sm mt-1">Upload some images to get started</p>
       </div>
     );
   }
@@ -29,13 +29,16 @@ export default function PhotoGrid({ photos, onEdit, onDelete }: Props) {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: i * 0.03 }}
-          className="relative aspect-square rounded-xl overflow-hidden group border border-white/[0.06] hover:border-white/[0.18] transition-all duration-300 shadow-md hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
+          className="relative aspect-square rounded-xl overflow-hidden group border border-border hover:border-border transition-all duration-300 shadow-md hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
         >
           <img
             src={photo.url}
             alt={photo.alt}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
+            onError={(e) => {
+              e.currentTarget.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23ffffff30' stroke-width='1.5'%3E%3Crect x='3' y='3' width='18' height='18' rx='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Cpath d='M21 15l-5-5L5 21'/%3E%3C/svg%3E`;
+              e.currentTarget.className = "w-full h-full object-contain p-6 opacity-20";
+            }}
           />
 
           {/* Dark gradient overlay */}

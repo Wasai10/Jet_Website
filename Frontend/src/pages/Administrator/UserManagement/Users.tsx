@@ -121,20 +121,20 @@ export default function Users() {
         className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
       >
         <div>
-          <h2 className="text-xl font-bold text-white">All Users</h2>
-          <p className="text-white/40 text-sm mt-0.5">{users.length} total members</p>
+          <h2 className="text-xl font-bold text-foreground">All Users</h2>
+          <p className="text-muted-foreground text-sm mt-0.5">{users.length} total members</p>
         </div>
 
         <div className="flex items-center gap-3">
           {/* Search */}
-          <div className="flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] rounded-xl px-3 py-2.5 w-52">
-            <Search className="w-4 h-4 text-white/30 shrink-0" />
+          <div className="flex items-center gap-2 bg-card border border-border rounded-xl px-3 py-2.5 w-52">
+            <Search className="w-4 h-4 text-muted-foreground/60 shrink-0" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search users…"
-              className="bg-transparent text-sm text-white placeholder-white/30 outline-none w-full"
+              className="bg-transparent text-sm text-foreground placeholder-muted-foreground/40 outline-none w-full"
             />
           </div>
 
@@ -142,7 +142,7 @@ export default function Users() {
           <button
             onClick={fetchUsers}
             title="Refresh"
-            className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white/40 hover:text-white hover:bg-white/[0.07] transition-all cursor-pointer"
+            className="w-10 h-10 rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all cursor-pointer"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
           </button>
@@ -163,7 +163,7 @@ export default function Users() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.07] rounded-2xl overflow-hidden"
+        className="bg-card backdrop-blur-xl border border-border rounded-2xl overflow-hidden"
       >
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
@@ -171,7 +171,7 @@ export default function Users() {
               <div className="absolute inset-0 border-2 border-[#0096FF]/15 rounded-full" />
               <div className="absolute inset-0 border-2 border-transparent border-t-[#0096FF] rounded-full animate-spin" />
             </div>
-            <p className="text-white/30 text-sm">Loading users…</p>
+            <p className="text-muted-foreground/60 text-sm">Loading users…</p>
           </div>
         ) : (
           <UserTable
@@ -183,8 +183,8 @@ export default function Users() {
         )}
 
         {!loading && filtered.length > 0 && (
-          <div className="px-4 py-3 border-t border-white/[0.06]">
-            <p className="text-white/30 text-xs">
+          <div className="px-4 py-3 border-t border-border">
+            <p className="text-muted-foreground/60 text-xs">
               Showing {filtered.length} of {users.length} users
             </p>
           </div>
