@@ -159,7 +159,7 @@ export default function About() {
             <section className="bg-muted/40 py-20">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">Department Leaders</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">Meet your Leaders!!</h2>
                         <p className="text-muted-foreground">Meet the dedicated individuals guiding our ministries.</p>
                     </div>
                     {leaders.length === 0 ? (
