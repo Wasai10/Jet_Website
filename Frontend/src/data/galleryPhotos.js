@@ -32,7 +32,7 @@ export const galleryItems = [
   {
     id: 5,
     category: 'Worship',
-    src: 'https://res.cloudinary.com/dvkt0lsqb/image/upload/v1778832280/JET_LOGO.jpg_v0evon.jpg',
+    src: '/jet-logo.jpeg',
     alt: 'Praise and Worship',
     title: 'Praise Night',
   },

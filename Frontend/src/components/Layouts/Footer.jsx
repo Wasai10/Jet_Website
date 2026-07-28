@@ -17,7 +17,7 @@ export default function Footer() {
                         <div className="self-start p-2 bg-gray-100/90 hover:bg-gray-100 transition-colors duration-300 rounded-xl shadow-md">
                             <img
                                 className="h-10 w-10 object-contain rounded-lg"
-                                src="https://res.cloudinary.com/dvkt0lsqb/image/upload/v1778832280/JET_LOGO.jpg_v0evon.jpg"
+                                src="/jet-logo.jpeg"
                                 alt="JET Ministries Logo"
                             />
                         </div>

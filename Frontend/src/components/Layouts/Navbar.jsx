@@ -26,7 +26,7 @@ export default function Navbar() {
                         <Link to="/">
                             <img
                                 className="h-10 w-auto rounded-md shadow-sm transition-transform hover:scale-105"
-                                src="https://res.cloudinary.com/dvkt0lsqb/image/upload/v1778832280/JET_LOGO.jpg_v0evon.jpg"
+                                src="/jet-logo.jpeg"
                                 alt="JET Logo"
                             />
                         </Link>
