@@ -72,10 +72,39 @@ const deleteEvent = async (req, res) => {
   }
 };
 
+const uploadEventImage = async (req, res) => {
+  if (!req.eventImageResult) return res.status(400).json({ error: "No image file provided." });
+  return res.status(200).json({
+    url: req.eventImageResult.secure_url,
+    publicId: req.eventImageResult.public_id,
+  });
+};
+
+const createRsvp = async (req, res) => {
+  try {
+    const rsvp = await eventService.rsvpToEvent(req.params.id, req.body);
+    return res.status(201).json({ message: "Your RSVP has been received.", rsvp });
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+};
+
+const getEventRsvps = async (req, res) => {
+  try {
+    const rsvps = await eventService.getEventRsvps(req.params.id);
+    return res.status(200).json({ rsvps });
+  } catch (error) {
+    return res.status(404).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getAllEvents,
   getEventById,
   createEvent,
   updateEvent,
   deleteEvent,
+  uploadEventImage,
+  createRsvp,
+  getEventRsvps,
 };

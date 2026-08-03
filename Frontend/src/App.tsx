@@ -8,6 +8,7 @@ import Home from "@/pages/Landing/Home";
 import Gallery from "@/pages/Gallery/Gallery";
 import About from "@/pages/About/About";
 import Events from "@/pages/Events/Events";
+import EventRsvp from "@/pages/Events/EventRsvp";
 import Blog from "@/pages/Blog/Blog";
 import BlogPost from "@/pages/Blog/BlogPost";
 import Login from "@/pages/Authentication/Login";
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/gallery" element={<DefaultLayout><Gallery /></DefaultLayout>} />
           <Route path="/about" element={<DefaultLayout><About /></DefaultLayout>} />
           <Route path="/events" element={<DefaultLayout><Events /></DefaultLayout>} />
+          <Route path="/events/:id/rsvp" element={<DefaultLayout><EventRsvp /></DefaultLayout>} />
           <Route path="/blog" element={<DefaultLayout><Blog /></DefaultLayout>} />
           <Route path="/blog/:slug" element={<DefaultLayout><BlogPost /></DefaultLayout>} />
 

@@ -11,6 +11,7 @@ import {
 import jetSwal from "@/lib/swal";
 import EventTable from "./components/EventTable";
 import EventModal from "./components/EventModal";
+import EventRsvpModal from "./components/EventRsvpModal";
 
 type ModalTarget = Event | "new" | null;
 
@@ -20,6 +21,7 @@ export default function AdminEvents() {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<EventType | "ALL">("ALL");
   const [modalTarget, setModalTarget] = useState<ModalTarget>(null);
+  const [rsvpEvent, setRsvpEvent] = useState<Event | null>(null);
 
   const fetchEvents = async () => {
     setLoading(true);
@@ -191,6 +193,7 @@ export default function AdminEvents() {
             events={filtered}
             onEdit={(e) => setModalTarget(e)}
             onDelete={handleDelete}
+            onViewRsvps={setRsvpEvent}
           />
         )}
 
@@ -210,6 +213,7 @@ export default function AdminEvents() {
         onClose={() => setModalTarget(null)}
         onSave={handleSave}
       />
+      <EventRsvpModal event={rsvpEvent} onClose={() => setRsvpEvent(null)} />
     </div>
   );
 }

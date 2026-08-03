@@ -63,10 +63,20 @@ const remove = async (id) => {
   });
 };
 
+const createRsvp = async (eventId, data) => {
+  return prisma.eventRsvp.create({ data: { eventId, ...data } });
+};
+
+const findRsvpsByEventId = async (eventId) => {
+  return prisma.eventRsvp.findMany({ where: { eventId }, orderBy: { createdAt: "desc" } });
+};
+
 module.exports = {
   findAll,
   findById,
   create,
   update,
   remove,
+  createRsvp,
+  findRsvpsByEventId,
 };

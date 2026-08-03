@@ -79,7 +79,28 @@ const validateEventUpdate = (req, res, next) => {
   next();
 };
 
+const validateEventRsvp = (req, res, next) => {
+  const { fullName, email, phone, guests, notes } = req.body;
+  if (!fullName || typeof fullName !== "string" || fullName.trim().length < 2) {
+    return res.status(400).json({ error: "Please enter your full name." });
+  }
+  if (!email || typeof email !== "string" || !/^\S+@\S+\.\S+$/.test(email)) {
+    return res.status(400).json({ error: "Please enter a valid email address." });
+  }
+  if (phone !== undefined && typeof phone !== "string") {
+    return res.status(400).json({ error: "Phone number must be text." });
+  }
+  if (guests !== undefined && (!Number.isInteger(guests) || guests < 1 || guests > 20)) {
+    return res.status(400).json({ error: "Guests must be a whole number between 1 and 20." });
+  }
+  if (notes !== undefined && (typeof notes !== "string" || notes.length > 1000)) {
+    return res.status(400).json({ error: "Notes must be under 1,000 characters." });
+  }
+  next();
+};
+
 module.exports = {
   validateEventCreate,
   validateEventUpdate,
+  validateEventRsvp,
 };

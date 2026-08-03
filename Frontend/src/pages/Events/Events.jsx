@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Calendar, MapPin, Clock, ArrowUpRight, ArrowRight,
@@ -199,7 +200,8 @@ function FeaturedLargeCard({ event, fullWidth }) {
       </div>
 
       {/* CTA */}
-      <button
+      <Link
+        to={event.type === 'UPCOMING' ? `/events/${event.id}/rsvp` : '/events'}
         className="mt-7 flex items-center gap-2.5 text-xs uppercase tracking-widest font-semibold transition-colors duration-300 group/btn w-fit"
         style={{ color: cfg.color }}
       >
@@ -210,7 +212,7 @@ function FeaturedLargeCard({ event, fullWidth }) {
         >
           <ArrowRight className="w-3.5 h-3.5" />
         </div>
-      </button>
+      </Link>
     </motion.div>
   );
 }
@@ -412,13 +414,14 @@ function HeroCard({ event }) {
 
         {/* CTA */}
         <div>
-          <button
+          <Link
+            to={event.type === 'UPCOMING' ? `/events/${event.id}/rsvp` : '/events'}
             className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-bold text-white transition-all duration-300 hover:scale-105"
             style={{ backgroundColor: cfg.color, boxShadow: `0 0 28px ${cfg.color}40` }}
           >
             {event.type === 'UPCOMING' ? 'Register Now' : 'View Event'}
             <ArrowUpRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
       </div>
     </motion.div>
@@ -516,13 +519,14 @@ function EventCard({ event, index }) {
               <MapPin className="w-3 h-3 flex-shrink-0" style={{ color: cfg.color }} />
               <span className="truncate">{event.location}</span>
             </div>
-            <button
+            <Link
+              to={event.type === 'UPCOMING' ? `/events/${event.id}/rsvp` : '/events'}
               className="flex-shrink-0 inline-flex items-center gap-1 text-xs font-semibold transition-all duration-200 group-hover:gap-2"
               style={{ color: cfg.color }}
             >
               {event.type === 'UPCOMING' ? 'Register' : 'Details'}
               <ChevronRight className="w-3.5 h-3.5" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>

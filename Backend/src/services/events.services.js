@@ -43,10 +43,28 @@ const deleteEvent = async (id) => {
   return await eventRepository.remove(id);
 };
 
+const rsvpToEvent = async (eventId, data) => {
+  const event = await getEventById(eventId);
+  if (event.type === "PAST") throw new Error("RSVPs are closed for past events.");
+  try {
+    return await eventRepository.createRsvp(eventId, data);
+  } catch (error) {
+    if (error.code === "P2002") throw new Error("You have already RSVP'd for this event with this email address.");
+    throw error;
+  }
+};
+
+const getEventRsvps = async (eventId) => {
+  await getEventById(eventId);
+  return eventRepository.findRsvpsByEventId(eventId);
+};
+
 module.exports = {
   getAllEvents,
   getEventById,
   createEvent,
   updateEvent,
   deleteEvent,
+  rsvpToEvent,
+  getEventRsvps,
 };

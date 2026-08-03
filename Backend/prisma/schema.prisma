@@ -54,6 +54,21 @@ model Event {
   type        String   @default("UPCOMING") // "UPCOMING", "PAST", "HOME_FELLOWSHIP"
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  rsvps       EventRsvp[]
+}
+
+model EventRsvp {
+  id        String   @id @default(uuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  fullName  String
+  email     String
+  phone     String?
+  guests    Int      @default(1)
+  notes     String?  @db.Text
+  createdAt DateTime @default(now())
+
+  @@unique([eventId, email])
 }
 
 model Photo {

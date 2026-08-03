@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Pencil, Trash2, CalendarDays, Star } from "lucide-react";
+import { Pencil, Trash2, CalendarDays, Star, UsersRound } from "lucide-react";
 import type { Event } from "@/api/events.service";
 
 const TYPE_STYLES: Record<string, { label: string; cls: string }> = {
@@ -12,9 +12,10 @@ interface Props {
   events: Event[];
   onEdit: (event: Event) => void;
   onDelete: (event: Event) => void;
+  onViewRsvps: (event: Event) => void;
 }
 
-export default function EventTable({ events, onEdit, onDelete }: Props) {
+export default function EventTable({ events, onEdit, onDelete, onViewRsvps }: Props) {
   if (events.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -125,6 +126,13 @@ export default function EventTable({ events, onEdit, onDelete }: Props) {
                 {/* Actions */}
                 <td className="px-4 py-3.5">
                   <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={() => onViewRsvps(event)}
+                      title="View RSVPs"
+                      className="w-8 h-8 rounded-lg bg-input hover:bg-primary/20 hover:text-primary text-muted-foreground flex items-center justify-center transition-all duration-200 cursor-pointer"
+                    >
+                      <UsersRound className="w-3.5 h-3.5" />
+                    </button>
                     <button
                       onClick={() => onEdit(event)}
                       className="w-8 h-8 rounded-lg bg-input hover:bg-primary/20 hover:text-primary text-muted-foreground flex items-center justify-center transition-all duration-200 cursor-pointer"

@@ -50,6 +50,20 @@ export interface UpdateEventPayload {
   type?: EventType;
 }
 
+export interface EventRsvpPayload {
+  fullName: string;
+  email: string;
+  phone?: string;
+  guests: number;
+  notes?: string;
+}
+
+export interface EventRsvp extends EventRsvpPayload {
+  id: string;
+  eventId: string;
+  createdAt: string;
+}
+
 // ── Events API ───────────────────────────────────────────────────────────────
 
 export const eventsService = {
@@ -80,8 +94,8 @@ export const eventsService = {
 
   async uploadImage(file: File): Promise<{ url: string; publicId: string }> {
     const form = new FormData();
-    form.append("cover", file);
-    const res = await fetch(`${API_URL}/blog/admin/cover`, {
+    form.append("image", file);
+    const res = await fetch(`${API_URL}/events/upload`, {
       method: "POST",
       headers: { Authorization: `Bearer ${tokenStore.getAccess() ?? ""}` },
       body: form,
@@ -92,5 +106,14 @@ export const eventsService = {
     }
     const data = await res.json() as { url: string; publicId: string };
     return data;
+  },
+
+  async rsvp(id: string, payload: EventRsvpPayload): Promise<void> {
+    await request("POST", `/events/${id}/rsvp`, payload);
+  },
+
+  async getRsvps(id: string): Promise<EventRsvp[]> {
+    const data = await request<{ rsvps: EventRsvp[] }>("GET", `/events/${id}/rsvps`);
+    return data.rsvps;
   },
 };

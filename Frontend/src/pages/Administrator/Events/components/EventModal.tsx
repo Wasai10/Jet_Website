@@ -425,11 +425,12 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
                   <label className={labelCls}>
                     <span className="flex items-center gap-1.5">
                       <ImagePlus className="w-3 h-3" />
-                      Event Images
+                      Event Poster & Photos
                       <span className="text-muted-foreground/40 normal-case font-normal">(optional)</span>
                     </span>
                   </label>
 
+                  <p className="text-xs text-muted-foreground/60">The first image is used as the event poster on the website.</p>
                   {/* Uploaded thumbnails */}
                   {images.length > 0 && (
                     <div className="grid grid-cols-3 gap-2">

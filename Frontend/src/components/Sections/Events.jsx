@@ -291,7 +291,7 @@ export default function Events() {
 
                 {/* CTA */}
                 <Link
-                  to="/events"
+                  to={featured.type === 'UPCOMING' ? `/events/${featured.id}/rsvp` : '/events'}
                   className="mt-7 flex items-center space-x-2.5 text-xs uppercase tracking-widest font-semibold transition-colors duration-300 group/btn w-fit"
                   style={{ color }}
                 >
