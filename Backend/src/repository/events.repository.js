@@ -30,12 +30,15 @@ const create = async (eventData) => {
       description: eventData.description,
       location: eventData.location,
       date: new Date(eventData.date),
+      endDate: eventData.endDate ? new Date(eventData.endDate) : null,
       time: eventData.time,
       tag: eventData.tag,
       color: eventData.color,
       featured: eventData.featured ?? false,
+      coverImage: eventData.coverImage,
       images: eventData.images,
       type: eventData.type ?? "UPCOMING",
+      ownership: eventData.ownership ?? "PARTNERSHIP",
     },
   });
 };
@@ -47,6 +50,9 @@ const update = async (id, eventData) => {
   const updateData = { ...eventData };
   if (updateData.date) {
     updateData.date = new Date(updateData.date);
+  }
+  if (updateData.endDate !== undefined) {
+    updateData.endDate = updateData.endDate ? new Date(updateData.endDate) : null;
   }
   return await prisma.event.update({
     where: { id },
@@ -71,6 +77,23 @@ const findRsvpsByEventId = async (eventId) => {
   return prisma.eventRsvp.findMany({ where: { eventId }, orderBy: { createdAt: "desc" } });
 };
 
+const findAllRsvps = async () => {
+  return prisma.eventRsvp.findMany({
+    include: {
+      event: {
+        select: {
+          id: true,
+          title: true,
+          date: true,
+          location: true,
+          type: true,
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+};
+
 module.exports = {
   findAll,
   findById,
@@ -79,4 +102,5 @@ module.exports = {
   remove,
   createRsvp,
   findRsvpsByEventId,
+  findAllRsvps,
 };

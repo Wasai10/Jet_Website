@@ -8,18 +8,23 @@ export type EventType =
   | "UPCOMING" | "PAST" | "HOME_FELLOWSHIP"
   | "WORSHIP" | "CONFERENCE" | "OUTREACH" | "YOUTH" | "PRAYER" | "SPECIAL";
 
+export type EventOwnership = "JET" | "PARTNERSHIP";
+
 export interface Event {
   id: string;
   title: string;
   description: string;
   location: string;
   date: string;
+  endDate?: string | null;
   time?: string | null;
   tag?: string | null;
   color?: string | null;
   featured: boolean;
+  coverImage?: string | null;
   images?: string[] | null;
   type: EventType;
+  ownership?: EventOwnership | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -29,12 +34,15 @@ export interface CreateEventPayload {
   description: string;
   location: string;
   date: string;
+  endDate?: string | null;
   time?: string;
   tag?: string;
   color?: string;
   featured?: boolean;
+  coverImage?: string;
   images?: string[];
   type?: EventType;
+  ownership?: EventOwnership;
 }
 
 export interface UpdateEventPayload {
@@ -42,12 +50,15 @@ export interface UpdateEventPayload {
   description?: string;
   location?: string;
   date?: string;
+  endDate?: string | null;
   time?: string;
   tag?: string;
   color?: string;
   featured?: boolean;
+  coverImage?: string;
   images?: string[];
   type?: EventType;
+  ownership?: EventOwnership;
 }
 
 export interface EventRsvpPayload {
@@ -62,6 +73,13 @@ export interface EventRsvp extends EventRsvpPayload {
   id: string;
   eventId: string;
   createdAt: string;
+  event?: {
+    id: string;
+    title: string;
+    date: string;
+    location: string;
+    type: string;
+  };
 }
 
 // ── Events API ───────────────────────────────────────────────────────────────
@@ -114,6 +132,11 @@ export const eventsService = {
 
   async getRsvps(id: string): Promise<EventRsvp[]> {
     const data = await request<{ rsvps: EventRsvp[] }>("GET", `/events/${id}/rsvps`);
+    return data.rsvps;
+  },
+
+  async getAllRsvps(): Promise<EventRsvp[]> {
+    const data = await request<{ rsvps: EventRsvp[] }>("GET", "/events/rsvps/all");
     return data.rsvps;
   },
 };

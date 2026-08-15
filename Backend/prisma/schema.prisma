@@ -52,6 +52,9 @@ model Event {
   featured    Boolean  @default(false)
   images      Json?    // Array of image URLs for past events
   type        String   @default("UPCOMING") // "UPCOMING", "PAST", "HOME_FELLOWSHIP"
+  coverImage  String?
+  endDate     DateTime?
+  ownership   String   @default("PARTNERSHIP")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   rsvps       EventRsvp[]

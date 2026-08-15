@@ -8,6 +8,7 @@ const navItems = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Events', href: '/events' },
+    { name: 'Giving & Resources', href: '/giving' },
     { name: 'Gallery', href: '/gallery' },
     { name: 'LiveStream', href: '#' },
     { name: 'Blogs', href: '/blog' },

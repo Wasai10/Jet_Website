@@ -98,6 +98,15 @@ const getEventRsvps = async (req, res) => {
   }
 };
 
+const getAllRsvps = async (req, res) => {
+  try {
+    const rsvps = await eventService.getAllRsvps();
+    return res.status(200).json({ rsvps });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getAllEvents,
   getEventById,
@@ -107,4 +116,5 @@ module.exports = {
   uploadEventImage,
   createRsvp,
   getEventRsvps,
+  getAllRsvps,
 };

@@ -1,15 +1,17 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  LayoutDashboard, Users, CalendarDays, ImageIcon,
+  LayoutDashboard, Users, CalendarDays, UsersRound, FileText, ImageIcon,
   BookOpen, Settings, LogOut, ChevronLeft, ChevronRight, X, Layers
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const NAV = [
   { to: "/admin-dashboard", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { to: "/admin-dashboard/users", label: "Users", icon: Users },
   { to: "/admin-dashboard/events", label: "Events", icon: CalendarDays },
+  { to: "/admin-dashboard/registrations", label: "Registrations", icon: UsersRound },
+  { to: "/admin-dashboard/documents", label: "Documents", icon: FileText },
+  { to: "/admin-dashboard/users", label: "Users", icon: Users },
   { to: "/admin-dashboard/gallery", label: "Gallery", icon: ImageIcon },
   { to: "/admin-dashboard/blog", label: "Blog", icon: BookOpen },
   { to: "/admin-dashboard/departmental-leadership", label: "Leadership", icon: Layers },

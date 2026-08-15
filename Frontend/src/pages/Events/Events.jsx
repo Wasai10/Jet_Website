@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Calendar, MapPin, Clock, ArrowUpRight, ArrowRight,
-  CalendarX2, ChevronRight, Star,
+  CalendarX2, ChevronRight, Star, Sparkles, Users, Layers
 } from 'lucide-react';
 import { eventsService } from '@/api/events.service';
 
@@ -21,24 +21,29 @@ const TYPE = {
   SPECIAL:         { label: 'Special',    color: '#6366F1', bg: 'rgba(99,102,241,0.1)',  gradient: 'from-[#0f0a2d] to-[#1e1459]' },
 };
 
-const TABS = [
-  { key: 'ALL',            label: 'All Events' },
-  { key: 'UPCOMING',       label: 'Upcoming' },
-  { key: 'PAST',           label: 'Past' },
-  { key: 'HOME_FELLOWSHIP',label: 'Fellowship' },
-  { key: 'WORSHIP',        label: 'Worship' },
-  { key: 'CONFERENCE',     label: 'Conference' },
-  { key: 'OUTREACH',       label: 'Outreach' },
-  { key: 'YOUTH',          label: 'Youth' },
-  { key: 'PRAYER',         label: 'Prayer' },
-  { key: 'SPECIAL',        label: 'Special' },
+const CATEGORY_TABS = [
+  { key: 'ALL',          label: 'All Events' },
+  { key: 'JET_EVENTS',   label: '⚡ JET Events' },
+  { key: 'PARTNERSHIPS', label: '🤝 Partnership Events' },
+  { key: 'UPCOMING',     label: 'Upcoming' },
+  { key: 'PAST',         label: 'Past' },
+  { key: 'HOME_FELLOWSHIP', label: 'Fellowship' },
+];
+
+const FALLBACK_POSTERS = [
+  'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1200&q=80',
 ];
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function fmtDate(iso) {
+  if (!iso) return '';
   return new Date(iso).toLocaleDateString('en-GB', {
-    day: 'numeric', month: 'long', year: 'numeric',
+    day: 'numeric', month: 'short', year: 'numeric',
   });
 }
 
@@ -51,6 +56,35 @@ function parseDateParts(iso) {
   };
 }
 
+function checkIsJetEvent(event) {
+  if (event.ownership === 'JET') return true;
+  if (event.ownership === 'PARTNERSHIP') return false;
+  const titleLower = (event.title || '').toLowerCase();
+  const tagLower = (event.tag || '').toLowerCase();
+  return (
+    titleLower.includes('mission') ||
+    titleLower.includes('ossen') ||
+    titleLower.includes('impact conference') ||
+    titleLower.includes('house fellowship') ||
+    tagLower.includes('mission') ||
+    event.type === 'HOME_FELLOWSHIP'
+  );
+}
+
+function getEventCover(event, index = 0) {
+  return event.coverImage || event.images?.[0] || FALLBACK_POSTERS[index % FALLBACK_POSTERS.length];
+}
+
+function formatDateRange(event) {
+  const startStr = fmtDate(event.date);
+  if (event.endDate) {
+    const endStr = fmtDate(event.endDate);
+    if (startStr === endStr) return `From: ${startStr}`;
+    return `From: ${startStr} To: ${endStr}`;
+  }
+  return `From: ${startStr}`;
+}
+
 // ── Skeletons ─────────────────────────────────────────────────────────────────
 
 function SkeletonCard() {
@@ -61,470 +95,131 @@ function SkeletonCard() {
         <div className="h-3 bg-muted rounded-full w-24" />
         <div className="h-5 bg-muted/80 rounded-full w-3/4" />
         <div className="h-3 bg-muted rounded-full w-2/5" />
-        <div className="space-y-2 pt-1">
-          <div className="h-3 bg-muted rounded-full w-full" />
-          <div className="h-3 bg-muted rounded-full w-5/6" />
-        </div>
       </div>
     </div>
   );
 }
 
-function SkeletonHero() {
-  return (
-    <div className="rounded-2xl overflow-hidden border border-border animate-pulse bg-card" style={{ minHeight: 340 }}>
-      <div className="w-full bg-muted" style={{ minHeight: 340 }} />
-    </div>
-  );
-}
-
-function SkeletonAllLayout() {
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div className="lg:col-span-5 rounded-2xl border border-border animate-pulse h-[420px] bg-card" />
-      <div className="lg:col-span-7 flex flex-col gap-5">
-        {[0, 1, 2].map(i => (
-          <div key={i} className="rounded-xl border border-border animate-pulse h-[110px] bg-card" />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Empty State ───────────────────────────────────────────────────────────────
-
-function EmptyState({ typeKey }) {
-  const cfg = typeKey && typeKey !== 'ALL' ? (TYPE[typeKey] ?? TYPE.UPCOMING) : TYPE.UPCOMING;
-  const label = typeKey && typeKey !== 'ALL' ? cfg.label.toLowerCase() : 'matching';
+function EmptyState({ filterKey }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
       className="flex flex-col items-center justify-center py-20 gap-5 text-center"
     >
-      <div className="relative flex items-center justify-center">
-        {[48, 80, 112].map((size, i) => (
-          <motion.div
-            key={size}
-            className="absolute rounded-full border"
-            style={{ width: size, height: size, borderColor: cfg.color, opacity: 0 }}
-            animate={{ opacity: [0, 0.18, 0], scale: [0.8, 1.05, 1.05] }}
-            transition={{ duration: 2.4, repeat: Infinity, delay: i * 0.5, ease: 'easeOut' }}
-          />
-        ))}
-        <div
-          className="w-14 h-14 rounded-2xl flex items-center justify-center relative z-10"
-          style={{ background: cfg.bg }}
-        >
-          <CalendarX2 className="w-6 h-6" style={{ color: cfg.color }} />
-        </div>
+      <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
+        <CalendarX2 className="w-6 h-6 text-primary" />
       </div>
       <div>
-        <p className="text-foreground font-semibold text-base mb-1">No {label} events</p>
+        <p className="text-foreground font-semibold text-base mb-1">No events listed</p>
         <p className="text-muted-foreground text-sm max-w-xs">
-          Nothing scheduled here yet — check back soon.
+          There are currently no events matching this filter. Check back soon!
         </p>
       </div>
     </motion.div>
   );
 }
 
-// ── ALL tab: Featured large card (left) ──────────────────────────────────────
+// ── Ownership Pill Component ──────────────────────────────────────────────────
 
-function FeaturedLargeCard({ event, fullWidth }) {
-  const cfg = TYPE[event.type] ?? TYPE.UPCOMING;
-  const { day, month, year } = parseDateParts(event.date);
+function OwnershipBadge({ isJet }) {
+  if (isJet) {
+    return (
+      <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#0096FF]/20 text-[#0096FF] border border-[#0096FF]/40 shadow-[0_0_12px_rgba(0,150,255,0.2)]">
+        <Sparkles className="w-3 h-3" /> JET Event
+      </span>
+    );
+  }
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -30 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.7, ease: 'easeOut' }}
-      className={`${fullWidth ? 'col-span-12' : 'lg:col-span-5'} relative bg-foreground/5 backdrop-blur-sm border border-foreground/10 rounded-2xl overflow-hidden p-7 flex flex-col justify-between transition-all duration-300 hover:bg-foreground/10 hover:border-foreground/15 hover:shadow-[0_12px_40px_rgba(0,150,255,0.08)] group cursor-pointer`}
-    >
-      {/* Top accent line */}
-      <div
-        className="absolute top-0 left-0 right-0 h-0.5 opacity-60"
-        style={{ background: `linear-gradient(to right, ${cfg.color}, transparent)` }}
-      />
-
-      {/* Tag + year */}
-      <div className="flex items-center justify-between mb-6">
-        <span
-          className="text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full border"
-          style={{ color: cfg.color, backgroundColor: `${cfg.color}18`, borderColor: `${cfg.color}30` }}
-        >
-          {event.tag ?? cfg.label}
-        </span>
-        <div className="flex items-center gap-1.5 text-foreground/40 text-xs">
-          <Calendar className="w-3.5 h-3.5" />
-          <span>{year}</span>
-        </div>
-      </div>
-
-      {/* Big date */}
-      <div className="mb-5">
-        <div className="flex items-end gap-2">
-          <span className="text-6xl font-black text-foreground leading-none">{day}</span>
-          <div className="flex flex-col mb-1">
-            <span className="text-sm font-bold leading-tight" style={{ color: cfg.color }}>{month}</span>
-            <span className="text-foreground/30 text-xs leading-tight">{year}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Title + description */}
-      <div className="flex-grow">
-        <h3 className="text-xl font-bold text-foreground leading-snug mb-3 group-hover:text-[#87CEEB] transition-colors duration-300">
-          {event.title}
-        </h3>
-        {event.description && (
-          <p className="text-sm text-foreground/60 leading-relaxed font-light line-clamp-3">
-            {event.description}
-          </p>
-        )}
-      </div>
-
-      {/* Meta */}
-      <div className="mt-6 space-y-2">
-        {event.time && (
-          <div className="flex items-center gap-2 text-foreground/50 text-xs">
-            <Clock className="w-3.5 h-3.5" style={{ color: cfg.color }} />
-            <span>{event.time}</span>
-          </div>
-        )}
-        <div className="flex items-center gap-2 text-foreground/50 text-xs">
-          <MapPin className="w-3.5 h-3.5" style={{ color: cfg.color }} />
-          <span>{event.location}</span>
-        </div>
-      </div>
-
-      {/* CTA */}
-      <Link
-        to={event.type === 'UPCOMING' ? `/events/${event.id}/rsvp` : '/events'}
-        className="mt-7 flex items-center gap-2.5 text-xs uppercase tracking-widest font-semibold transition-colors duration-300 group/btn w-fit"
-        style={{ color: cfg.color }}
-      >
-        <span>{event.type === 'UPCOMING' ? 'Register Now' : 'Learn More'}</span>
-        <div
-          className="w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-300 group-hover/btn:scale-110"
-          style={{ backgroundColor: `${cfg.color}20`, borderColor: `${cfg.color}30` }}
-        >
-          <ArrowRight className="w-3.5 h-3.5" />
-        </div>
-      </Link>
-    </motion.div>
+    <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-400 border border-purple-500/30">
+      <Users className="w-3 h-3" /> Partnership
+    </span>
   );
 }
 
-// ── ALL tab: Stacked list card (right) ───────────────────────────────────────
-
-function ListCard({ event, index }) {
-  const [hovered, setHovered] = useState(false);
-  const cfg = TYPE[event.type] ?? TYPE.UPCOMING;
-  const { day, month } = parseDateParts(event.date);
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 30 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.08, ease: 'easeOut' }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="relative flex items-start gap-5 bg-foreground/5 backdrop-blur-sm border border-foreground/10 rounded-xl p-5 transition-all duration-300 hover:bg-foreground/10 hover:border-foreground/15 hover:scale-[1.01] hover:shadow-[0_8px_24px_rgba(0,150,255,0.06)] group cursor-pointer"
-    >
-      {/* Left accent line */}
-      <div
-        className="absolute left-0 top-4 bottom-4 w-0.5 rounded-full opacity-50"
-        style={{ backgroundColor: cfg.color }}
-      />
-
-      {/* Date block */}
-      <div className="flex-shrink-0 text-center w-12 pl-3">
-        <div className="text-2xl font-black text-foreground leading-none">{day}</div>
-        <div className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: cfg.color }}>
-          {month}
-        </div>
-      </div>
-
-      {/* Divider */}
-      <div className="w-px self-stretch bg-foreground/5 flex-shrink-0" />
-
-      {/* Content */}
-      <div className="flex-grow min-w-0">
-        <div className="flex items-center justify-between gap-2 mb-1.5">
-          <span
-            className="text-[9px] uppercase tracking-widest font-bold px-2 py-0.5 rounded-full border"
-            style={{ color: cfg.color, borderColor: `${cfg.color}33`, backgroundColor: `${cfg.color}11` }}
-          >
-            {event.tag ?? cfg.label}
-          </span>
-          {event.time && (
-            <div className="flex items-center gap-1 text-foreground/30 text-[10px]">
-              <Clock className="w-3 h-3" />
-              <span>{event.time}</span>
-            </div>
-          )}
-        </div>
-
-        <h4 className="text-[15px] font-bold text-foreground leading-snug mb-1.5 group-hover:text-[#87CEEB] transition-colors duration-300 truncate">
-          {event.title}
-        </h4>
-        {event.description && (
-          <p className="text-[12px] text-foreground/50 leading-relaxed font-light line-clamp-2">
-            {event.description}
-          </p>
-        )}
-        <div className="flex items-center gap-1.5 mt-2.5 text-foreground/40 text-[11px]">
-          <MapPin className="w-3 h-3 flex-shrink-0" style={{ color: cfg.color }} />
-          <span className="truncate">{event.location}</span>
-        </div>
-      </div>
-
-      {/* Arrow */}
-      <div
-        className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-300 group-hover:scale-110"
-        style={{
-          backgroundColor: hovered ? cfg.color : `${cfg.color}15`,
-          borderColor: `${cfg.color}30`,
-          color: hovered ? '#fff' : cfg.color,
-        }}
-      >
-        <ArrowRight className="w-3.5 h-3.5" />
-      </div>
-    </motion.div>
-  );
-}
-
-// ── ALL tab layout wrapper ────────────────────────────────────────────────────
-
-function AllEventsLayout({ events }) {
-  const featuredEvent = events.find(e => e.featured) ?? events[0];
-  const rest = events.filter(e => e !== featuredEvent);
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <FeaturedLargeCard event={featuredEvent} fullWidth={rest.length === 0} />
-      {rest.length > 0 && (
-        <div className="lg:col-span-7 flex flex-col gap-5">
-          {rest.map((evt, i) => (
-            <ListCard key={evt.id} event={evt} index={i} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Filtered tab: hero banner ─────────────────────────────────────────────────
-
-function HeroCard({ event }) {
-  const cfg = TYPE[event.type] ?? TYPE.UPCOMING;
-  const cover = event.images?.[0];
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="relative w-full rounded-2xl overflow-hidden group cursor-pointer border border-border"
-      style={{ minHeight: 380 }}
-    >
-      {/* ── Background ── */}
-      {cover ? (
-        <>
-          <img
-            src={cover} alt={event.title}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
-          />
-          {/* Dark overlay over photo — same in both modes; it's intentional cinematic */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
-        </>
-      ) : (
-        <>
-          {/* Light mode: very subtle tinted background */}
-          <div
-            className="absolute inset-0 dark:hidden"
-            style={{ background: `linear-gradient(135deg, ${cfg.color}08 0%, ${cfg.color}18 100%)` }}
-          />
-          {/* Dark mode: rich gradient */}
-          <div className={`absolute inset-0 hidden dark:block bg-gradient-to-br ${cfg.gradient}`} />
-        </>
-      )}
-
-      {/* Left accent bar */}
-      <div className="absolute left-0 top-0 bottom-0 w-1" style={{ backgroundColor: cfg.color }} />
-
-      {/* ── Content ── */}
-      <div className="relative z-10 flex flex-col justify-end p-8 md:p-12" style={{ minHeight: 380 }}>
-
-        {/* Tags */}
-        <div className="flex flex-wrap items-center gap-2 mb-4">
-          <span
-            className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full"
-            style={{ background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.color}50` }}
-          >
-            {cfg.label}
-          </span>
-          {event.featured && (
-            <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full flex items-center gap-1 border border-yellow-400/30 bg-yellow-400/15 ${
-              cover ? 'text-yellow-300' : 'text-yellow-600 dark:text-yellow-300'
-            }`}>
-              <Star className="w-2.5 h-2.5" /> Featured
-            </span>
-          )}
-          {event.tag && (
-            <span className={`text-[10px] font-semibold uppercase tracking-widest px-2.5 py-1 rounded-full ${
-              cover
-                ? 'bg-white/10 text-white/60 border border-white/10'
-                : 'bg-foreground/8 text-foreground/50 dark:bg-white/10 dark:text-white/60 border border-foreground/10 dark:border-white/10'
-            }`}>
-              {event.tag}
-            </span>
-          )}
-        </div>
-
-        {/* Title */}
-        <h2 className={`text-3xl md:text-5xl font-black mb-4 leading-tight tracking-tight max-w-3xl ${
-          cover ? 'text-white' : 'text-foreground dark:text-white'
-        }`}>
-          {event.title}
-        </h2>
-
-        {/* Date + location */}
-        <div className={`flex flex-wrap gap-5 mb-5 text-sm ${
-          cover ? 'text-white/55' : 'text-foreground/55 dark:text-white/55'
-        }`}>
-          <span className="flex items-center gap-1.5">
-            <Calendar className="w-4 h-4" />
-            {fmtDate(event.date)}{event.time ? ` · ${event.time}` : ''}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <MapPin className="w-4 h-4" />
-            {event.location}
-          </span>
-        </div>
-
-        {/* Description */}
-        {event.description && (
-          <p className={`text-base max-w-2xl leading-relaxed mb-7 line-clamp-2 ${
-            cover ? 'text-white/65' : 'text-muted-foreground dark:text-white/65'
-          }`}>
-            {event.description}
-          </p>
-        )}
-
-        {/* CTA */}
-        <div>
-          <Link
-            to={event.type === 'UPCOMING' ? `/events/${event.id}/rsvp` : '/events'}
-            className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-bold text-white transition-all duration-300 hover:scale-105"
-            style={{ backgroundColor: cfg.color, boxShadow: `0 0 28px ${cfg.color}40` }}
-          >
-            {event.type === 'UPCOMING' ? 'Register Now' : 'View Event'}
-            <ArrowUpRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-// ── Filtered tab: regular event card ─────────────────────────────────────────
+// ── Event Card Component ──────────────────────────────────────────────────────
 
 function EventCard({ event, index }) {
   const cfg = TYPE[event.type] ?? TYPE.UPCOMING;
-  const cover = event.images?.[0];
+  const cover = getEventCover(event, index);
   const { day, month, year } = parseDateParts(event.date);
+  const isJet = checkIsJetEvent(event);
+  const dateRangeText = formatDateRange(event);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.06 }}
-      className="group flex flex-col rounded-2xl overflow-hidden border border-border bg-card hover:border-foreground/20 transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/40"
+      transition={{ duration: 0.4, delay: index * 0.05 }}
+      className="group flex flex-col rounded-2xl overflow-hidden border border-border bg-card hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/10"
     >
-      {/* Cover */}
-      <div className="relative aspect-[16/9] overflow-hidden flex-shrink-0">
-        {cover ? (
-          <>
-            <img
-              src={cover} alt={event.title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
-            <div className="absolute bottom-3 left-4 flex items-end gap-2">
-              <span className="text-4xl font-black text-white leading-none drop-shadow">{day}</span>
-              <div className="flex flex-col mb-0.5 drop-shadow">
-                <span className="text-sm font-bold leading-tight" style={{ color: cfg.color }}>{month}</span>
-                <span className="text-white/50 text-[11px] leading-tight">{year}</span>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="relative w-full h-full flex flex-col items-start justify-end p-4">
-            {/* Light mode: subtle tint */}
-            <div
-              className="absolute inset-0 dark:hidden"
-              style={{ background: `linear-gradient(135deg, ${cfg.color}10 0%, ${cfg.color}22 100%)` }}
-            />
-            {/* Dark mode: original rich gradient */}
-            <div className={`absolute inset-0 hidden dark:block bg-gradient-to-br ${cfg.gradient}`} />
-            {/* Date */}
-            <div className="relative z-10">
-              <span className="text-4xl font-black leading-none text-foreground dark:text-white">{day}</span>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-sm font-bold" style={{ color: cfg.color }}>{month}</span>
-                <span className="text-foreground/40 dark:text-white/40 text-xs">{year}</span>
-              </div>
-            </div>
+      {/* Cover Background Photo */}
+      <div className="relative aspect-[16/9] overflow-hidden flex-shrink-0 bg-slate-900">
+        <img
+          src={cover}
+          alt={event.title}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10" />
+
+        {/* Date Overlay */}
+        <div className="absolute bottom-3 left-4 flex items-end gap-2">
+          <span className="text-4xl font-black text-white leading-none drop-shadow">{day}</span>
+          <div className="flex flex-col mb-0.5 drop-shadow">
+            <span className="text-xs font-extrabold leading-tight text-[#0096FF]">{month}</span>
+            <span className="text-white/60 text-[10px] leading-tight">{year}</span>
           </div>
-        )}
+        </div>
 
-        {/* Type pill — top-left when cover present, top-right otherwise to avoid clash */}
-        <span
-          className={`absolute top-3 ${cover ? 'right-3' : 'left-3'} text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full backdrop-blur-sm`}
-          style={{ background: `${cfg.color}28`, color: cfg.color, border: `1px solid ${cfg.color}45` }}
-        >
-          {cfg.label}
-        </span>
-
-        {event.featured && (
-          <span className={`absolute top-3 ${cover ? 'left-3' : 'right-3'} w-7 h-7 rounded-full bg-yellow-400/20 border border-yellow-400/30 flex items-center justify-center backdrop-blur-sm`}>
-            <Star className="w-3 h-3 text-yellow-300" />
+        {/* Top Badges */}
+        <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
+          <OwnershipBadge isJet={isJet} />
+          <span
+            className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full backdrop-blur-md"
+            style={{ background: 'rgba(0,0,0,0.6)', color: cfg.color, border: `1px solid ${cfg.color}50` }}
+          >
+            {cfg.label}
           </span>
-        )}
+        </div>
       </div>
 
-      {/* Body */}
+      {/* Card Content */}
       <div className="flex flex-col flex-1 p-5">
-        <h3 className="text-foreground font-bold text-base leading-snug mb-2 line-clamp-2 group-hover:text-primary transition-colors duration-200">
+        <h3 className="text-foreground font-bold text-base leading-snug mb-2 line-clamp-2 group-hover:text-primary transition-colors">
           {event.title}
         </h3>
 
         {event.description && (
-          <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 flex-1 mb-4">
+          <p className="text-muted-foreground text-xs leading-relaxed line-clamp-2 mb-4 flex-1">
             {event.description}
           </p>
         )}
 
-        {/* Footer meta */}
-        <div className="mt-auto pt-3 border-t border-border space-y-1.5">
+        {/* Date, Time & Location Meta */}
+        <div className="mt-auto pt-3 border-t border-border space-y-1.5 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1.5 font-medium text-foreground/80">
+            <Calendar className="w-3.5 h-3.5 text-primary shrink-0" />
+            <span className="truncate">{dateRangeText}</span>
+          </div>
+
           {event.time && (
-            <div className="flex items-center gap-1.5 text-muted-foreground text-xs">
-              <Clock className="w-3 h-3 flex-shrink-0" style={{ color: cfg.color }} />
-              <span>{event.time}</span>
+            <div className="flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span>Time: {event.time}</span>
             </div>
           )}
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-1.5 text-muted-foreground text-xs min-w-0">
-              <MapPin className="w-3 h-3 flex-shrink-0" style={{ color: cfg.color }} />
+
+          <div className="flex items-center justify-between gap-2 pt-1">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <MapPin className="w-3.5 h-3.5 text-teal-400 shrink-0" />
               <span className="truncate">{event.location}</span>
             </div>
+
             <Link
-              to={event.type === 'UPCOMING' ? `/events/${event.id}/rsvp` : '/events'}
-              className="flex-shrink-0 inline-flex items-center gap-1 text-xs font-semibold transition-all duration-200 group-hover:gap-2"
-              style={{ color: cfg.color }}
+              to={`/events/${event.id}/rsvp`}
+              className="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary/90 transition-all shadow-md hover:shadow-primary/25 cursor-pointer"
             >
-              {event.type === 'UPCOMING' ? 'Register' : 'Details'}
+              <span>Register NOW</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -534,7 +229,79 @@ function EventCard({ event, index }) {
   );
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────────
+// ── Hero Banner Event ─────────────────────────────────────────────────────────
+
+function FeaturedHeroEvent({ event }) {
+  const cover = getEventCover(event, 0);
+  const isJet = checkIsJetEvent(event);
+  const dateRangeText = formatDateRange(event);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="relative w-full rounded-3xl overflow-hidden border border-border bg-slate-900 group shadow-2xl mb-10"
+      style={{ minHeight: 400 }}
+    >
+      <img
+        src={cover}
+        alt={event.title}
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-103"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/20" />
+
+      <div className="relative z-10 p-8 md:p-12 flex flex-col justify-end min-h-[400px]">
+        <div className="flex flex-wrap items-center gap-3 mb-4">
+          <OwnershipBadge isJet={isJet} />
+          {event.featured && (
+            <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 flex items-center gap-1">
+              <Star className="w-3 h-3 fill-amber-300" /> Featured Event
+            </span>
+          )}
+        </div>
+
+        <h2 className="text-3xl md:text-5xl font-black text-white leading-tight mb-4 max-w-3xl">
+          {event.title}
+        </h2>
+
+        <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-2xl mb-6 line-clamp-2">
+          {event.description}
+        </p>
+
+        <div className="flex flex-wrap items-center gap-6 text-sm text-white/90 mb-8">
+          <div className="flex items-center gap-2 bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/10">
+            <Calendar className="w-4 h-4 text-[#0096FF]" />
+            <span className="font-semibold">{dateRangeText}</span>
+          </div>
+
+          {event.time && (
+            <div className="flex items-center gap-2 bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/10">
+              <Clock className="w-4 h-4 text-amber-400" />
+              <span>Time: {event.time}</span>
+            </div>
+          )}
+
+          <div className="flex items-center gap-2 bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/10">
+            <MapPin className="w-4 h-4 text-teal-400" />
+            <span>{event.location}</span>
+          </div>
+        </div>
+
+        <div>
+          <Link
+            to={`/events/${event.id}/rsvp`}
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[#0096FF] hover:bg-[#0080ee] text-white font-bold text-sm shadow-[0_0_24px_rgba(0,150,255,0.4)] transition-all hover:scale-105"
+          >
+            <span>Register NOW</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function Events() {
   const [events, setEvents] = useState([]);
@@ -555,77 +322,54 @@ export default function Events() {
 
   useEffect(() => { load(); }, [load]);
 
-  const filtered = filter === 'ALL'
-    ? events
-    : events.filter(e => e.type === filter);
+  const filtered = events.filter(e => {
+    if (filter === 'ALL') return true;
+    if (filter === 'JET_EVENTS') return checkIsJetEvent(e);
+    if (filter === 'PARTNERSHIPS') return !checkIsJetEvent(e);
+    return e.type === filter;
+  });
 
-  const counts = TABS.reduce((acc, t) => {
-    acc[t.key] = t.key === 'ALL' ? events.length : events.filter(e => e.type === t.key).length;
-    return acc;
-  }, {});
-
-  const featuredEvent = filtered.find(e => e.featured);
-  const restEvents = filtered.filter(e => !e.featured || !featuredEvent);
+  const featuredHero = filtered.find(e => e.featured) || filtered[0];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
 
-      {/* ── Hero section ── */}
-      <div className="max-w-7xl mx-auto px-6 pt-20 pb-10">
+      {/* Header Banner */}
+      <div className="max-w-7xl mx-auto px-6 pt-16 pb-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
           className="max-w-2xl"
         >
-          <span className="text-primary dark:text-secondary text-xs font-semibold uppercase tracking-widest mb-3 block">
-            Gather · Serve · Grow
+          <span className="text-primary font-bold text-xs uppercase tracking-widest mb-2 block">
+            Gather · Fellowship · Serve
           </span>
-          <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tight leading-tight mb-4">
-            Ministry Events
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-tight mb-3">
+            Ministry & Partner Events
           </h1>
-          <p className="text-muted-foreground text-base leading-relaxed">
-            From conferences and outreach missions to intimate home fellowships — every gathering is a moment of purpose.
+          <p className="text-muted-foreground text-base">
+            Explore our JET ministry gatherings and partner conferences. Join us to grow, worship, and build kingdom connections.
           </p>
         </motion.div>
       </div>
 
-      {/* ── Filter tabs ── */}
-      <div className="sticky top-[64px] z-20 bg-background/80 backdrop-blur-md border-b border-border">
+      {/* Filter Tabs */}
+      <div className="sticky top-[56px] z-20 bg-background/85 backdrop-blur-md border-y border-border">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center gap-1 overflow-x-auto scrollbar-none py-1">
-            {TABS.map(tab => {
+          <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-2">
+            {CATEGORY_TABS.map(tab => {
               const active = filter === tab.key;
-              const count = counts[tab.key];
-              const tabColor = tab.key !== 'ALL' ? (TYPE[tab.key]?.color ?? '#0096FF') : '#0096FF';
               return (
                 <button
                   key={tab.key}
                   onClick={() => setFilter(tab.key)}
-                  className={`relative flex items-center gap-2 px-4 py-2.5 text-sm font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer rounded-none ${
-                    active ? '' : 'text-muted-foreground hover:text-foreground'
+                  className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                    active
+                      ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                      : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-muted/50'
                   }`}
-                  style={active ? { color: tabColor } : {}}
                 >
                   {tab.label}
-                  {!loading && count > 0 && (
-                    <span
-                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full transition-all ${
-                        active ? '' : 'bg-muted text-muted-foreground'
-                      }`}
-                      style={active ? { background: `${tabColor}20`, color: tabColor } : {}}
-                    >
-                      {count}
-                    </span>
-                  )}
-                  {active && (
-                    <motion.div
-                      layoutId="tab-indicator"
-                      className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                      style={{ backgroundColor: tabColor }}
-                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                    />
-                  )}
                 </button>
               );
             })}
@@ -633,62 +377,31 @@ export default function Events() {
         </div>
       </div>
 
-      {/* ── Content ── */}
-      <div className="max-w-7xl mx-auto px-6 py-14">
+      {/* Events Grid */}
+      <div className="max-w-7xl mx-auto px-6 py-12">
         {error && (
-          <div className="rounded-2xl border border-destructive/20 bg-destructive/5 px-5 py-4 text-destructive text-sm flex items-center gap-3 mb-8">
-            <span className="font-semibold">Error:</span> {error}
-            <button onClick={load} className="ml-auto text-xs underline cursor-pointer hover:no-underline">Retry</button>
+          <div className="rounded-2xl border border-destructive/20 bg-destructive/10 p-4 text-destructive text-sm mb-6 flex justify-between items-center">
+            <span>{error}</span>
+            <button onClick={load} className="underline text-xs cursor-pointer">Retry</button>
           </div>
         )}
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={filter}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.25 }}
-          >
-            {/* Loading */}
-            {loading && (
-              filter === 'ALL'
-                ? <SkeletonAllLayout />
-                : (
-                  <div className="space-y-5">
-                    <SkeletonHero />
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                      <SkeletonCard /><SkeletonCard /><SkeletonCard />
-                    </div>
-                  </div>
-                )
-            )}
-
-            {/* Empty */}
-            {!loading && filtered.length === 0 && !error && (
-              <EmptyState typeKey={filter} />
-            )}
-
-            {/* ALL tab: featured-left + list-right */}
-            {!loading && filtered.length > 0 && filter === 'ALL' && (
-              <AllEventsLayout events={filtered} />
-            )}
-
-            {/* Filtered tabs: hero banner + image card grid */}
-            {!loading && filtered.length > 0 && filter !== 'ALL' && (
-              <div className="space-y-5">
-                {featuredEvent && <HeroCard event={featuredEvent} />}
-                {restEvents.length > 0 && (
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {restEvents.map((evt, i) => (
-                      <EventCard key={evt.id} event={evt} index={i} />
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
+        {loading ? (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <SkeletonCard /><SkeletonCard /><SkeletonCard />
+          </div>
+        ) : filtered.length === 0 ? (
+          <EmptyState filterKey={filter} />
+        ) : (
+          <div>
+            {featuredHero && filter === 'ALL' && <FeaturedHeroEvent event={featuredHero} />}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filtered.map((evt, idx) => (
+                <EventCard key={evt.id} event={evt} index={idx} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

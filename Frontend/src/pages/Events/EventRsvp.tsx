@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Calendar, CheckCircle2, Clock, MapPin, Users } from "lucide-react";
 import { eventsService, type Event } from "@/api/events.service";

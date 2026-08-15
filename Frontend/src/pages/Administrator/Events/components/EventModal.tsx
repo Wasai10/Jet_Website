@@ -1,11 +1,7 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, CalendarPlus, Save, Star, ImagePlus, Loader2, ChevronDown, Trash2 } from "lucide-react";
-import { eventsService, type Event, type CreateEventPayload, type UpdateEventPayload } from "@/api/events.service";
-
-const PRESET_COLORS = [
-  "#0096FF", "#87CEEB", "#22C55E", "#A855F7", "#F59E0B", "#EF4444", "#EC4899",
-];
+import { X, CalendarPlus, Save, Star, ChevronDown, Sparkles, Users } from "lucide-react";
+import { type Event, type CreateEventPayload, type UpdateEventPayload, type EventOwnership } from "@/api/events.service";
 
 const EVENT_TYPES = [
   { value: "UPCOMING",         label: "Upcoming",           description: "Future scheduled event",         color: "#0096FF" },
@@ -33,7 +29,6 @@ function toDateInput(val?: string | null): string {
   return new Date(val).toISOString().slice(0, 10);
 }
 
-/** Derives PAST or UPCOMING purely from the date string (YYYY-MM-DD). */
 function autoType(dateStr: string): EventType {
   if (!dateStr) return "UPCOMING";
   const today = new Date();
@@ -52,37 +47,36 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [time, setTime] = useState("");
   const [tag, setTag] = useState("");
-  const [color, setColor] = useState("#0096FF");
   const [type, setType] = useState<EventType>("UPCOMING");
+  const [ownership, setOwnership] = useState<EventOwnership>("PARTNERSHIP");
+  const [coverImage, setCoverImage] = useState("");
   const [featured, setFeatured] = useState(false);
-  const [images, setImages] = useState<string[]>([]);
-  const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const typeDropdownRef = useRef<HTMLDivElement>(null);
   const [typeOpen, setTypeOpen] = useState(false);
 
   useEffect(() => {
     if (!open) return;
     const d = toDateInput(event?.date);
+    const ed = toDateInput(event?.endDate);
     setTitle(event?.title ?? "");
     setDescription(event?.description ?? "");
     setLocation(event?.location ?? "");
     setDate(d);
+    setEndDate(ed);
     setTime(event?.time ?? "");
     setTag(event?.tag ?? "");
-    setColor(event?.color ?? "#0096FF");
-    // PAST/UPCOMING are re-derived from the date; any other type stored on the event is preserved
     const storedType = event?.type as EventType | undefined;
     const isDateDerived = !storedType || storedType === "PAST" || storedType === "UPCOMING";
     setType(isDateDerived ? autoType(d) : storedType);
+
+    setOwnership(event?.ownership === "JET" ? "JET" : "PARTNERSHIP");
+    setCoverImage(event?.coverImage ?? (Array.isArray(event?.images) ? event.images[0] : ""));
     setFeatured(event?.featured ?? false);
-    setImages(Array.isArray(event?.images) ? (event.images as string[]) : []);
-    setUploadError("");
     setError("");
   }, [event, open]);
 
@@ -97,35 +91,10 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
     return () => document.removeEventListener("mousedown", handler);
   }, [typeOpen]);
 
-  /** When the date changes, auto-sync only if type is PAST or UPCOMING; preserve any manual selection. */
   const handleDateChange = (val: string) => {
     setDate(val);
     setType((prev) => (prev === "PAST" || prev === "UPCOMING") ? autoType(val) : prev);
   };
-
-  const handleImageFiles = async (files: FileList | null) => {
-    if (!files || files.length === 0) return;
-    setUploadError("");
-    setUploading(true);
-    try {
-      const uploads = await Promise.all(
-        Array.from(files).map(async (file) => {
-          if (!file.type.startsWith("image/")) throw new Error(`${file.name} is not an image.`);
-          if (file.size > 5 * 1024 * 1024) throw new Error(`${file.name} exceeds 5 MB.`);
-          const result = await eventsService.uploadImage(file);
-          return result.url;
-        })
-      );
-      setImages((prev) => [...prev, ...uploads]);
-    } catch (err) {
-      setUploadError(err instanceof Error ? err.message : "Upload failed.");
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const removeImage = (idx: number) =>
-    setImages((prev) => prev.filter((_, i) => i !== idx));
 
   const canSave = !!title.trim() && !!description.trim() && !!location.trim() && !!date;
 
@@ -139,12 +108,13 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
         description: description.trim(),
         location: location.trim(),
         date,
+        endDate: endDate || undefined,
         time: time.trim() || undefined,
         tag: tag.trim() || undefined,
-        color,
         type,
+        ownership,
+        coverImage: coverImage || undefined,
         featured,
-        images: images.length > 0 ? images : undefined,
       };
       await onSave(event?.id ?? null, payload);
     } catch (err) {
@@ -218,9 +188,41 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
                   <input
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="e.g. Sunday Worship Service"
+                    placeholder="e.g. Annual JET Missions & Outreach"
                     className={inputCls}
                   />
+                </div>
+
+                {/* Ownership Selection (JET vs Partnership) */}
+                <div className="space-y-1.5">
+                  <label className={labelCls}>Event Classification (Ownership)</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setOwnership("JET")}
+                      className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                        ownership === "JET"
+                          ? "bg-primary/15 text-primary border-primary shadow-sm"
+                          : "bg-input border-border text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      <span>JET Event</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setOwnership("PARTNERSHIP")}
+                      className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                        ownership === "PARTNERSHIP"
+                          ? "bg-purple-500/15 text-purple-400 border-purple-500 shadow-sm"
+                          : "bg-input border-border text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <Users className="w-4 h-4" />
+                      <span>Partnership Event</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Description */}
@@ -245,16 +247,16 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
                   <input
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    placeholder="e.g. JET Ministries Auditorium"
+                    placeholder="e.g. JET Main Auditorium"
                     className={inputCls}
                   />
                 </div>
 
-                {/* Date + Time */}
+                {/* From Date + To Date */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className={labelCls}>
-                      Date <span className="text-red-400">*</span>
+                      From Date <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="date"
@@ -263,78 +265,65 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
                       className={`${inputCls} dark:[color-scheme:dark] [color-scheme:light]`}
                     />
                   </div>
+
                   <div className="space-y-1.5">
                     <label className={labelCls}>
-                      Time{" "}
-                      <span className="text-muted-foreground/40 normal-case font-normal">(optional)</span>
+                      To Date <span className="text-muted-foreground/40 normal-case font-normal">(optional)</span>
+                    </label>
+                    <input
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      className={`${inputCls} dark:[color-scheme:dark] [color-scheme:light]`}
+                    />
+                  </div>
+                </div>
+
+                {/* Time + Tag */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className={labelCls}>
+                      Time <span className="text-muted-foreground/40 normal-case font-normal">(e.g. 09:00 AM – 05:00 PM)</span>
                     </label>
                     <input
                       value={time}
                       onChange={(e) => setTime(e.target.value)}
-                      placeholder="e.g. 10:00 AM – 1:00 PM"
+                      placeholder="e.g. 09:00 AM – 05:00 PM"
+                      className={inputCls}
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className={labelCls}>Tag</label>
+                    <input
+                      value={tag}
+                      onChange={(e) => setTag(e.target.value)}
+                      placeholder="e.g. Mission, Youth, Prayer"
                       className={inputCls}
                     />
                   </div>
                 </div>
 
-                {/* Tag + Color */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className={labelCls}>
-                      Tag{" "}
-                      <span className="text-muted-foreground/40 normal-case font-normal">(optional)</span>
-                    </label>
-                    <input
-                      value={tag}
-                      onChange={(e) => setTag(e.target.value)}
-                      placeholder="e.g. Youth, Prayer"
-                      className={inputCls}
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className={labelCls}>Accent Color</label>
-                    <div className="flex items-center gap-2 flex-wrap pt-1">
-                      {PRESET_COLORS.map((c) => (
-                        <button
-                          key={c}
-                          type="button"
-                          onClick={() => setColor(c)}
-                          title={c}
-                          className={`w-7 h-7 rounded-full border-2 transition-all duration-200 cursor-pointer shrink-0 ${
-                            color === c
-                              ? "border-white scale-110 shadow-[0_0_8px_rgba(255,255,255,0.3)]"
-                              : "border-transparent opacity-60 hover:opacity-100 hover:scale-105"
-                          }`}
-                          style={{ backgroundColor: c }}
-                        />
-                      ))}
-                      {/* Live preview swatch */}
-                      <span
-                        className="ml-1 text-[10px] font-mono text-muted-foreground/60"
-                        style={{ color }}
-                      >
-                        {color}
-                      </span>
-                    </div>
-                  </div>
+                {/* Background Cover Image Photo URL */}
+                <div className="space-y-1.5">
+                  <label className={labelCls}>Background Photo Image URL</label>
+                  <input
+                    value={coverImage}
+                    onChange={(e) => setCoverImage(e.target.value)}
+                    placeholder="https://images.unsplash.com/..."
+                    className={inputCls}
+                  />
+                  <p className="text-[10px] text-muted-foreground">URL of cover background photo displayed on event cards.</p>
                 </div>
 
                 {/* Event Type dropdown */}
                 <div className="space-y-1.5">
-                  <label className={labelCls}>
-                    Event Type
-                    {(type === "PAST" || type === "UPCOMING") && (
-                      <span className="ml-1.5 normal-case font-normal text-muted-foreground/40 tracking-normal">
-                        — auto-set from date
-                      </span>
-                    )}
-                  </label>
+                  <label className={labelCls}>Event Category Type</label>
                   <div className="relative" ref={typeDropdownRef}>
-                    {/* Trigger */}
                     <button
                       type="button"
                       onClick={() => setTypeOpen((v) => !v)}
-                      className="w-full bg-input border border-border rounded-xl px-4 py-3 text-foreground text-sm outline-none focus:border-primary/50 focus:shadow-[0_0_0_3px_rgba(0,150,255,0.1)] transition-all cursor-pointer flex items-center gap-3 text-left"
+                      className="w-full bg-input border border-border rounded-xl px-4 py-3 text-foreground text-sm outline-none focus:border-primary/50 transition-all cursor-pointer flex items-center gap-3 text-left"
                     >
                       <span
                         className="w-2.5 h-2.5 rounded-full flex-shrink-0"
@@ -348,15 +337,13 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
                       />
                     </button>
 
-                    {/* Options panel */}
                     <AnimatePresence>
                       {typeOpen && (
                         <motion.div
                           initial={{ opacity: 0, y: -6, scale: 0.98 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: -6, scale: 0.98 }}
-                          transition={{ duration: 0.15 }}
-                          className="absolute z-50 top-full left-0 right-0 mt-1.5 bg-card border border-border rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.18)] overflow-hidden"
+                          className="absolute z-50 top-full left-0 right-0 mt-1.5 bg-card border border-border rounded-xl shadow-2xl overflow-hidden"
                         >
                           <div className="max-h-64 overflow-y-auto py-1">
                             {EVENT_TYPES.map((t) => {
@@ -367,9 +354,7 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
                                   type="button"
                                   onClick={() => { setType(t.value as EventType); setTypeOpen(false); }}
                                   className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left transition-colors ${
-                                    selected
-                                      ? "bg-primary/8 text-foreground"
-                                      : "text-foreground hover:bg-muted/60"
+                                    selected ? "bg-primary/10 text-foreground font-bold" : "text-foreground hover:bg-muted/60"
                                   }`}
                                 >
                                   <span
@@ -380,12 +365,6 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
                                     <div className="font-medium leading-tight">{t.label}</div>
                                     <div className="text-[11px] text-muted-foreground leading-tight mt-0.5">{t.description}</div>
                                   </div>
-                                  {selected && (
-                                    <span
-                                      className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                                      style={{ backgroundColor: t.color }}
-                                    />
-                                  )}
                                 </button>
                               );
                             })}
@@ -403,7 +382,6 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
                       className={`w-4 h-4 transition-colors ${featured ? "text-amber-400 fill-amber-400" : "text-muted-foreground/50"}`}
                     />
                     <span className="text-sm font-medium text-foreground/70">Featured Event</span>
-                    <span className="text-xs text-muted-foreground/50 hidden sm:inline">— shown prominently on the homepage</span>
                   </div>
                   <button
                     type="button"
@@ -419,74 +397,6 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
                     />
                   </button>
                 </div>
-
-                {/* Images */}
-                <div className="space-y-2">
-                  <label className={labelCls}>
-                    <span className="flex items-center gap-1.5">
-                      <ImagePlus className="w-3 h-3" />
-                      Event Poster & Photos
-                      <span className="text-muted-foreground/40 normal-case font-normal">(optional)</span>
-                    </span>
-                  </label>
-
-                  <p className="text-xs text-muted-foreground/60">The first image is used as the event poster on the website.</p>
-                  {/* Uploaded thumbnails */}
-                  {images.length > 0 && (
-                    <div className="grid grid-cols-3 gap-2">
-                      {images.map((url, idx) => (
-                        <div key={idx} className="relative group rounded-xl overflow-hidden border border-border aspect-video">
-                          <img
-                            src={url}
-                            alt={`Event image ${idx + 1}`}
-                            className="w-full h-full object-cover"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => removeImage(idx)}
-                            className="absolute top-1.5 right-1.5 w-6 h-6 rounded-lg bg-black/60 hover:bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Drop zone */}
-                  <div
-                    onClick={() => !uploading && fileInputRef.current?.click()}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={(e) => { e.preventDefault(); handleImageFiles(e.dataTransfer.files); }}
-                    className="flex flex-col items-center justify-center gap-2 h-24 rounded-xl border-2 border-dashed border-border hover:border-primary/40 bg-card hover:bg-input transition-all cursor-pointer"
-                  >
-                    {uploading ? (
-                      <>
-                        <Loader2 className="w-5 h-5 text-primary animate-spin" />
-                        <span className="text-muted-foreground/60 text-xs">Uploading…</span>
-                      </>
-                    ) : (
-                      <>
-                        <ImagePlus className="w-5 h-5 text-muted-foreground/50" />
-                        <p className="text-muted-foreground/60 text-xs text-center">
-                          Drop images here or <span className="text-primary">browse</span>
-                        </p>
-                        <p className="text-muted-foreground/40 text-[10px]">Max 5 MB · JPEG, PNG, WebP · Multiple allowed</p>
-                      </>
-                    )}
-                  </div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={(e) => { handleImageFiles(e.target.files); e.target.value = ""; }}
-                    className="hidden"
-                  />
-                  {uploadError && (
-                    <p className="text-red-400 text-xs">{uploadError}</p>
-                  )}
-                </div>
               </div>
 
               {/* Footer */}
@@ -501,7 +411,7 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
                 <button
                   onClick={handleSave}
                   disabled={loading || !canSave}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[#0096FF] hover:bg-[#0080ee] disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-all shadow-[0_0_16px_rgba(0,150,255,0.3)] cursor-pointer"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[#0096FF] hover:bg-[#0080ee] disabled:opacity-40 text-white text-sm font-semibold transition-all shadow-md cursor-pointer"
                 >
                   {loading ? (
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

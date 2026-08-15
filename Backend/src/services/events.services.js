@@ -59,6 +59,10 @@ const getEventRsvps = async (eventId) => {
   return eventRepository.findRsvpsByEventId(eventId);
 };
 
+const getAllRsvps = async () => {
+  return eventRepository.findAllRsvps();
+};
+
 module.exports = {
   getAllEvents,
   getEventById,
@@ -67,4 +71,5 @@ module.exports = {
   deleteEvent,
   rsvpToEvent,
   getEventRsvps,
+  getAllRsvps,
 };

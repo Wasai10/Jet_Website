@@ -8,6 +8,7 @@ const blogRoutes = require("./src/routes/blog.routes");
 const livestreamRoutes = require("./src/routes/livestream.routes");
 const leadershipRoutes = require("./src/routes/leadership.routes");
 const departmentRoutes = require("./src/routes/department.routes");
+const documentsRoutes = require("./src/routes/documents.routes");
 
 const app = express();
 const PORT = config.server.port;
@@ -26,6 +27,7 @@ app.use("/api/blog", blogRoutes);
 app.use("/api/livestream", livestreamRoutes);
 app.use("/api/leadership", leadershipRoutes);
 app.use("/api/departments", departmentRoutes);
+app.use("/api/documents", documentsRoutes);
 
 app.use((err, req, res, next) => {
   console.error("Unhandled Error:", err);
