@@ -6,8 +6,6 @@ const { parseEventImageUpload, uploadEventImageToCloudinary } = require("../midd
 
 const router = express.Router();
 
-const router = express.Router();
-
 // Public routes — anyone can read events
 router.get("/", eventsController.getAllEvents);
 router.get("/:id", eventsController.getEventById);

@@ -173,3 +173,15 @@ model Department {
   updatedAt       DateTime   @updatedAt
 }
 
+model MinistryDocument {
+  id           String   @id @default(uuid())
+  title        String
+  description  String   @db.Text
+  fileUrl      String
+  filePublicId String?
+  fileName     String
+  fileSize     String
+  category     String   @default("General")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

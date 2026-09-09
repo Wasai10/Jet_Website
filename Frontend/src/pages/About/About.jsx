@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Users, Heart, UserX, Layers } from 'lucide-react';
-import LiveStream from '@/components/Sections/LiveStream';
 import { leadershipService } from '@/api/leadership.service';
 import { departmentService } from '@/api/department.service';
 
@@ -261,9 +260,6 @@ export default function About() {
                     )}
                 </div>
             </section>
-
-            {/* 7. Worship Arts — Live Stream */}
-            <LiveStream />
         </div>
     );
 }

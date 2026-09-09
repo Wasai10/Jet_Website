@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { X, ZoomIn, ChevronLeft, ChevronRight, Images, ImageOff } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { galleryService, PHOTO_CATEGORIES } from '@/api/gallery.service'
-import LiveStream from '@/components/Sections/LiveStream'
 
 const ALL_TABS = ['All', ...PHOTO_CATEGORIES]
 
@@ -238,11 +237,6 @@ export default function Gallery() {
             </motion.div>
           </AnimatePresence>
         )}
-
-        {/* ── Livestream section ── */}
-        <div className="mt-4 -mx-6">
-          <LiveStream />
-        </div>
       </div>
 
       {/* ── Lightbox (always dark by design) ── */}
