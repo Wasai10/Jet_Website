@@ -1,12 +1,5 @@
 const multer = require("multer");
-const { v2: cloudinary } = require("cloudinary");
-const config = require("../configs");
-
-cloudinary.config({
-  cloud_name: config.cloudinary.cloudName,
-  api_key: config.cloudinary.apiKey,
-  api_secret: config.cloudinary.apiSecret,
-});
+const { cloudinary, isConfigured } = require("../configs/cloudinary");
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -16,6 +9,13 @@ const upload = multer({
 
 const uploadEventImageToCloudinary = async (req, _res, next) => {
   if (!req.file) return next();
+  if (!isConfigured()) {
+    return next(
+      new Error(
+        "Cloudinary is not configured. Please add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET (or CLOUDINARY_URL) to Backend/.env"
+      )
+    );
+  }
   try {
     req.eventImageResult = await new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
