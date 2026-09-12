@@ -4,22 +4,8 @@ const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000/api";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-export type PhotoCategory =
-  | "Worship"
-  | "Community"
-  | "Events"
-  | "Youth"
-  | "Outreach"
-  | "General";
-
-export const PHOTO_CATEGORIES: PhotoCategory[] = [
-  "Worship",
-  "Community",
-  "Events",
-  "Youth",
-  "Outreach",
-  "General",
-];
+// Category is now a plain string — populated dynamically from event titles.
+export type PhotoCategory = string;
 
 export interface Photo {
   id: string;

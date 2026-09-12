@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Upload, Save, Star, ImageIcon, Plus } from "lucide-react";
 import {
-  PHOTO_CATEGORIES,
   type Photo,
   type PhotoCategory,
   type UploadPhotoMetadata,
@@ -17,6 +16,7 @@ export interface UploadItem {
 interface Props {
   open: boolean;
   photo: Photo | null;
+  categories: string[];
   onClose: () => void;
   onUpload: (items: UploadItem[]) => Promise<void>;
   onUpdate: (id: string, payload: UpdatePhotoPayload) => Promise<void>;
@@ -32,7 +32,7 @@ const filenameToTitle = (f: File) =>
     .replace(/[-_]/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
-export default function PhotoModal({ open, photo, onClose, onUpload, onUpdate }: Props) {
+export default function PhotoModal({ open, photo, categories, onClose, onUpload, onUpdate }: Props) {
   const isCreate = open && photo === null;
 
   const [files, setFiles] = useState<File[]>([]);
@@ -40,7 +40,7 @@ export default function PhotoModal({ open, photo, onClose, onUpload, onUpdate }:
   const [dragging, setDragging] = useState(false);
   const [title, setTitle] = useState("");
   const [alt, setAlt] = useState("");
-  const [category, setCategory] = useState<PhotoCategory>("General");
+  const [category, setCategory] = useState<PhotoCategory>("");
   const [featured, setFeatured] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -60,7 +60,7 @@ export default function PhotoModal({ open, photo, onClose, onUpload, onUpdate }:
     setDragging(false);
     setTitle(photo?.title ?? "");
     setAlt(photo?.alt ?? "");
-    setCategory((photo?.category as PhotoCategory) ?? "General");
+    setCategory(photo?.category ?? categories[0] ?? "");
     setFeatured(photo?.featured ?? false);
     setError("");
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -358,7 +358,7 @@ export default function PhotoModal({ open, photo, onClose, onUpload, onUpdate }:
                     )}
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {PHOTO_CATEGORIES.map((cat) => (
+                    {categories.map((cat) => (
                       <button
                         key={cat}
                         type="button"
