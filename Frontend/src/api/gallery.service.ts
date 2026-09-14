@@ -2,6 +2,8 @@ import { request, tokenStore, authService } from "./auth.service";
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000/api";
 
+export const PHOTO_CATEGORIES = ["Worship", "Community", "Outreach", "Youth", "General"];
+
 // ── Types ────────────────────────────────────────────────────────────────────
 
 // Category is now a plain string — populated dynamically from event titles.

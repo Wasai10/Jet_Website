@@ -1,4 +1,6 @@
-const VALID_CATEGORIES = ["Worship", "Community", "Events", "Youth", "Outreach", "General"];
+const validateGalleryCategory = (category) => {
+  return typeof category === "string" && category.trim().length >= 1;
+};
 
 const validatePhotoCreate = (req, res, next) => {
   const { title, alt, category } = req.body;
@@ -15,9 +17,9 @@ const validatePhotoCreate = (req, res, next) => {
     return res.status(400).json({ error: "Alt text is required and must be at least 2 characters." });
   }
 
-  if (category !== undefined && !VALID_CATEGORIES.includes(category)) {
+  if (category !== undefined && !validateGalleryCategory(category)) {
     return res.status(400).json({
-      error: `Category must be one of: ${VALID_CATEGORIES.join(", ")}.`,
+      error: "Category must be a non-empty string.",
     });
   }
 
@@ -35,13 +37,13 @@ const validatePhotoUpdate = (req, res, next) => {
     return res.status(400).json({ error: "Alt text must be at least 2 characters." });
   }
 
-  if (category !== undefined && !VALID_CATEGORIES.includes(category)) {
+  if (category !== undefined && !validateGalleryCategory(category)) {
     return res.status(400).json({
-      error: `Category must be one of: ${VALID_CATEGORIES.join(", ")}.`,
+      error: "Category must be a non-empty string.",
     });
   }
 
   next();
 };
 
-module.exports = { validatePhotoCreate, validatePhotoUpdate, VALID_CATEGORIES };
+module.exports = { validatePhotoCreate, validatePhotoUpdate };
