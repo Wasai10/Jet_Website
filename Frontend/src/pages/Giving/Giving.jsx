@@ -70,9 +70,6 @@ export default function Giving() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center max-w-3xl mx-auto space-y-4"
         >
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest">
-            <Heart className="w-3.5 h-3.5 fill-primary" /> Generosity & Resources
-          </span>
           <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
             Partner in Ministry & Downloads
           </h1>
