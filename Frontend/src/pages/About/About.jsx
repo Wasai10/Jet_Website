@@ -22,12 +22,12 @@ export default function About() {
         <div className="bg-background text-foreground min-h-screen pb-20 overflow-x-hidden">
 
             {/* 1. Hero */}
-            <section className="relative h-[80vh] overflow-hidden">
+            <section className="relative h-[95vh] overflow-hidden">
                 {/* Background image */}
                 <img
                     src="https://res.cloudinary.com/dxeuvtxys/image/upload/v1790668559/Background_photo_nzwy4a.jpg"
                     alt="JET Ministries — our roots"
-                    className="absolute inset-0 w-full h-full object-cover object-center"
+                    className="absolute inset-0 w-full h-full object-cover object-top"
                 />
                 {/* Overlay so text is always legible */}
                 <div className="absolute inset-0 bg-black/55" />
@@ -59,7 +59,7 @@ export default function About() {
                             <div className="w-12 h-1 bg-primary rounded-full mx-auto" />
 
                             {/* Body */}
-                            <p className="text-white/65 text-base md:text-lg leading-relaxed max-w-3xl mx-auto">
+                            <p className="text-white text-base md:text-lg leading-relaxed max-w-3xl mx-auto">
                                 JET stands for Jesus Evangelistic Train, hence we have JET Ministries International. It began when its founder was still a student, following a call to start a ministry. It initially began as a healing ministry with only three members. Over time, more people joined, and the ministry continued to grow. Today, the vision is to see people grow spiritually and become a positive influence in society, with a strong desire for the members to also make a meaningful economic impact.
                             </p>
 
