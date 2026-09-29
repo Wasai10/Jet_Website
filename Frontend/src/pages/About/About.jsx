@@ -29,8 +29,8 @@ export default function About() {
                     alt="JET Ministries — our roots"
                     className="absolute inset-0 w-full h-full object-cover object-center"
                 />
-                {/* Left-heavy overlay so text is always legible */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/10" />
+                {/* Overlay so text is always legible */}
+                <div className="absolute inset-0 bg-black/55" />
                 {/* Top darkening to blend with fixed nav */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
 
