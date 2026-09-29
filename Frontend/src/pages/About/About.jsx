@@ -59,8 +59,8 @@ export default function About() {
 
                             {/* Body */}
                             <p className="text-white/65 text-sm md:text-base leading-relaxed">
-                                From a small living-room fellowship to a vibrant multi-city ministry —
-                                built on faith, shaped by calling, and sustained by God's boundless grace.
+                                JET stands for Jesus Evangelistic Train,Hence we have JET Ministries International.It began when its founder was still a student, following a call to start a ministry. It initially began as a healing ministry with only three members. Over time, more people joined, and the ministry continued to grow. Today, the vision is to see people grow spiritually and become a positive influence in society, with a strong desire for the members to also make a meaningful economic impact.
+
                             </p>
 
                         </motion.div>
