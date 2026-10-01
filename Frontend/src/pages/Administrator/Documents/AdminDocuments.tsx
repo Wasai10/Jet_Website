@@ -197,7 +197,7 @@ export default function AdminDocuments() {
 
                 <div className="pt-4 mt-4 border-t border-border/60 flex items-center justify-between">
                   <a
-                    href={doc.fileUrl}
+                    href={doc.filePublicId ? documentsService.getDownloadUrl(doc.id) : doc.fileUrl}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline"

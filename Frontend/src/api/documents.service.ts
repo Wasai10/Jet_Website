@@ -30,6 +30,10 @@ export const documentsService = {
     return data.documents;
   },
 
+  getDownloadUrl(id: string): string {
+    return `${API_URL}/documents/${encodeURIComponent(id)}/download`;
+  },
+
   async create(payload: CreateDocumentPayload, file?: File): Promise<MinistryDocument> {
     if (file) {
       const form = new FormData();

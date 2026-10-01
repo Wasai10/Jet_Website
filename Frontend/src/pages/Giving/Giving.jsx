@@ -43,7 +43,7 @@ export default function Giving() {
       showConfirmButton: false,
     });
     const link = document.createElement('a');
-    link.href = doc.fileUrl;
+    link.href = doc.filePublicId ? documentsService.getDownloadUrl(doc.id) : doc.fileUrl;
     link.target = '_blank';
     link.download = doc.fileName || `${doc.title}.pdf`;
     document.body.appendChild(link);

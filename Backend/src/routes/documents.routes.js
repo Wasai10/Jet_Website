@@ -7,6 +7,7 @@ const router = express.Router();
 
 // Public route: get all ministry documents
 router.get("/", documentsController.getAllDocuments);
+router.get("/:id/download", documentsController.downloadDocument);
 
 // Admin routes: upload document file & create/delete document record
 router.post(
