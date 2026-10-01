@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Heart, UserX, Layers, Zap, Trophy } from 'lucide-react';
+import { HandHeart, Globe2, UserX, Layers, Waves, Crown } from 'lucide-react';
 import { leadershipService } from '@/api/leadership.service';
 import { departmentService } from '@/api/department.service';
 
@@ -59,7 +59,7 @@ export default function About() {
                             <div className="w-12 h-1 bg-primary rounded-full mx-auto" />
 
                             {/* Body */}
-                            <p className="text-white/75 text-base md:text-lg leading-relaxed max-w-3xl mx-auto">
+                            <p className="text-white text-base md:text-lg leading-relaxed max-w-3xl mx-auto drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
                                 JET stands for Jesus Evangelistic Train, hence we have JET Ministries International. It began when its founder was still a student, following a call to start a ministry. It initially began as a healing ministry with only three members. Over time, more people joined, and the ministry continued to grow. Today, the vision is to see people grow spiritually and become a positive influence in society, with a strong desire for the members to also make a meaningful economic impact.
                             </p>
 
@@ -112,7 +112,7 @@ export default function About() {
             <section className="max-w-7xl mx-auto px-6 py-20">
                 <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
                     <div className="bg-gradient-to-br from-primary/20 to-transparent p-10 rounded-3xl border border-primary/30 backdrop-blur-sm">
-                        <Heart className="w-12 h-12 text-primary mb-6" />
+                        <HandHeart className="w-12 h-12 text-primary mb-6" />
                         <h3 className="text-3xl font-bold mb-4 text-foreground">Our Mission</h3>
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             To prepare God's people for the works of service that the body of Christ may be built. (Ephesians 4:12)
@@ -120,21 +120,21 @@ export default function About() {
                         </p>
                     </div>
                     <div className="bg-gradient-to-br from-purple-500/20 to-transparent p-10 rounded-3xl border border-purple-500/30 backdrop-blur-sm">
-                        <Users className="w-12 h-12 text-purple-500 dark:text-purple-400 mb-6" />
+                        <Globe2 className="w-12 h-12 text-purple-500 dark:text-purple-400 mb-6" />
                         <h3 className="text-3xl font-bold mb-4 text-foreground">Our Vision</h3>
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             To develop a generation to impact the whole world for Jesus Christ turning them to be fully committed followers of Him.
                         </p>
                     </div>
                     <div className="bg-gradient-to-br from-primary/20 to-transparent p-10 rounded-3xl border border-primary/30 backdrop-blur-sm">
-                        <Zap className="w-12 h-12 text-primary mb-6" />
+                        <Waves className="w-12 h-12 text-primary mb-6" />
                         <h3 className="text-2xl font-bold mb-4 text-foreground">Our Driving Force</h3>
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             Impacting Generations
                         </p>
                     </div>
                     <div className="bg-gradient-to-br from-purple-500/20 to-transparent p-10 rounded-3xl border border-purple-500/30 backdrop-blur-sm">
-                        <Trophy className="w-12 h-12 text-purple-500 dark:text-purple-400 mb-6" />
+                        <Crown className="w-12 h-12 text-purple-500 dark:text-purple-400 mb-6" />
                         <h3 className="text-3xl font-bold mb-4 text-foreground">Our Mantra</h3>
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             Helping the Next Generation Win
@@ -186,13 +186,20 @@ export default function About() {
                                 quote: "I am the LORD who heals you.",
                                 reference: "Exodus 15:26",
                             },
-                        ].map(({ title, body, quote, reference }) => (
-                            <article key={title} className="rounded-2xl border border-border bg-background/80 p-7 shadow-sm">
-                                <div className="mb-5 h-1 w-10 rounded-full bg-primary" />
+                        ].map(({ title, body, quote, reference }, index) => (
+                            <article
+                                key={title}
+                                className={`rounded-2xl border p-7 backdrop-blur-sm ${
+                                    index % 2 === 0
+                                        ? "bg-gradient-to-br from-primary/20 to-transparent border-primary/30"
+                                        : "bg-gradient-to-br from-purple-500/20 to-transparent border-purple-500/30"
+                                }`}
+                            >
+                                <div className={`mb-5 h-1 w-10 rounded-full ${index % 2 === 0 ? "bg-primary" : "bg-purple-500"}`} />
                                 <h3 className="text-xl font-semibold mb-3 text-foreground">{title}</h3>
                                 <p className="text-muted-foreground leading-relaxed">{body}</p>
                                 {quote && (
-                                    <blockquote className="mt-5 border-l-2 border-primary/50 pl-4 text-foreground/80">
+                                    <blockquote className={`mt-5 border-l-2 pl-4 text-foreground/80 ${index % 2 === 0 ? "border-primary/50" : "border-purple-500/50"}`}>
                                         <p className="italic">“{quote}”</p>
                                         <cite className="mt-2 block text-sm not-italic text-muted-foreground">— {reference}</cite>
                                     </blockquote>
