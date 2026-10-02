@@ -92,7 +92,7 @@ export default function About() {
                                     <h3 className="font-bold text-foreground text-base">Our Vision</h3>
                                 </div>
                                 <p className="text-sm text-foreground/70 leading-relaxed font-light">
-                                    To be a lighthouse of hope, raising a generation of believers who are deeply rooted in Christ, walking in faith, and active in service.
+                                    To develop a generation to impact the whole world for Jesus Christ turning them to be fully committed followers of Him.
                                 </p>
                             </div>
 
@@ -105,7 +105,7 @@ export default function About() {
                                     <h3 className="font-bold text-foreground text-base">Our Mission</h3>
                                 </div>
                                 <p className="text-sm text-foreground/70 leading-relaxed font-light">
-                                    To share the message of Christ through word and action, equipping believers to grow spiritually and reach the world with His love.
+                                    To prepare God's people for the works of service that the body of Christ may be built. (Ephesians 4:12)
                                 </p>
                             </div>
                         </div>

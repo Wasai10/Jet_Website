@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { HandHeart, Globe2, UserX, Layers, Waves, Crown } from 'lucide-react';
+import { Users, Heart, UserX, Layers, Zap, Trophy } from 'lucide-react';
 import { leadershipService } from '@/api/leadership.service';
 import { departmentService } from '@/api/department.service';
 
@@ -22,44 +22,62 @@ export default function About() {
         <div className="bg-background text-foreground min-h-screen pb-20 overflow-x-hidden">
 
             {/* 1. Hero */}
+            <section className="relative h-[80vh] overflow-hidden">
             <section className="relative h-[95vh] overflow-hidden">
                 {/* Background image */}
                 <img
+                    src="https://res.cloudinary.com/dom6wa8ih/image/upload/v1782561968/jet_gallery/sok6zgpetvozpbid13pt.jpg"
                     src="https://res.cloudinary.com/dxeuvtxys/image/upload/v1790668559/Background_photo_nzwy4a.jpg"
                     alt="JET Ministries — our roots"
+                    className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
                     className="absolute inset-0 w-full h-full object-cover object-top"
                 />
+                {/* Left-heavy overlay so text is always legible */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/10" />
                 {/* Overlay so text is always legible */}
                 <div className="absolute inset-0 bg-black/55" />
                 {/* Top darkening to blend with fixed nav */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
 
+                {/* Content — vertically centred, cleared below the nav */}
+                <div className="absolute inset-0 flex items-center">
                 {/* Content — vertically centred */}
                 <div className="absolute inset-0 flex items-center justify-center">
                     <div className="max-w-7xl mx-auto px-6 w-full" style={{ paddingTop: '4.5rem' }}>
                         <motion.div
+                            initial={{ opacity: 0, x: -28 }}
+                            animate={{ opacity: 1, x: 0 }}
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.85, ease: "easeOut" }}
+                            className="max-w-lg space-y-4"
                             className="space-y-4 text-center"
                         >
                             {/* Eyebrow */}
+                            <div className="flex items-center gap-3">
                             <div className="flex items-center justify-center gap-3">
                                 <span className="w-7 h-[2px] bg-primary rounded-full shrink-0" />
+                                <span className="text-primary text-[11px] font-bold uppercase tracking-[0.22em]">Our Roots & Origin</span>
                                 <span className="text-primary text-[13px] font-bold uppercase tracking-[0.22em]">Our Roots &amp; Origin</span>
                                 <span className="w-7 h-[2px] bg-primary rounded-full shrink-0" />
                             </div>
 
                             {/* Headline */}
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.08] tracking-tight">
+                                Where It<br />All Began
                             <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-[1.08] tracking-tight">
                                 Where It All Began
                             </h1>
 
                             {/* Divider */}
+                            <div className="w-12 h-1 bg-primary rounded-full" />
                             <div className="w-12 h-1 bg-primary rounded-full mx-auto" />
 
                             {/* Body */}
-                            <p className="text-white text-base md:text-lg leading-relaxed max-w-3xl mx-auto drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+                            <p className="text-white text-sm md:text-base leading-relaxed">
+                                JET stands for Jesus Evangelistic Train, hence we have JET Ministries International.It began when its founder was still a student, following a call to start a ministry. It initially began as a healing ministry with only three members. Over time, more people joined, and the ministry continued to grow. Today, the vision is to see people grow spiritually and become a positive influence in society, with a strong desire for the members to also make a meaningful economic impact.
+
+                            <p className="text-white/75 text-base md:text-lg leading-relaxed max-w-3xl mx-auto">
                                 JET stands for Jesus Evangelistic Train, hence we have JET Ministries International. It began when its founder was still a student, following a call to start a ministry. It initially began as a healing ministry with only three members. Over time, more people joined, and the ministry continued to grow. Today, the vision is to see people grow spiritually and become a positive influence in society, with a strong desire for the members to also make a meaningful economic impact.
                             </p>
 
@@ -112,7 +130,7 @@ export default function About() {
             <section className="max-w-7xl mx-auto px-6 py-20">
                 <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
                     <div className="bg-gradient-to-br from-primary/20 to-transparent p-10 rounded-3xl border border-primary/30 backdrop-blur-sm">
-                        <HandHeart className="w-12 h-12 text-primary mb-6" />
+                        <Heart className="w-12 h-12 text-primary mb-6" />
                         <h3 className="text-3xl font-bold mb-4 text-foreground">Our Mission</h3>
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             To prepare God's people for the works of service that the body of Christ may be built. (Ephesians 4:12)
@@ -120,21 +138,21 @@ export default function About() {
                         </p>
                     </div>
                     <div className="bg-gradient-to-br from-purple-500/20 to-transparent p-10 rounded-3xl border border-purple-500/30 backdrop-blur-sm">
-                        <Globe2 className="w-12 h-12 text-purple-500 dark:text-purple-400 mb-6" />
+                        <Users className="w-12 h-12 text-purple-500 dark:text-purple-400 mb-6" />
                         <h3 className="text-3xl font-bold mb-4 text-foreground">Our Vision</h3>
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             To develop a generation to impact the whole world for Jesus Christ turning them to be fully committed followers of Him.
                         </p>
                     </div>
                     <div className="bg-gradient-to-br from-primary/20 to-transparent p-10 rounded-3xl border border-primary/30 backdrop-blur-sm">
-                        <Waves className="w-12 h-12 text-primary mb-6" />
+                        <Zap className="w-12 h-12 text-primary mb-6" />
                         <h3 className="text-2xl font-bold mb-4 text-foreground">Our Driving Force</h3>
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             Impacting Generations
                         </p>
                     </div>
                     <div className="bg-gradient-to-br from-purple-500/20 to-transparent p-10 rounded-3xl border border-purple-500/30 backdrop-blur-sm">
-                        <Crown className="w-12 h-12 text-purple-500 dark:text-purple-400 mb-6" />
+                        <Trophy className="w-12 h-12 text-purple-500 dark:text-purple-400 mb-6" />
                         <h3 className="text-3xl font-bold mb-4 text-foreground">Our Mantra</h3>
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             Helping the Next Generation Win
@@ -149,62 +167,21 @@ export default function About() {
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">What We Believe</h2>
                         <p className="text-muted-foreground max-w-2xl mx-auto">
-                            The convictions that shape our faith, guide our ministry, and inspire the generations we serve.
+                            Our doctrine is centered on the authority of Scripture, the triune nature of God, the person of Jesus Christ, salvation by grace, and the purpose of the Church.
                         </p>
                     </div>
-                    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                    <div className="space-y-10">
                         {[
-                            {
-                                title: "God at the Beginning",
-                                body: "At JET Ministries, we believe that God is at the beginning of everything we do. Our foundation is built on God and His Word, trusting Him to guide the ministry and everyone connected to it.",
-                                quote: "In the beginning was the Word, and the Word was with God, and the Word was God.",
-                                reference: "John 1:1",
-                            },
-                            {
-                                title: "The Power of the Word",
-                                body: "We believe in the true and living Word of God as the foundation for our lives. Through the Word, we are equipped to grow, live purposefully, and become all that God has called us to be.",
-                            },
-                            {
-                                title: "Speed and Progress",
-                                body: "As the name JET—Jesus Evangelistic Train—suggests, we believe in speed and forward movement. We believe that those under the ministry should experience progress in their lives and should not remain where they started.",
-                            },
-                            {
-                                title: "Success and Impact",
-                                body: "We believe that God's people are called to be successful, productive, and impactful. We desire to see individuals grow in their different areas of life and make a meaningful difference in their families, communities, and society.",
-                            },
-                            {
-                                title: "Economic Empowerment",
-                                body: "We believe that spiritual growth should also be reflected in practical areas of life. We desire to see people develop economic value, become productive, and have the capacity to positively influence their communities.",
-                            },
-                            {
-                                title: "Transformation and Growth",
-                                body: "We believe that no one who encounters God should remain the same. Through faith, the Word of God, and a growing relationship with Him, we believe people can experience meaningful transformation and become greater versions of who God has called them to be.",
-                            },
-                            {
-                                title: "Divine Healing",
-                                body: "We believe in the healing power of God. We believe that God is able to heal and restore lives, and we look to Him as our ultimate source of healing.",
-                                quote: "I am the LORD who heals you.",
-                                reference: "Exodus 15:26",
-                            },
-                        ].map(({ title, body, quote, reference }, index) => (
-                            <article
-                                key={title}
-                                className={`rounded-2xl border p-7 backdrop-blur-sm ${
-                                    index % 2 === 0
-                                        ? "bg-gradient-to-br from-primary/20 to-transparent border-primary/30"
-                                        : "bg-gradient-to-br from-purple-500/20 to-transparent border-purple-500/30"
-                                }`}
-                            >
-                                <div className={`mb-5 h-1 w-10 rounded-full ${index % 2 === 0 ? "bg-primary" : "bg-purple-500"}`} />
-                                <h3 className="text-xl font-semibold mb-3 text-foreground">{title}</h3>
+                            { title: "The Bible", body: "We believe the Bible is the inspired and authoritative Word of God, without error in its original manuscripts, and is the final authority for faith and practice." },
+                            { title: "God", body: "We believe in one God, eternally existing in three persons: Father, Son, and Holy Spirit, equal in power and glory." },
+                            { title: "Jesus Christ", body: "We believe in the deity of Jesus Christ, His virgin birth, His sinless life, His miracles, His substitutionary death, His bodily resurrection, His ascension to heaven, and His personal return in power and glory." },
+                            { title: "Salvation", body: "We believe that salvation is a gift of God's grace, received through faith in Jesus Christ alone, and not by works. It includes forgiveness of sins, eternal life, and transformation by the Holy Spirit." },
+                            { title: "The Church", body: "We believe the Church is the body of Christ, composed of all believers, called to worship God, edify one another, and proclaim the Gospel to the world." },
+                        ].map(({ title, body }) => (
+                            <div key={title}>
+                                <h3 className="text-2xl font-semibold mb-3 text-foreground">{title}</h3>
                                 <p className="text-muted-foreground leading-relaxed">{body}</p>
-                                {quote && (
-                                    <blockquote className={`mt-5 border-l-2 pl-4 text-foreground/80 ${index % 2 === 0 ? "border-primary/50" : "border-purple-500/50"}`}>
-                                        <p className="italic">“{quote}”</p>
-                                        <cite className="mt-2 block text-sm not-italic text-muted-foreground">— {reference}</cite>
-                                    </blockquote>
-                                )}
-                            </article>
+                            </div>
                         ))}
                     </div>
                 </div>
