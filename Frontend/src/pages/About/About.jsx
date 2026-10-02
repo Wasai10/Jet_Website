@@ -22,65 +22,38 @@ export default function About() {
         <div className="bg-background text-foreground min-h-screen pb-20 overflow-x-hidden">
 
             {/* 1. Hero */}
-            <section className="relative h-[80vh] overflow-hidden">
             <section className="relative h-[95vh] overflow-hidden">
-                {/* Background image */}
                 <img
-                    src="https://res.cloudinary.com/dom6wa8ih/image/upload/v1782561968/jet_gallery/sok6zgpetvozpbid13pt.jpg"
                     src="https://res.cloudinary.com/dxeuvtxys/image/upload/v1790668559/Background_photo_nzwy4a.jpg"
                     alt="JET Ministries — our roots"
-                    className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
                     className="absolute inset-0 w-full h-full object-cover object-top"
                 />
-                {/* Left-heavy overlay so text is always legible */}
                 <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/10" />
-                {/* Overlay so text is always legible */}
-                <div className="absolute inset-0 bg-black/55" />
-                {/* Top darkening to blend with fixed nav */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
 
-                {/* Content — vertically centred, cleared below the nav */}
                 <div className="absolute inset-0 flex items-center">
-                {/* Content — vertically centred */}
-                <div className="absolute inset-0 flex items-center justify-center">
                     <div className="max-w-7xl mx-auto px-6 w-full" style={{ paddingTop: '4.5rem' }}>
                         <motion.div
                             initial={{ opacity: 0, x: -28 }}
                             animate={{ opacity: 1, x: 0 }}
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.85, ease: "easeOut" }}
                             className="max-w-lg space-y-4"
-                            className="space-y-4 text-center"
                         >
-                            {/* Eyebrow */}
                             <div className="flex items-center gap-3">
-                            <div className="flex items-center justify-center gap-3">
                                 <span className="w-7 h-[2px] bg-primary rounded-full shrink-0" />
-                                <span className="text-primary text-[11px] font-bold uppercase tracking-[0.22em]">Our Roots & Origin</span>
-                                <span className="text-primary text-[13px] font-bold uppercase tracking-[0.22em]">Our Roots &amp; Origin</span>
+                                <span className="text-primary text-[11px] font-bold uppercase tracking-[0.22em]">Our Roots &amp; Origin</span>
                                 <span className="w-7 h-[2px] bg-primary rounded-full shrink-0" />
                             </div>
 
-                            {/* Headline */}
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.08] tracking-tight">
-                                Where It<br />All Began
-                            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-[1.08] tracking-tight">
                                 Where It All Began
                             </h1>
 
-                            {/* Divider */}
                             <div className="w-12 h-1 bg-primary rounded-full" />
-                            <div className="w-12 h-1 bg-primary rounded-full mx-auto" />
 
-                            {/* Body */}
-                            <p className="text-white text-sm md:text-base leading-relaxed">
-                                JET stands for Jesus Evangelistic Train, hence we have JET Ministries International.It began when its founder was still a student, following a call to start a ministry. It initially began as a healing ministry with only three members. Over time, more people joined, and the ministry continued to grow. Today, the vision is to see people grow spiritually and become a positive influence in society, with a strong desire for the members to also make a meaningful economic impact.
-
-                            <p className="text-white/75 text-base md:text-lg leading-relaxed max-w-3xl mx-auto">
+                            <p className="text-white text-base md:text-lg leading-relaxed max-w-3xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
                                 JET stands for Jesus Evangelistic Train, hence we have JET Ministries International. It began when its founder was still a student, following a call to start a ministry. It initially began as a healing ministry with only three members. Over time, more people joined, and the ministry continued to grow. Today, the vision is to see people grow spiritually and become a positive influence in society, with a strong desire for the members to also make a meaningful economic impact.
                             </p>
-
                         </motion.div>
                     </div>
                 </div>
