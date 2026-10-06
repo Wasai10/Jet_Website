@@ -31,27 +31,27 @@ export default function About() {
                 <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/10" />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
 
-                <div className="absolute inset-0 flex items-center">
-                    <div className="max-w-7xl mx-auto px-6 w-full" style={{ paddingTop: '4.5rem' }}>
+                <div className="absolute inset-0 flex items-start justify-center pt-24 md:pt-28">
+                    <div className="max-w-7xl mx-auto px-6 w-full">
                         <motion.div
                             initial={{ opacity: 0, x: -28 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.85, ease: "easeOut" }}
-                            className="max-w-lg space-y-4"
+                            className="mx-auto max-w-5xl space-y-4 text-center"
                         >
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 justify-center">
                                 <span className="w-7 h-[2px] bg-primary rounded-full shrink-0" />
-                                <span className="text-primary text-[11px] font-bold uppercase tracking-[0.22em]">Our Roots &amp; Origin</span>
+                                <span className="text-primary text-[12px] md:text-[13px] font-bold uppercase tracking-[0.22em]">Our Roots &amp; Origin</span>
                                 <span className="w-7 h-[2px] bg-primary rounded-full shrink-0" />
                             </div>
 
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.08] tracking-tight">
+                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight">
                                 Where It All Began
                             </h1>
 
-                            <div className="w-12 h-1 bg-primary rounded-full" />
+                            <div className="w-14 h-1 bg-primary rounded-full mx-auto" />
 
-                            <p className="text-white text-base md:text-lg leading-relaxed max-w-3xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+                            <p className="text-white text-lg md:text-xl leading-relaxed max-w-5xl mx-auto drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
                                 JET stands for Jesus Evangelistic Train, hence we have JET Ministries International. It began when its founder was still a student, following a call to start a ministry. It initially began as a healing ministry with only three members. Over time, more people joined, and the ministry continued to grow. Today, the vision is to see people grow spiritually and become a positive influence in society, with a strong desire for the members to also make a meaningful economic impact.
                             </p>
                         </motion.div>
@@ -90,7 +90,7 @@ export default function About() {
                         {/* Founder image — anchored to bottom-right, overflows above the card */}
                         <div className="absolute right-10 bottom-0 h-[115%] pointer-events-none hidden md:block">
                             <img
-                                src="https://res.cloudinary.com/dvkt0lsqb/image/upload/v1775352177/20260405_0422_Image_Generation_remix_01kndkp2b7fgbaajgj3zrwx5ng_rizvpg.png"
+                                src="https://res.cloudinary.com/dxeuvtxys/image/upload/e_background_removal/f_png/v1791274966/Mr_Abacy_an0dpz.jpg"
                                 alt="Founder"
                                 className="h-full w-auto object-contain drop-shadow-[0_12px_16px_rgba(0,0,0,0.35)]"
                             />
