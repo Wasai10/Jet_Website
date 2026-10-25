@@ -137,22 +137,51 @@ export default function About() {
             {/* 4. What We Believe */}
             <section className="bg-muted/40 py-20">
                 <div className="max-w-7xl mx-auto px-6">
-                    <div className="text-center mb-12">
+                    <div className="text-center mb-14">
                         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">What We Believe</h2>
-                        <p className="text-muted-foreground max-w-2xl mx-auto">
-                            Our doctrine is centered on the authority of Scripture, the triune nature of God, the person of Jesus Christ, salvation by grace, and the purpose of the Church.
+                        <p className="text-muted-foreground max-w-3xl mx-auto">
+                            We believe in the authority of Scripture, the transforming power of the Gospel, and the call to build people into fully committed followers of Christ.
                         </p>
                     </div>
-                    <div className="space-y-10">
+
+                    <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
                         {[
-                            { title: "The Bible", body: "We believe the Bible is the inspired and authoritative Word of God, without error in its original manuscripts, and is the final authority for faith and practice." },
-                            { title: "God", body: "We believe in one God, eternally existing in three persons: Father, Son, and Holy Spirit, equal in power and glory." },
-                            { title: "Jesus Christ", body: "We believe in the deity of Jesus Christ, His virgin birth, His sinless life, His miracles, His substitutionary death, His bodily resurrection, His ascension to heaven, and His personal return in power and glory." },
-                            { title: "Salvation", body: "We believe that salvation is a gift of God's grace, received through faith in Jesus Christ alone, and not by works. It includes forgiveness of sins, eternal life, and transformation by the Holy Spirit." },
-                            { title: "The Church", body: "We believe the Church is the body of Christ, composed of all believers, called to worship God, edify one another, and proclaim the Gospel to the world." },
-                        ].map(({ title, body }) => (
-                            <div key={title}>
-                                <h3 className="text-2xl font-semibold mb-3 text-foreground">{title}</h3>
+                            {
+                                title: "In the Beginning God",
+                                body: "We believe God is the origin of all things, the source of life, and the architect of purpose. Before any movement, any vision, or any generation, there was God — sovereign, creative, and active. We build our lives and our ministry on that truth.",
+                                className: "bg-gradient-to-br from-blue-600/15 via-blue-500/10 to-cyan-500/10 border-blue-500/30"
+                            },
+                            {
+                                title: "The Word Is Life",
+                                body: "We believe the Word of God is alive, authoritative, and transformative. It is the standard that shapes character, governs destiny, and releases wisdom for personal growth, leadership, family restoration, and national revival.",
+                                className: "bg-gradient-to-br from-indigo-600/15 via-violet-500/10 to-purple-500/10 border-violet-500/30"
+                            },
+                            {
+                                title: "God with Us",
+                                body: "We believe God is not distant. He is present, personal, and deeply involved in the lives of His people. Where God is at work, there is hope, healing, direction, and the power to rise above limitation into divine assignment.",
+                                className: "bg-gradient-to-br from-cyan-600/15 via-sky-500/10 to-blue-500/10 border-sky-500/30"
+                            },
+                            {
+                                title: "Growth That Produces Greatness",
+                                body: "We believe in growth that is intentional, disciplined, and visible. We are not content with spiritual inactivity. We pursue growth in wisdom, character, influence, and capacity so people can become meaningful contributors to the kingdom and society.",
+                                className: "bg-gradient-to-br from-primary/20 via-blue-600/10 to-indigo-500/10 border-primary/30"
+                            },
+                            {
+                                title: "Unity That Builds Nations",
+                                body: "We believe unity is not weakness; it is power. When believers, leaders, and communities align around purpose, they become a force for restoration, influence, and transformation. We are committed to strong relationships, shared vision, and collective impact.",
+                                className: "bg-gradient-to-br from-violet-600/15 via-purple-500/10 to-fuchsia-500/10 border-purple-500/30"
+                            },
+                            {
+                                title: "Kingdom Economics & Transformation",
+                                body: "We believe the Gospel must move beyond spiritual expression into practical transformation. We are committed to raising people who are not only spiritually strong but also economically empowered, responsible, and impactful — creating a generation that can build, sustain, and bless communities with wisdom and excellence.",
+                                className: "bg-gradient-to-br from-sky-600/15 via-blue-500/10 to-indigo-500/10 border-sky-600/30"
+                            }
+                        ].map(({ title, body, className }) => (
+                            <div key={title} className={`rounded-3xl border p-6 shadow-sm ${className}`}>
+                                <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 mb-5 flex items-center justify-center">
+                                    <span className="text-lg font-black text-primary">✦</span>
+                                </div>
+                                <h3 className="text-2xl font-bold mb-3 text-foreground">{title}</h3>
                                 <p className="text-muted-foreground leading-relaxed">{body}</p>
                             </div>
                         ))}
