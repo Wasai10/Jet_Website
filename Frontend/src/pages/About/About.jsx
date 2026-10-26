@@ -76,10 +76,7 @@ export default function About() {
                                 Meet Our Founder
                             </h3>
                             <p className="text-white/75 leading-relaxed text-sm md:text-base">
-                                Driven by a divine mandate, our founder has dedicated their life to spreading
-                                the Gospel and uplifting communities. With a heart for the marginalized and a
-                                vision for spiritual revival, they have shepherded JET Ministries from its
-                                inception to its current global footprint.
+                                Mr Abacy Young is 
                             </p>
                             <p className="text-white/75 leading-relaxed text-sm md:text-base">
                                 Their leadership is characterized by humility, profound biblical insight, and
