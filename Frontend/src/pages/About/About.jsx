@@ -129,7 +129,7 @@ export default function About() {
                         <h3 className="text-3xl font-bold mb-4 text-foreground">Our Mantra</h3>
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             Helping the Next Generation Win
-                        </p>
+                            </p>
                     </div>
                 </motion.div>
             </section>

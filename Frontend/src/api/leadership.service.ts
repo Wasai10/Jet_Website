@@ -19,9 +19,41 @@ export interface Leader {
 
 async function fetchWithAuth(url: string, init: RequestInit): Promise<Response> {
   const access = tokenStore.getAccess();
-  const headers: Record<string, string> = { ...(init.headers as Record<string, string>) };
-  if (access) headers["Authorization"] = `Bearer ${access}`;
-  return fetch(url, { ...init, headers });
+  const headers = new Headers(init.headers ?? {});
+  if (access) headers.set("Authorization", `Bearer ${access}`);
+
+  let res = await fetch(url, { ...init, headers });
+
+  if (res.status !== 401) return res;
+
+  const refreshToken = tokenStore.getRefresh();
+  if (!refreshToken) {
+    tokenStore.clearAll();
+    throw new Error("Session expired. Please log in again.");
+  }
+
+  const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refreshToken }),
+  });
+
+  if (!refreshRes.ok) {
+    tokenStore.clearAll();
+    throw new Error("Session expired. Please log in again.");
+  }
+
+  const refreshed = await refreshRes.json().catch(() => ({}));
+  if (!refreshed || !refreshed.accessToken) {
+    tokenStore.clearAll();
+    throw new Error("Session expired. Please log in again.");
+  }
+
+  tokenStore.setTokens(refreshed);
+  const retryHeaders = new Headers(init.headers ?? {});
+  retryHeaders.set("Authorization", `Bearer ${refreshed.accessToken}`);
+
+  return fetch(url, { ...init, headers: retryHeaders });
 }
 
 // ── Service ───────────────────────────────────────────────────────────────────
