@@ -167,7 +167,7 @@ export default function DepartmentalLeadership() {
         <div>
           <h2 className="text-xl font-bold text-foreground">Departmental Leadership</h2>
           <p className="text-muted-foreground text-sm mt-0.5">
-            {leaders.length} leaders · {departments.length} ministries
+            {leaders.length} leaders · {departments.length} ministries & partnerships
           </p>
         </div>
 
@@ -179,7 +179,7 @@ export default function DepartmentalLeadership() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={activeTab === "leaders" ? "Search leaders…" : "Search ministries…"}
+              placeholder={activeTab === "leaders" ? "Search leaders…" : "Search ministries & partnerships…"}
               className="bg-transparent text-sm text-foreground placeholder-muted-foreground/40 outline-none w-full"
             />
           </div>
@@ -208,7 +208,7 @@ export default function DepartmentalLeadership() {
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0096FF] hover:bg-[#0080ee] text-white text-sm font-semibold transition-all shadow-[0_0_16px_rgba(0,150,255,0.25)] cursor-pointer"
             >
               <FolderPlus className="w-4 h-4" />
-              <span>Add Ministry</span>
+              <span>Add Ministry / Partnership</span>
             </button>
           )}
         </div>
@@ -223,7 +223,7 @@ export default function DepartmentalLeadership() {
       >
         {[
           { key: "leaders" as Tab, label: "Leaders", icon: Users, count: leaders.length },
-          { key: "departments" as Tab, label: "Ministries", icon: Layers, count: departments.length },
+          { key: "departments" as Tab, label: "Ministries & Partnerships", icon: Layers, count: departments.length },
         ].map(({ key, label, icon: Icon, count }) => (
           <button
             key={key}
@@ -281,7 +281,7 @@ export default function DepartmentalLeadership() {
             <p className="text-muted-foreground/60 text-xs">
               {activeTab === "leaders"
                 ? `Showing ${filteredLeaders.length} of ${leaders.length} leaders`
-                : `Showing ${filteredDepts.length} of ${departments.length} ministries`}
+                : `Showing ${filteredDepts.length} of ${departments.length} ministries & partnerships`}
             </p>
           </div>
         )}

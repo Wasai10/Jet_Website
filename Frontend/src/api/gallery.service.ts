@@ -2,7 +2,13 @@ import { request, tokenStore, authService } from "./auth.service";
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000/api";
 
-export const PHOTO_CATEGORIES = ["Worship", "Community", "Outreach", "Youth", "General"];
+export const PHOTO_CATEGORIES = [
+  "Ossen Girls Mission",
+  "Impact Conference",
+  "Vision Summit",
+  "International Women's Day",
+  "Abacy Feed a Widow Initiative",
+];
 
 // ── Types ────────────────────────────────────────────────────────────────────
 

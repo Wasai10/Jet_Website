@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, CalendarPlus, Save, Star, ChevronDown, Sparkles, Users } from "lucide-react";
-import { type Event, type CreateEventPayload, type UpdateEventPayload, type EventOwnership } from "@/api/events.service";
+import { EVENT_CATEGORIES, type Event, type CreateEventPayload, type UpdateEventPayload, type EventOwnership } from "@/api/events.service";
 
 const EVENT_TYPES = [
   { value: "UPCOMING",         label: "Upcoming",           description: "Future scheduled event",         color: "#0096FF" },
@@ -179,6 +179,31 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
                     {error}
                   </div>
                 )}
+
+                {/* Category Preset Picker */}
+                <div className="space-y-1.5">
+                  <label className={labelCls}>Category Preset (Matches Gallery)</label>
+                  <div className="flex flex-wrap gap-2">
+                    {EVENT_CATEGORIES.map((cat) => (
+                      <button
+                        key={cat.name}
+                        type="button"
+                        onClick={() => {
+                          setTitle(cat.name);
+                          setTag(cat.tag);
+                          setType(cat.status);
+                        }}
+                        className={`text-xs px-3 py-1.5 rounded-lg border font-semibold transition-all cursor-pointer ${
+                          title === cat.name
+                            ? "bg-primary text-white border-primary shadow-sm"
+                            : "bg-input border-border text-muted-foreground hover:text-foreground hover:border-primary/40"
+                        }`}
+                      >
+                        {cat.name} ({cat.status === "PAST" ? "Past" : "Upcoming"})
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
                 {/* Title */}
                 <div className="space-y-1.5">

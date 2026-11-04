@@ -19,7 +19,7 @@ export default function AdminEvents() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState<EventType | "ALL">("ALL");
+  const [typeFilter, setTypeFilter] = useState<string>("ALL");
   const [modalTarget, setModalTarget] = useState<ModalTarget>(null);
   const [rsvpEvent, setRsvpEvent] = useState<Event | null>(null);
 

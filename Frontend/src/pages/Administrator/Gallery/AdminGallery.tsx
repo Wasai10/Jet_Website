@@ -3,11 +3,11 @@ import { motion } from "framer-motion";
 import { Search, RefreshCw, Upload } from "lucide-react";
 import {
   galleryService,
+  PHOTO_CATEGORIES,
   type Photo,
   type PhotoCategory,
   type UpdatePhotoPayload,
 } from "@/api/gallery.service";
-import { eventsService } from "@/api/events.service";
 import jetSwal from "@/lib/swal";
 import PhotoGrid from "./components/PhotoGrid";
 import PhotoModal, { type UploadItem } from "./components/PhotoModal";
@@ -20,7 +20,6 @@ export default function AdminGallery() {
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<PhotoCategory | "ALL">("ALL");
   const [modalTarget, setModalTarget] = useState<ModalTarget>(null);
-  const [eventCategories, setEventCategories] = useState<string[]>([]);
 
   const fetchPhotos = async () => {
     setLoading(true);
@@ -33,14 +32,6 @@ export default function AdminGallery() {
 
   useEffect(() => {
     fetchPhotos();
-    // Fetch event titles to use as gallery categories
-    eventsService.getAll().then((events) => {
-      const titles = [...new Set(events.map((e) => e.title).filter(Boolean))];
-      setEventCategories(titles);
-    }).catch(() => {
-      // If events fail to load, fall back to generic labels
-      setEventCategories(["Worship", "Community", "Outreach", "Youth", "General"]);
-    });
   }, []);
 
   const handleUpload = async (items: UploadItem[]) => {
@@ -162,7 +153,7 @@ export default function AdminGallery() {
             className="bg-card border border-border rounded-xl px-3 py-2.5 text-sm text-foreground/70 outline-none cursor-pointer hover:border-border transition-colors"
           >
             <option value="ALL">All Categories</option>
-            {eventCategories.map((cat) => (
+            {PHOTO_CATEGORIES.map((cat) => (
               <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
@@ -223,7 +214,7 @@ export default function AdminGallery() {
       <PhotoModal
         open={modalTarget !== null}
         photo={editPhoto}
-        categories={eventCategories}
+        categories={PHOTO_CATEGORIES}
         onClose={() => setModalTarget(null)}
         onUpload={handleUpload}
         onUpdate={handleUpdate}
