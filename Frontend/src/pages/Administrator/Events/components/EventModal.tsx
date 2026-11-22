@@ -50,6 +50,7 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
   const [endDate, setEndDate] = useState("");
   const [time, setTime] = useState("");
   const [tag, setTag] = useState("");
+  const [color, setColor] = useState("");
   const [type, setType] = useState<EventType>("UPCOMING");
   const [ownership, setOwnership] = useState<EventOwnership>("PARTNERSHIP");
   const [coverImage, setCoverImage] = useState("");
@@ -70,9 +71,9 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
     setEndDate(ed);
     setTime(event?.time ?? "");
     setTag(event?.tag ?? "");
+    setColor(event?.color ?? EVENT_CATEGORIES.find((category) => category.name === event?.title)?.color ?? "");
     const storedType = event?.type as EventType | undefined;
-    const isDateDerived = !storedType || storedType === "PAST" || storedType === "UPCOMING";
-    setType(isDateDerived ? autoType(d) : storedType);
+    setType(storedType ?? autoType(d));
 
     setOwnership(event?.ownership === "JET" ? "JET" : "PARTNERSHIP");
     setCoverImage(event?.coverImage ?? (Array.isArray(event?.images) ? event.images[0] : ""));
@@ -111,6 +112,7 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
         endDate: endDate || undefined,
         time: time.trim() || undefined,
         tag: tag.trim() || undefined,
+        color: color || undefined,
         type,
         ownership,
         coverImage: coverImage || undefined,
@@ -191,6 +193,7 @@ export default function EventModal({ open, event, onClose, onSave }: Props) {
                         onClick={() => {
                           setTitle(cat.name);
                           setTag(cat.tag);
+                          setColor(cat.color);
                           setType(cat.status);
                         }}
                         className={`text-xs px-3 py-1.5 rounded-lg border font-semibold transition-all cursor-pointer ${

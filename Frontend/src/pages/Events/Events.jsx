@@ -5,7 +5,7 @@ import {
   Calendar, MapPin, Clock, ArrowUpRight, ArrowRight,
   CalendarX2, ChevronRight, Star, Sparkles, Users, Layers
 } from 'lucide-react';
-import { eventsService } from '@/api/events.service';
+import { EVENT_CATEGORIES, eventsService } from '@/api/events.service';
 
 // ── Config ───────────────────────────────────────────────────────────────────
 
@@ -23,11 +23,9 @@ const TYPE = {
 
 const CATEGORY_TABS = [
   { key: 'ALL',          label: 'All Events' },
-  { key: 'JET_EVENTS',   label: '⚡ JET Events' },
-  { key: 'PARTNERSHIPS', label: '🤝 Partnership Events' },
-  { key: 'UPCOMING',     label: 'Upcoming' },
-  { key: 'PAST',         label: 'Past' },
-  { key: 'HOME_FELLOWSHIP', label: 'Fellowship' },
+  { key: 'PAST',         label: 'Past Events' },
+  { key: 'UPCOMING',     label: 'Upcoming Events' },
+  ...EVENT_CATEGORIES.map(({ name }) => ({ key: name, label: name })),
 ];
 
 const FALLBACK_POSTERS = [
@@ -144,6 +142,7 @@ function EventCard({ event, index }) {
   const cover = getEventCover(event, index);
   const { day, month, year } = parseDateParts(event.date);
   const isJet = checkIsJetEvent(event);
+  const isPast = event.type === 'PAST';
   const dateRangeText = formatDateRange(event);
 
   return (
@@ -215,13 +214,15 @@ function EventCard({ event, index }) {
               <span className="truncate">{event.location}</span>
             </div>
 
-            <Link
-              to={`/events/${event.id}/rsvp`}
-              className="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary/90 transition-all shadow-md hover:shadow-primary/25 cursor-pointer"
-            >
-              <span>Register NOW</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </Link>
+            {!isPast && (
+              <Link
+                to={`/events/${event.id}/rsvp`}
+                className="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary/90 transition-all shadow-md hover:shadow-primary/25 cursor-pointer"
+              >
+                <span>Register NOW</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -234,6 +235,7 @@ function EventCard({ event, index }) {
 function FeaturedHeroEvent({ event }) {
   const cover = getEventCover(event, 0);
   const isJet = checkIsJetEvent(event);
+  const isPast = event.type === 'PAST';
   const dateRangeText = formatDateRange(event);
 
   return (
@@ -287,15 +289,17 @@ function FeaturedHeroEvent({ event }) {
           </div>
         </div>
 
-        <div>
-          <Link
-            to={`/events/${event.id}/rsvp`}
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[#0096FF] hover:bg-[#0080ee] text-white font-bold text-sm shadow-[0_0_24px_rgba(0,150,255,0.4)] transition-all hover:scale-105"
-          >
-            <span>Register NOW</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+        {!isPast && (
+          <div>
+            <Link
+              to={`/events/${event.id}/rsvp`}
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[#0096FF] hover:bg-[#0080ee] text-white font-bold text-sm shadow-[0_0_24px_rgba(0,150,255,0.4)] transition-all hover:scale-105"
+            >
+              <span>Register NOW</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        )}
       </div>
     </motion.div>
   );
@@ -324,9 +328,8 @@ export default function Events() {
 
   const filtered = events.filter(e => {
     if (filter === 'ALL') return true;
-    if (filter === 'JET_EVENTS') return checkIsJetEvent(e);
-    if (filter === 'PARTNERSHIPS') return !checkIsJetEvent(e);
-    return e.type === filter;
+    if (filter === 'PAST' || filter === 'UPCOMING') return e.type === filter;
+    return e.title.toLowerCase() === filter.toLowerCase();
   });
 
   const featuredHero = filtered.find(e => e.featured) || filtered[0];

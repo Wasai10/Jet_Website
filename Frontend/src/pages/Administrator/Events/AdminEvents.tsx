@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Search, RefreshCw, CalendarPlus } from "lucide-react";
 import {
   eventsService,
+  EVENT_CATEGORIES,
   type Event,
   type EventType,
   type CreateEventPayload,
@@ -20,6 +21,7 @@ export default function AdminEvents() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("ALL");
+  const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
   const [modalTarget, setModalTarget] = useState<ModalTarget>(null);
   const [rsvpEvent, setRsvpEvent] = useState<Event | null>(null);
 
@@ -106,6 +108,7 @@ export default function AdminEvents() {
 
   const filtered = events
     .filter((e) => typeFilter === "ALL" || e.type === typeFilter)
+    .filter((e) => categoryFilter === "ALL" || e.title.toLowerCase().includes(categoryFilter.toLowerCase()))
     .filter(
       (e) =>
         e.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -151,6 +154,17 @@ export default function AdminEvents() {
             <option value="UPCOMING">Upcoming</option>
             <option value="PAST">Past</option>
             <option value="HOME_FELLOWSHIP">Fellowship</option>
+          </select>
+
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="bg-card border border-border rounded-xl px-3 py-2.5 text-sm text-foreground/70 outline-none cursor-pointer hover:border-border transition-colors"
+          >
+            <option value="ALL">All Categories</option>
+            {EVENT_CATEGORIES.map((category) => (
+              <option key={category.name} value={category.name}>{category.name}</option>
+            ))}
           </select>
 
           {/* Refresh */}

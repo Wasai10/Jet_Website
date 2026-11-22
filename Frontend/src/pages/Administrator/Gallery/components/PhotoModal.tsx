@@ -17,6 +17,7 @@ interface Props {
   open: boolean;
   photo: Photo | null;
   categories: string[];
+  defaultCategory?: string;
   onClose: () => void;
   onUpload: (items: UploadItem[]) => Promise<void>;
   onUpdate: (id: string, payload: UpdatePhotoPayload) => Promise<void>;
@@ -32,7 +33,7 @@ const filenameToTitle = (f: File) =>
     .replace(/[-_]/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
-export default function PhotoModal({ open, photo, categories, onClose, onUpload, onUpdate }: Props) {
+export default function PhotoModal({ open, photo, categories, defaultCategory, onClose, onUpload, onUpdate }: Props) {
   const isCreate = open && photo === null;
 
   const [files, setFiles] = useState<File[]>([]);
@@ -60,7 +61,7 @@ export default function PhotoModal({ open, photo, categories, onClose, onUpload,
     setDragging(false);
     setTitle(photo?.title ?? "");
     setAlt(photo?.alt ?? "");
-    setCategory(photo?.category ?? categories[0] ?? "");
+    setCategory(photo?.category ?? defaultCategory ?? categories[0] ?? "");
     setFeatured(photo?.featured ?? false);
     setError("");
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -226,7 +227,7 @@ export default function PhotoModal({ open, photo, categories, onClose, onUpload,
                               <span className="text-primary">browse files</span>
                             </p>
                             <p className="text-muted-foreground/50 text-xs mt-1">
-                              PNG, JPG, WEBP — max 10 MB each · multiple allowed
+                              PNG, JPG, WEBP — large photos are optimized automatically · multiple allowed
                             </p>
                           </div>
                         </div>
