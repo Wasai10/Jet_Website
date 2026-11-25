@@ -22,69 +22,78 @@ export default function About() {
         <div className="bg-background text-foreground min-h-screen pb-20 overflow-x-hidden">
 
             {/* 1. Hero */}
-            <section className="relative h-[95vh] overflow-hidden">
+            <section className="relative min-h-[55vh] md:min-h-[85vh] py-16 md:py-24 flex items-center justify-center overflow-hidden">
                 <img
                     src="https://res.cloudinary.com/dxeuvtxys/image/upload/v1790668559/Background_photo_nzwy4a.jpg"
                     alt="JET Ministries — our roots"
                     className="absolute inset-0 w-full h-full object-cover object-top"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/10" />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/30" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/40" />
 
-                <div className="absolute inset-0 flex items-start justify-center pt-24 md:pt-28">
-                    <div className="max-w-7xl mx-auto px-6 w-full">
-                        <motion.div
-                            initial={{ opacity: 0, x: -28 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.85, ease: "easeOut" }}
-                            className="mx-auto max-w-5xl space-y-4 text-center"
-                        >
-                            <div className="flex items-center gap-3 justify-center">
-                                <span className="w-7 h-[2px] bg-primary rounded-full shrink-0" />
-                                <span className="text-primary text-[12px] md:text-[13px] font-bold uppercase tracking-[0.22em]">Our Roots &amp; Origin</span>
-                                <span className="w-7 h-[2px] bg-primary rounded-full shrink-0" />
-                            </div>
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pt-10 md:pt-0">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.7, ease: "easeOut" }}
+                        className="mx-auto max-w-4xl space-y-4 text-center"
+                    >
+                        <div className="flex items-center gap-2 sm:gap-3 justify-center">
+                            <span className="w-5 sm:w-7 h-[2px] bg-primary rounded-full shrink-0" />
+                            <span className="text-primary text-[11px] sm:text-[13px] font-bold uppercase tracking-[0.2em]">Our Roots &amp; Origin</span>
+                            <span className="w-5 sm:w-7 h-[2px] bg-primary rounded-full shrink-0" />
+                        </div>
 
-                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight">
-                                Where It All Began
-                            </h1>
+                        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight">
+                            Where It All Began
+                        </h1>
 
-                            <div className="w-14 h-1 bg-primary rounded-full mx-auto" />
+                        <div className="w-12 sm:w-14 h-1 bg-primary rounded-full mx-auto" />
 
-                            <p className="text-white text-lg md:text-xl leading-relaxed max-w-5xl mx-auto drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
-                                JET stands for Jesus Evangelistic Train, hence we have JET Ministries International. It began when its founder was still a student, following a call to start a ministry. It initially began as a healing ministry with only three members. Over time, more people joined, and the ministry continued to grow. Today, the vision is to see people grow spiritually and become a positive influence in society, with a strong desire for the members to also make a meaningful economic impact.
-                            </p>
-                        </motion.div>
-                    </div>
+                        <p className="text-white/90 text-sm sm:text-base md:text-lg leading-relaxed max-w-3xl mx-auto drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+                            JET stands for Jesus Evangelistic Train, hence we have JET Ministries International. It began when its founder was still a student, following a call to start a ministry. It initially began as a healing ministry with only three members. Over time, more people joined, and the ministry continued to grow. Today, the vision is to see people grow spiritually and become a positive influence in society, with a strong desire for the members to also make a meaningful economic impact.
+                        </p>
+                    </motion.div>
                 </div>
             </section>
 
             {/* 2. The Founder */}
-            <section className="py-20 mt-8 bg-[#0F172A]">
-                <div className="max-w-7xl mx-auto px-6">
+            <section className="py-12 sm:py-20 mt-4 sm:mt-8 bg-[#0F172A]">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6">
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
                         variants={fadeUp}
-                        className="relative bg-[#2563EB] rounded-3xl overflow-visible min-h-[280px]"
+                        className="relative bg-[#2563EB] rounded-2xl sm:rounded-3xl overflow-visible min-h-[260px]"
                     >
-                        {/* Text — left side, max 58% wide so the image has room */}
-                        <div className="relative z-10 p-10 md:p-14 md:max-w-[58%] space-y-4">
-                            <p className="text-white/60 text-xs font-bold uppercase tracking-[0.2em]">Leadership</p>
-                            <h3 className="text-3xl md:text-4xl font-black text-white leading-tight">
+                        {/* Mobile Founder Image Avatar */}
+                        <div className="flex md:hidden justify-center pt-6 px-6">
+                            <div className="w-28 h-28 rounded-2xl overflow-hidden border-2 border-white/40 shadow-xl bg-slate-900/30">
+                                <img
+                                    src="https://res.cloudinary.com/dxeuvtxys/image/upload/e_background_removal/f_png/v1791274966/Mr_Abacy_an0dpz.jpg"
+                                    alt="Mr Abacy Young - Founder"
+                                    className="w-full h-full object-cover object-top"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Text */}
+                        <div className="relative z-10 p-6 sm:p-10 md:p-14 md:max-w-[58%] space-y-3 sm:space-y-4 text-center md:text-left">
+                            <p className="text-white/70 text-xs font-bold uppercase tracking-[0.2em]">Leadership</p>
+                            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white leading-tight">
                                 Meet Our Founder
                             </h3>
-                            <p className="text-white/75 leading-relaxed text-sm md:text-base">
-                                Mr Abacy Young is 
+                            <p className="text-white/90 leading-relaxed text-sm sm:text-base">
+                                Mr Abacy Young is the founder and visionary leader of JET Ministries International.
                             </p>
-                            <p className="text-white/75 leading-relaxed text-sm md:text-base">
-                                Their leadership is characterized by humility, profound biblical insight, and
-                                a relentless passion for empowering the next generation of leaders.
+                            <p className="text-white/80 leading-relaxed text-sm sm:text-base">
+                                His leadership is characterized by humility, profound biblical insight, and
+                                a relentless passion for empowering the next generation of leaders to win.
                             </p>
                         </div>
 
-                        {/* Founder image — anchored to bottom-right, overflows above the card */}
+                        {/* Founder image — desktop anchored bottom-right */}
                         <div className="absolute right-10 bottom-0 h-[115%] pointer-events-none hidden md:block">
                             <img
                                 src="https://res.cloudinary.com/dxeuvtxys/image/upload/e_background_removal/f_png/v1791274966/Mr_Abacy_an0dpz.jpg"
@@ -97,36 +106,35 @@ export default function About() {
             </section>
 
             {/* 3. Mission & Vision */}
-            <section className="max-w-7xl mx-auto px-6 py-20">
-                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
-                    <div className="bg-gradient-to-br from-primary/20 to-transparent p-10 rounded-3xl border border-primary/30 backdrop-blur-sm">
-                        <Heart className="w-12 h-12 text-primary mb-6" />
-                        <h3 className="text-3xl font-bold mb-4 text-foreground">Our Mission</h3>
-                        <p className="text-muted-foreground text-lg leading-relaxed">
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
+                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+                    <div className="bg-gradient-to-br from-primary/20 to-transparent p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-primary/30 backdrop-blur-sm">
+                        <Heart className="w-10 h-10 sm:w-12 sm:h-12 text-primary mb-4" />
+                        <h3 className="text-2xl sm:text-3xl font-bold mb-3 text-foreground">Our Mission</h3>
+                        <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
                             To prepare God's people for the works of service that the body of Christ may be built. (Ephesians 4:12)
-
                         </p>
                     </div>
-                    <div className="bg-gradient-to-br from-purple-500/20 to-transparent p-10 rounded-3xl border border-purple-500/30 backdrop-blur-sm">
-                        <Users className="w-12 h-12 text-purple-500 dark:text-purple-400 mb-6" />
-                        <h3 className="text-3xl font-bold mb-4 text-foreground">Our Vision</h3>
-                        <p className="text-muted-foreground text-lg leading-relaxed">
+                    <div className="bg-gradient-to-br from-purple-500/20 to-transparent p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-purple-500/30 backdrop-blur-sm">
+                        <Users className="w-10 h-10 sm:w-12 sm:h-12 text-purple-500 dark:text-purple-400 mb-4" />
+                        <h3 className="text-2xl sm:text-3xl font-bold mb-3 text-foreground">Our Vision</h3>
+                        <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
                             To develop a generation to impact the whole world for Jesus Christ turning them to be fully committed followers of Him.
                         </p>
                     </div>
-                    <div className="bg-gradient-to-br from-primary/20 to-transparent p-10 rounded-3xl border border-primary/30 backdrop-blur-sm">
-                        <Zap className="w-12 h-12 text-primary mb-6" />
-                        <h3 className="text-2xl font-bold mb-4 text-foreground">Our Driving Force</h3>
-                        <p className="text-muted-foreground text-lg leading-relaxed">
+                    <div className="bg-gradient-to-br from-primary/20 to-transparent p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-primary/30 backdrop-blur-sm">
+                        <Zap className="w-10 h-10 sm:w-12 sm:h-12 text-primary mb-4" />
+                        <h3 className="text-xl sm:text-2xl font-bold mb-3 text-foreground">Our Driving Force</h3>
+                        <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
                             Impacting Generations
                         </p>
                     </div>
-                    <div className="bg-gradient-to-br from-purple-500/20 to-transparent p-10 rounded-3xl border border-purple-500/30 backdrop-blur-sm">
-                        <Trophy className="w-12 h-12 text-purple-500 dark:text-purple-400 mb-6" />
-                        <h3 className="text-3xl font-bold mb-4 text-foreground">Our Mantra</h3>
-                        <p className="text-muted-foreground text-lg leading-relaxed">
+                    <div className="bg-gradient-to-br from-purple-500/20 to-transparent p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-purple-500/30 backdrop-blur-sm">
+                        <Trophy className="w-10 h-10 sm:w-12 sm:h-12 text-purple-500 dark:text-purple-400 mb-4" />
+                        <h3 className="text-2xl sm:text-3xl font-bold mb-3 text-foreground">Our Mantra</h3>
+                        <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
                             Helping the Next Generation Win
-                            </p>
+                        </p>
                     </div>
                 </motion.div>
             </section>
@@ -204,7 +212,7 @@ export default function About() {
                             </p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-6">
                             {leaders.map((leader, index) => (
                                 <motion.div
                                     key={leader.id}

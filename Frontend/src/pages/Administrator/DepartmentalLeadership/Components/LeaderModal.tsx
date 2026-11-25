@@ -7,7 +7,7 @@ interface Props {
   open: boolean;
   leader: Leader | null;
   onClose: () => void;
-  onSave: (id: string | null, form: FormData) => Promise<void>;
+  onSave: (id: string | null, form: FormData | Record<string, unknown>) => Promise<void>;
 }
 
 const inputCls =
@@ -52,12 +52,20 @@ export default function LeaderModal({ open, leader, onClose, onSave }: Props) {
     setLoading(true);
     setError("");
     try {
-      const form = new FormData();
-      form.append("name", name.trim());
-      form.append("role", role.trim());
-      form.append("order", String(order));
-      if (imageFile) form.append("image", imageFile);
-      await onSave(leader?.id ?? null, form);
+      if (imageFile) {
+        const form = new FormData();
+        form.append("name", name.trim());
+        form.append("role", role.trim());
+        form.append("order", String(order));
+        form.append("image", imageFile);
+        await onSave(leader?.id ?? null, form);
+      } else {
+        await onSave(leader?.id ?? null, {
+          name: name.trim(),
+          role: role.trim(),
+          order: Number(order),
+        });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {

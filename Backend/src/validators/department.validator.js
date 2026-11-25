@@ -1,5 +1,5 @@
 const validateDepartmentCreate = (req, res, next) => {
-  const { name, description, leaderId } = req.body;
+  const { name, description, leaderId, order } = req.body;
 
   if (!name || typeof name !== "string" || name.trim().length < 2) {
     return res.status(400).json({ error: "Name is required and must be at least 2 characters." });
@@ -11,6 +11,14 @@ const validateDepartmentCreate = (req, res, next) => {
 
   if (!leaderId || typeof leaderId !== "string" || leaderId.trim().length === 0) {
     return res.status(400).json({ error: "A leader is required for every department." });
+  }
+
+  if (order !== undefined && order !== null && order !== "") {
+    const num = Number(order);
+    if (!Number.isInteger(num) || num < 0 || isNaN(num)) {
+      return res.status(400).json({ error: "Order must be a non-negative integer." });
+    }
+    req.body.order = num;
   }
 
   next();
@@ -31,8 +39,12 @@ const validateDepartmentUpdate = (req, res, next) => {
     return res.status(400).json({ error: "A leader is required for every department." });
   }
 
-  if (order !== undefined && (typeof order !== "number" || !Number.isInteger(order) || order < 0)) {
-    return res.status(400).json({ error: "Order must be a non-negative integer." });
+  if (order !== undefined && order !== null && order !== "") {
+    const num = Number(order);
+    if (!Number.isInteger(num) || num < 0 || isNaN(num)) {
+      return res.status(400).json({ error: "Order must be a non-negative integer." });
+    }
+    req.body.order = num;
   }
 
   next();

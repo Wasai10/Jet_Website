@@ -77,11 +77,13 @@ export default function Footer() {
                             </li>
                             <li className="flex items-center space-x-3 text-foreground/90">
                                 <Phone className="w-5 h-5 text-foreground/70 shrink-0" />
-                                <span>0113738019</span>
+                                <a href="tel:0113738019" className="hover:text-[#3B82F6] transition-colors duration-300 font-medium py-1">
+                                    0113738019
+                                </a>
                             </li>
                             <li className="flex items-center space-x-3 text-foreground/90">
                                 <Mail className="w-5 h-5 text-foreground/70 shrink-0" />
-                                <a href="mailto:jet.ministriesintl@gmail.com" className="hover:text-[#3B82F6] transition-colors duration-300">
+                                <a href="mailto:jet.ministriesintl@gmail.com" className="hover:text-[#3B82F6] transition-colors duration-300 font-medium py-1 break-all">
                                     jet.ministriesintl@gmail.com
                                 </a>
                             </li>

@@ -2,15 +2,18 @@ import React, { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Button } from "@/components/ui/button"
 import { useTheme } from "@/components/theme-provider"
-import { Sun, Moon, Menu, X, ArrowRight } from "lucide-react"
+import {
+  Sun, Moon, Menu, X, ArrowRight, Home, Info, Calendar,
+  Heart, Images, FileText, Phone, Mail, MapPin
+} from "lucide-react"
 
 const navItems = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Events', href: '/events' },
-    { name: 'Giving & Resources', href: '/giving' },
-    { name: 'Gallery', href: '/gallery' },
-    { name: 'Blogs', href: '/blog' },
+    { name: 'Home', href: '/', desc: 'Welcome & overview', icon: Home },
+    { name: 'About Us', href: '/about', desc: 'Our roots, vision & leaders', icon: Info },
+    { name: 'Events', href: '/events', desc: 'Upcoming services & missions', icon: Calendar },
+    { name: 'Giving & Resources', href: '/giving', desc: 'Tithes, offerings & downloads', icon: Heart },
+    { name: 'Our Gallery', href: '/gallery', desc: 'Moments of fellowship', icon: Images },
+    { name: 'Blogs & Sermons', href: '/blog', desc: 'Pastoral messages & updates', icon: FileText },
 ]
 
 export default function Navbar() {
@@ -23,6 +26,18 @@ export default function Navbar() {
         setIsMenuOpen(false)
     }, [location.pathname])
 
+    // Lock body scroll when mobile menu is open
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = ''
+        }
+        return () => {
+            document.body.style.overflow = ''
+        }
+    }, [isMenuOpen])
+
     return (
         <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 shadow-xs">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,11 +48,16 @@ export default function Navbar() {
                             <img
                                 className="h-9 sm:h-10 w-auto rounded-md shadow-xs transition-transform hover:scale-105 active:scale-95"
                                 src="/jet-logo.jpeg"
-                                alt="JET Logo"
+                                alt="JET Ministries Logo"
                             />
-                            <span className="font-bold text-sm tracking-tight hidden xs:inline sm:hidden lg:inline text-foreground">
-                                JET Ministries
-                            </span>
+                            <div className="flex flex-col text-left">
+                                <span className="font-extrabold text-sm tracking-tight text-foreground leading-tight">
+                                    JET Ministries
+                                </span>
+                                <span className="text-[10px] text-muted-foreground hidden xs:block font-medium leading-none">
+                                    International
+                                </span>
+                            </div>
                         </Link>
                     </div>
 
@@ -53,7 +73,7 @@ export default function Navbar() {
                                         className={`text-sm font-medium transition-colors hover:text-primary ${
                                             isActive
                                                 ? 'text-primary font-bold'
-                                                : 'text-foreground/70'
+                                                : 'text-foreground/75'
                                         }`}
                                     >
                                         {item.name}
@@ -83,52 +103,95 @@ export default function Navbar() {
                             <Link to="/about">Contact Us</Link>
                         </Button>
 
-                        {/* Mobile Menu Toggle */}
+                        {/* Mobile Menu Toggle button */}
                         <div className="md:hidden">
-                            <Button
-                                variant="ghost"
-                                size="icon"
+                            <button
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                aria-label="Toggle menu"
-                                className="h-10 w-10 rounded-xl text-foreground cursor-pointer active:scale-95"
+                                aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                                className="h-10 w-10 rounded-xl flex items-center justify-center text-foreground hover:bg-muted/60 active:scale-95 transition-all cursor-pointer"
                             >
-                                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                            </Button>
+                                {isMenuOpen ? <X className="h-6 w-6 text-primary" /> : <Menu className="h-6 w-6" />}
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Mobile Dropdown Menu with Backdrop & Active highlights */}
+            {/* Mobile Drawer with Backdrop */}
             {isMenuOpen && (
-                <div className="md:hidden border-b border-border bg-background/98 backdrop-blur-xl animate-in slide-in-from-top-2 duration-200 shadow-xl">
-                    <div className="px-4 pt-2 pb-5 space-y-1">
+                <div className="md:hidden fixed inset-x-0 top-14 sm:top-16 bottom-0 z-50 flex flex-col bg-background/98 backdrop-blur-2xl animate-in fade-in duration-200 overflow-y-auto">
+                    <div className="px-4 py-4 space-y-1.5 flex-1">
+                        <div className="px-2 py-1 mb-2">
+                            <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                                Main Menu
+                            </p>
+                        </div>
+
                         {navItems.map((item) => {
+                            const IconComponent = item.icon
                             const isActive = location.pathname === item.href
                             return (
                                 <Link
                                     key={item.name}
                                     to={item.href}
-                                    className={`flex items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-all touch-manipulation ${
+                                    className={`flex items-center gap-3.5 rounded-2xl px-4 py-3.5 transition-all touch-manipulation active:scale-[0.98] ${
                                         isActive
-                                            ? 'bg-primary/15 text-primary font-bold shadow-xs'
-                                            : 'text-foreground/80 hover:bg-muted/60 hover:text-foreground'
+                                            ? 'bg-primary/15 text-primary border border-primary/25 shadow-xs'
+                                            : 'text-foreground hover:bg-muted/60 border border-transparent'
                                     }`}
                                     onClick={() => setIsMenuOpen(false)}
                                 >
-                                    <span>{item.name}</span>
-                                    {isActive && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
+                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+                                        isActive ? 'bg-primary text-white' : 'bg-foreground/5 text-muted-foreground'
+                                    }`}>
+                                        <IconComponent className="w-4 h-4" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className={`text-sm font-bold leading-tight ${isActive ? 'text-primary' : 'text-foreground'}`}>
+                                            {item.name}
+                                        </p>
+                                        <p className="text-[11px] text-muted-foreground truncate mt-0.5">
+                                            {item.desc}
+                                        </p>
+                                    </div>
+                                    <ArrowRight className={`w-4 h-4 shrink-0 transition-transform ${isActive ? 'text-primary' : 'text-foreground/30'}`} />
                                 </Link>
                             )
                         })}
 
-                        <div className="pt-3">
-                            <Button asChild size="sm" className="w-full bg-primary text-primary-foreground hover:bg-primary/90 text-xs font-bold py-2.5 rounded-xl shadow-xs">
-                                <Link to="/about" onClick={() => setIsMenuOpen(false)}>
-                                    <span>Contact Us</span>
-                                    <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-                                </Link>
-                            </Button>
+                        {/* Quick Contact & Info Card */}
+                        <div className="pt-4 pb-2">
+                            <div className="p-4 rounded-2xl bg-card border border-border space-y-3 shadow-xs">
+                                <p className="text-xs font-bold text-foreground uppercase tracking-wider">
+                                    Need Prayer or Assistance?
+                                </p>
+                                <div className="space-y-2 text-xs">
+                                    <a
+                                        href="tel:0113738019"
+                                        className="flex items-center gap-2.5 text-foreground/80 hover:text-primary transition-colors py-1"
+                                    >
+                                        <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                                            <Phone className="w-3.5 h-3.5" />
+                                        </div>
+                                        <span className="font-medium">Call Us: 0113738019</span>
+                                    </a>
+                                    <a
+                                        href="mailto:jet.ministriesintl@gmail.com"
+                                        className="flex items-center gap-2.5 text-foreground/80 hover:text-primary transition-colors py-1"
+                                    >
+                                        <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                                            <Mail className="w-3.5 h-3.5" />
+                                        </div>
+                                        <span className="font-medium truncate">jet.ministriesintl@gmail.com</span>
+                                    </a>
+                                    <div className="flex items-center gap-2.5 text-muted-foreground py-1">
+                                        <div className="w-7 h-7 rounded-lg bg-foreground/5 flex items-center justify-center shrink-0">
+                                            <MapPin className="w-3.5 h-3.5" />
+                                        </div>
+                                        <span>Nairobi, Kenya</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

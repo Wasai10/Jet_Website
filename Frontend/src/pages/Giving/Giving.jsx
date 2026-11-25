@@ -61,133 +61,61 @@ export default function Giving() {
     );
 
   return (
-    <div className="min-h-screen bg-background text-foreground py-16 px-4 md:px-8">
-      <div className="max-w-7xl mx-auto space-y-20">
+    <div className="min-h-screen bg-background text-foreground py-10 sm:py-16 px-4 md:px-8">
+      <div className="max-w-7xl mx-auto space-y-12 sm:space-y-16">
 
         {/* ── Section 1: Hero Header ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center max-w-3xl mx-auto space-y-4"
+          className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4"
         >
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
             Partner in Ministry & Downloads
           </h1>
-          <p className="text-muted-foreground text-base leading-relaxed">
+          <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
             "Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver."
             <span className="block mt-1 font-bold text-foreground">— 2 Corinthians 9:7</span>
           </p>
         </motion.div>
 
-        {/* ── Section 2: Giving Details (Image Graphic Poster) ── */}
-        <section className="space-y-8">
+        {/* ── Section 2: Giving Details ── */}
+        <section className="space-y-6 sm:space-y-8">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-foreground">Giving Details</h2>
-              <p className="text-sm text-muted-foreground">Official JET Ministry M-Pesa Paybill & Bank transfer poster</p>
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground">Giving Details</h2>
+              <p className="text-xs sm:text-sm text-muted-foreground">Official JET Ministry M-Pesa Paybill & Bank transfer details</p>
             </div>
             <button
               onClick={() => setShowPosterModal(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-card border border-border text-xs font-bold hover:bg-muted transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl bg-card border border-border text-xs font-bold hover:bg-muted transition-colors cursor-pointer"
             >
-              <Maximize2 className="w-4 h-4 text-primary" />
+              <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
               <span>Expand Poster</span>
             </button>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-8 items-center">
-            {/* Giving Image Poster Container */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="lg:col-span-7 relative group rounded-3xl overflow-hidden border border-border shadow-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-black p-6 md:p-10 cursor-pointer"
-              onClick={() => setShowPosterModal(true)}
-            >
-              <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                <Heart className="w-72 h-72 text-white" />
-              </div>
-
-              {/* Graphic Giving Card Design */}
-              <div className="relative z-10 space-y-8">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <img src="/jet-logo.jpeg" alt="JET Logo" className="w-12 h-12 rounded-xl shadow-md" />
-                    <div>
-                      <h3 className="font-extrabold text-lg text-white">JET Ministries International</h3>
-                      <p className="text-xs text-white/60">Official Giving & Tithes Channel</p>
-                    </div>
-                  </div>
-                  <span className="px-3 py-1 rounded-full bg-[#0096FF]/20 text-[#0096FF] border border-[#0096FF]/40 text-xs font-bold">
-                    VERIFIED
-                  </span>
-                </div>
-
-                {/* Main M-Pesa & Bank Details Box */}
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {/* M-Pesa Box */}
-                  <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 backdrop-blur-md space-y-3">
-                    <div className="flex items-center justify-between text-emerald-400">
-                      <div className="flex items-center gap-2">
-                        <Smartphone className="w-5 h-5" />
-                        <span className="font-bold text-xs uppercase tracking-wider">M-PESA PAYBILL</span>
-                      </div>
-                      <ShieldCheck className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-white/60">Business No / Paybill</p>
-                      <p className="text-3xl font-black text-white tracking-wider">247247</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-white/60">Account Name</p>
-                      <p className="text-sm font-bold text-emerald-300">0799573554</p>
-                    </div>
-                  </div>
-
-                  {/* Bank Box */}
-                  <div className="p-5 rounded-2xl bg-[#0096FF]/10 border border-[#0096FF]/30 backdrop-blur-md space-y-3">
-                    <div className="flex items-center justify-between text-[#0096FF]">
-                      <div className="flex items-center gap-2">
-                        <Landmark className="w-5 h-5" />
-                        <span className="font-bold text-xs uppercase tracking-wider">EQUITY BANK</span>
-                      </div>
-                      <ShieldCheck className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-white/60">Account Number</p>
-                      <p className="text-xl font-bold text-white tracking-wider">0799573554</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-white/60">Account Name</p>
-                      <p className="text-sm font-bold text-sky-300">JET MINISTRIES INTL</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-2 text-center text-xs text-white/50 border-t border-white/10">
-                  Click poster image to view high-resolution view
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Giving Quick Copy Cards */}
-            <div className="lg:col-span-5 space-y-4">
-              <div className="p-6 rounded-3xl bg-card border border-border shadow-xl space-y-4">
-                <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
+          <div className="grid lg:grid-cols-12 gap-6 sm:gap-8 items-center">
+            {/* Giving Quick Copy Cards - order-1 on mobile, order-2 on lg */}
+            <div className="order-1 lg:order-2 lg:col-span-5 space-y-4">
+              <div className="p-5 sm:p-6 rounded-2xl sm:rounded-3xl bg-card border border-border shadow-xl space-y-4">
+                <h3 className="font-bold text-base sm:text-lg text-foreground flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-amber-400" /> Quick Copy Details
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Use the one-click copy buttons below to easily paste Paybill or Account details directly into your mobile banking app.
+                  Tap the copy button to instantly copy the Paybill or Account number for your M-Pesa or bank transfer.
                 </p>
 
                 {/* Copy Paybill */}
-                <div className="flex items-center justify-between p-3.5 rounded-2xl bg-muted/40 border border-border">
+                <div className="flex items-center justify-between p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-muted/50 border border-border gap-2">
                   <div>
-                    <p className="text-[10px] uppercase font-bold text-muted-foreground">M-Pesa Paybill</p>
-                    <p className="text-base font-extrabold text-foreground">247247</p>
+                    <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">M-Pesa Paybill</p>
+                    <p className="text-lg sm:text-2xl font-black text-foreground tracking-wide">247247</p>
+                    <p className="text-[11px] text-muted-foreground">Account: 0799573554</p>
                   </div>
                   <button
                     onClick={() => handleCopy('247247', 'paybill')}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary/90 transition-all cursor-pointer"
+                    className="min-h-[44px] shrink-0 flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary/90 transition-all cursor-pointer shadow-md active:scale-95"
                   >
                     {copiedPaybill ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     <span>{copiedPaybill ? 'Copied!' : 'Copy Paybill'}</span>
@@ -195,14 +123,15 @@ export default function Giving() {
                 </div>
 
                 {/* Copy Account */}
-                <div className="flex items-center justify-between p-3.5 rounded-2xl bg-muted/40 border border-border">
+                <div className="flex items-center justify-between p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-muted/50 border border-border gap-2">
                   <div>
-                    <p className="text-[10px] uppercase font-bold text-muted-foreground">Account Number</p>
-                    <p className="text-base font-extrabold text-foreground">0799573554</p>
+                    <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">Equity Bank</p>
+                    <p className="text-base sm:text-xl font-bold text-foreground tracking-wide">0799573554</p>
+                    <p className="text-[11px] text-muted-foreground">Name: JET MINISTRIES INTL</p>
                   </div>
                   <button
                     onClick={() => handleCopy('0799573554', 'account')}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-card border border-border text-foreground font-bold text-xs hover:bg-muted transition-all cursor-pointer"
+                    className="min-h-[44px] shrink-0 flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl bg-card border border-border text-foreground font-bold text-xs hover:bg-muted transition-all cursor-pointer shadow-md active:scale-95"
                   >
                     {copiedAccount ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                     <span>{copiedAccount ? 'Copied!' : 'Copy Account'}</span>
@@ -210,6 +139,79 @@ export default function Giving() {
                 </div>
               </div>
             </div>
+
+            {/* Giving Image Poster Container - order-2 on mobile, order-1 on lg */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="order-2 lg:order-1 lg:col-span-7 relative group rounded-2xl sm:rounded-3xl overflow-hidden border border-border shadow-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-black p-5 sm:p-8 md:p-10 cursor-pointer"
+              onClick={() => setShowPosterModal(true)}
+            >
+              <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                <Heart className="w-72 h-72 text-white" />
+              </div>
+
+              {/* Graphic Giving Card Design */}
+              <div className="relative z-10 space-y-6 sm:space-y-8">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <img src="/jet-logo.jpeg" alt="JET Logo" className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl shadow-md" />
+                    <div>
+                      <h3 className="font-extrabold text-base sm:text-lg text-white">JET Ministries International</h3>
+                      <p className="text-[11px] sm:text-xs text-white/60">Official Giving &amp; Tithes Channel</p>
+                    </div>
+                  </div>
+                  <span className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-[#0096FF]/20 text-[#0096FF] border border-[#0096FF]/40 text-[10px] sm:text-xs font-bold">
+                    VERIFIED
+                  </span>
+                </div>
+
+                {/* Main M-Pesa & Bank Details Box */}
+                <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+                  {/* M-Pesa Box */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 backdrop-blur-md space-y-2 sm:space-y-3">
+                    <div className="flex items-center justify-between text-emerald-400">
+                      <div className="flex items-center gap-2">
+                        <Smartphone className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span className="font-bold text-[11px] sm:text-xs uppercase tracking-wider">M-PESA PAYBILL</span>
+                      </div>
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-white/60">Business No / Paybill</p>
+                      <p className="text-2xl sm:text-3xl font-black text-white tracking-wider">247247</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-white/60">Account Number</p>
+                      <p className="text-sm font-bold text-emerald-300">0799573554</p>
+                    </div>
+                  </div>
+
+                  {/* Bank Box */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-[#0096FF]/10 border border-[#0096FF]/30 backdrop-blur-md space-y-2 sm:space-y-3">
+                    <div className="flex items-center justify-between text-[#0096FF]">
+                      <div className="flex items-center gap-2">
+                        <Landmark className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span className="font-bold text-[11px] sm:text-xs uppercase tracking-wider">EQUITY BANK</span>
+                      </div>
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-white/60">Account Number</p>
+                      <p className="text-lg sm:text-xl font-bold text-white tracking-wider">0799573554</p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-white/60">Account Name</p>
+                      <p className="text-xs sm:text-sm font-bold text-sky-300">JET MINISTRIES INTL</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-2 text-center text-xs text-white/50 border-t border-white/10">
+                  Tap card to view full poster image
+                </div>
+              </div>
+            </motion.div>
           </div>
         </section>
 

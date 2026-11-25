@@ -217,7 +217,7 @@ function EventCard({ event, index }) {
             {!isPast && (
               <Link
                 to={`/events/${event.id}/rsvp`}
-                className="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary/90 transition-all shadow-md hover:shadow-primary/25 cursor-pointer"
+                className="shrink-0 inline-flex items-center gap-1 min-h-[40px] px-3.5 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary/90 transition-all shadow-md hover:shadow-primary/25 cursor-pointer active:scale-95"
               >
                 <span>Register NOW</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -358,15 +358,15 @@ export default function Events() {
 
       {/* Filter Tabs */}
       <div className="sticky top-[56px] z-20 bg-background/85 backdrop-blur-md border-y border-border">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2.5">
             {CATEGORY_TABS.map(tab => {
               const active = filter === tab.key;
               return (
                 <button
                   key={tab.key}
                   onClick={() => setFilter(tab.key)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                  className={`min-h-[40px] px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer active:scale-95 ${
                     active
                       ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
                       : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-muted/50'

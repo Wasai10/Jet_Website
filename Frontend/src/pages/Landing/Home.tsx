@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import Hero from "@/components/Sections/Hero"
+import QuickLinks from "@/components/Sections/QuickLinks"
 import About from "@/components/Sections/About"
 import Events from "@/components/Sections/Events"
 import Gallery from "@/components/Sections/Gallery"
@@ -10,6 +11,7 @@ export default function Home() {
         <motion.div className="min-h-screen bg-background font-sans antialiased">
             <main>
                 <Hero />
+                <QuickLinks />
                 <About />
                 <Events />
                 <Gallery />

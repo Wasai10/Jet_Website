@@ -112,7 +112,7 @@ function BlogCard({ post, index }) {
       className="bg-card border border-border rounded-3xl overflow-hidden group hover:border-primary/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(0,150,255,0.1)] flex flex-col"
     >
       {/* Cover image */}
-      <div className="relative h-64 overflow-hidden bg-muted">
+      <div className="relative h-48 sm:h-64 overflow-hidden bg-muted">
         {post.coverImage ? (
           <img
             src={post.coverImage}
@@ -143,9 +143,9 @@ function BlogCard({ post, index }) {
       </div>
 
       {/* Content */}
-      <div className="p-8 flex flex-col flex-grow">
+      <div className="p-5 sm:p-8 flex flex-col flex-grow">
         {/* Meta row */}
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-primary dark:text-secondary font-medium mb-4">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-primary dark:text-secondary font-medium mb-3 sm:mb-4">
           {post.publishedAt && (
             <div className="flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5" />
@@ -166,18 +166,18 @@ function BlogCard({ post, index }) {
           )}
         </div>
 
-        <h3 className="text-xl font-bold text-foreground leading-tight mb-4 group-hover:text-primary transition-colors duration-300 line-clamp-2">
+        <h3 className="text-lg sm:text-xl font-bold text-foreground leading-tight mb-3 sm:mb-4 group-hover:text-primary transition-colors duration-300 line-clamp-2">
           {post.title}
         </h3>
 
-        <p className="text-muted-foreground leading-relaxed text-sm mb-8 flex-grow line-clamp-3">
+        <p className="text-muted-foreground leading-relaxed text-xs sm:text-sm mb-6 sm:mb-8 flex-grow line-clamp-3">
           {post.excerpt}
         </p>
 
-        <div className="mt-auto pt-6 border-t border-border">
+        <div className="mt-auto pt-4 sm:pt-6 border-t border-border">
           <Link
             to={`/blog/${post.slug}`}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors duration-300 group/link"
+            className="inline-flex items-center gap-2 py-1 text-sm font-semibold text-foreground hover:text-primary transition-colors duration-300 group/link active:scale-95"
           >
             <span>Read Full Article</span>
             <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/link:translate-x-1" />
@@ -270,8 +270,8 @@ export default function Blog() {
       {/* ── Category tabs ── */}
       {allTabs.length > 1 && (
         <div className="sticky top-[64px] z-20 bg-background/80 backdrop-blur-md border-b border-border">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex items-center gap-1 overflow-x-auto scrollbar-none py-1">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-1">
               {allTabs.map(cat => {
                 const active = activeCategory === cat
                 return (

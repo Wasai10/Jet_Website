@@ -76,8 +76,17 @@ export const leadershipService = {
     return (data as { leader: Leader }).leader;
   },
 
-  async update(id: string, form: FormData): Promise<Leader> {
-    const res = await fetchWithAuth(`${BASE_URL}/leadership/${id}`, { method: "PUT", body: form });
+  async update(id: string, form: FormData | Record<string, unknown>): Promise<Leader> {
+    const isFormData = form instanceof FormData;
+    const headers: Record<string, string> = {};
+    if (!isFormData) {
+      headers["Content-Type"] = "application/json";
+    }
+    const res = await fetchWithAuth(`${BASE_URL}/leadership/${id}`, {
+      method: "PUT",
+      headers,
+      body: isFormData ? form : JSON.stringify(form),
+    });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error((data as { error?: string }).error ?? "Update failed.");
     return (data as { leader: Leader }).leader;

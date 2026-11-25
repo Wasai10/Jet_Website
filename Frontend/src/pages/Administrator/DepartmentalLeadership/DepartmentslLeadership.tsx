@@ -38,9 +38,9 @@ export default function DepartmentalLeadership() {
   useEffect(() => { void fetchAll(); }, []);
 
   // ── Leader handlers ────────────────────────────────────────────────────────
-  const handleLeaderSave = async (id: string | null, form: FormData) => {
+  const handleLeaderSave = async (id: string | null, form: FormData | Record<string, unknown>) => {
     if (id === null) {
-      await leadershipService.create(form);
+      await leadershipService.create(form as FormData);
     } else {
       await leadershipService.update(id, form);
     }
@@ -89,9 +89,9 @@ export default function DepartmentalLeadership() {
   };
 
   // ── Department handlers ────────────────────────────────────────────────────
-  const handleDeptSave = async (id: string | null, form: FormData) => {
+  const handleDeptSave = async (id: string | null, form: FormData | Record<string, unknown>) => {
     if (id === null) {
-      await departmentService.create(form);
+      await departmentService.create(form as FormData);
     } else {
       await departmentService.update(id, form);
     }

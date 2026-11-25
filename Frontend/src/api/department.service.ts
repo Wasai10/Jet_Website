@@ -53,8 +53,17 @@ export const departmentService = {
     return (data as { department: Department }).department;
   },
 
-  async update(id: string, form: FormData): Promise<Department> {
-    const res = await fetchWithAuth(`${BASE_URL}/departments/${id}`, { method: "PUT", body: form });
+  async update(id: string, form: FormData | Record<string, unknown>): Promise<Department> {
+    const isFormData = form instanceof FormData;
+    const headers: Record<string, string> = {};
+    if (!isFormData) {
+      headers["Content-Type"] = "application/json";
+    }
+    const res = await fetchWithAuth(`${BASE_URL}/departments/${id}`, {
+      method: "PUT",
+      headers,
+      body: isFormData ? form : JSON.stringify(form),
+    });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error((data as { error?: string }).error ?? "Update failed.");
     return (data as { department: Department }).department;

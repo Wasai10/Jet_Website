@@ -9,7 +9,7 @@ interface Props {
   department: Department | null;
   leaders: Leader[];
   onClose: () => void;
-  onSave: (id: string | null, form: FormData) => Promise<void>;
+  onSave: (id: string | null, form: FormData | Record<string, unknown>) => Promise<void>;
 }
 
 const inputCls =
@@ -71,13 +71,22 @@ export default function DepartmentModal({ open, department, leaders, onClose, on
     setLoading(true);
     setError("");
     try {
-      const form = new FormData();
-      form.append("name", name.trim());
-      form.append("description", description.trim());
-      form.append("order", String(order));
-      form.append("leaderId", leaderId);
-      if (bgFile) form.append("background", bgFile);
-      await onSave(department?.id ?? null, form);
+      if (bgFile) {
+        const form = new FormData();
+        form.append("name", name.trim());
+        form.append("description", description.trim());
+        form.append("order", String(order));
+        form.append("leaderId", leaderId);
+        form.append("background", bgFile);
+        await onSave(department?.id ?? null, form);
+      } else {
+        await onSave(department?.id ?? null, {
+          name: name.trim(),
+          description: description.trim(),
+          order: Number(order),
+          leaderId,
+        });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
