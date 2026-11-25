@@ -2,7 +2,8 @@ const galleryService = require("../services/gallery.service");
 
 const getAllPhotos = async (req, res) => {
   try {
-    const photos = await galleryService.getAllPhotos(req.query.category);
+    const { category, subcategory } = req.query;
+    const photos = await galleryService.getAllPhotos(category, subcategory);
     return res.status(200).json({ photos });
   } catch (error) {
     return res.status(500).json({ error: error.message });

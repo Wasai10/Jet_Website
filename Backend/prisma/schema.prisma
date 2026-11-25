@@ -75,15 +75,16 @@ model EventRsvp {
 }
 
 model Photo {
-  id        String   @id @default(uuid())
-  url       String   // Cloudinary secure URL
-  publicId  String   @unique // Cloudinary public_id — needed for deletion
-  title     String
-  alt       String
-  category  String   @default("General")
-  featured  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(uuid())
+  url         String   // Cloudinary secure URL
+  publicId    String   @unique // Cloudinary public_id — needed for deletion
+  title       String
+  alt         String
+  category    String   @default("General")
+  subcategory String?  // Optional subcategory (e.g. "Outreach and Missions", "JET Ladies", etc.)
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Blog {

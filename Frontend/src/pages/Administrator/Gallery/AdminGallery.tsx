@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import { Search, RefreshCw, Upload } from "lucide-react";
 import {
   galleryService,
-  PHOTO_CATEGORIES,
+  GALLERY_STRUCTURE,
+  MAIN_CATEGORIES,
   type Photo,
-  type PhotoCategory,
   type UpdatePhotoPayload,
 } from "@/api/gallery.service";
 import jetSwal from "@/lib/swal";
@@ -18,7 +18,7 @@ export default function AdminGallery() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState<PhotoCategory | "ALL">("ALL");
+  const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
   const [modalTarget, setModalTarget] = useState<ModalTarget>(null);
 
   const fetchPhotos = async () => {
@@ -110,13 +110,27 @@ export default function AdminGallery() {
   };
 
   const filtered = photos
-    .filter((p) => categoryFilter === "ALL" || p.category === categoryFilter)
-    .filter(
-      (p) =>
-        p.title.toLowerCase().includes(search.toLowerCase()) ||
-        p.alt.toLowerCase().includes(search.toLowerCase()) ||
-        p.category.toLowerCase().includes(search.toLowerCase())
-    );
+    .filter((p) => {
+      if (categoryFilter === "ALL") return true;
+      if (categoryFilter.startsWith("cat:")) {
+        const cat = categoryFilter.replace("cat:", "");
+        return p.category === cat;
+      }
+      if (categoryFilter.startsWith("sub:")) {
+        const sub = categoryFilter.replace("sub:", "");
+        return p.subcategory === sub;
+      }
+      return p.category === categoryFilter || p.subcategory === categoryFilter;
+    })
+    .filter((p) => {
+      const q = search.toLowerCase();
+      return (
+        p.title.toLowerCase().includes(q) ||
+        p.alt.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q) ||
+        (p.subcategory ? p.subcategory.toLowerCase().includes(q) : false)
+      );
+    });
 
   const editPhoto = modalTarget === "new" || modalTarget === null ? null : modalTarget;
 
@@ -149,12 +163,19 @@ export default function AdminGallery() {
           {/* Category filter */}
           <select
             value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value as PhotoCategory | "ALL")}
+            onChange={(e) => setCategoryFilter(e.target.value)}
             className="bg-card border border-border rounded-xl px-3 py-2.5 text-sm text-foreground/70 outline-none cursor-pointer hover:border-border transition-colors"
           >
-            <option value="ALL">All Categories</option>
-            {PHOTO_CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>{cat}</option>
+            <option value="ALL">All Categories &amp; Subcategories</option>
+            {GALLERY_STRUCTURE.map((group) => (
+              <optgroup key={group.id} label={group.name}>
+                <option value={`cat:${group.name}`}>{group.name} (All)</option>
+                {group.subcategories.map((sub) => (
+                  <option key={sub} value={`sub:${sub}`}>
+                    ↳ {sub}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
 
@@ -214,7 +235,17 @@ export default function AdminGallery() {
       <PhotoModal
         open={modalTarget !== null}
         photo={editPhoto}
-        categories={PHOTO_CATEGORIES}
+        categories={MAIN_CATEGORIES}
+        defaultCategory={
+          categoryFilter.startsWith("cat:")
+            ? categoryFilter.replace("cat:", "")
+            : undefined
+        }
+        defaultSubcategory={
+          categoryFilter.startsWith("sub:")
+            ? categoryFilter.replace("sub:", "")
+            : undefined
+        }
         onClose={() => setModalTarget(null)}
         onUpload={handleUpload}
         onUpdate={handleUpdate}

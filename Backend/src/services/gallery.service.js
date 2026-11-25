@@ -1,8 +1,8 @@
 const photoRepository = require("../repository/gallery.repository");
 const { cloudinary } = require("../middlewares/gallery.middleware");
 
-const getAllPhotos = async (category) => {
-  return await photoRepository.findAll(category || null);
+const getAllPhotos = async (category, subcategory) => {
+  return await photoRepository.findAll(category || null, subcategory || null);
 };
 
 const getPhotoById = async (id) => {
@@ -17,7 +17,8 @@ const createPhoto = async (cloudinaryResult, metadata) => {
     publicId: cloudinaryResult.public_id,
     title: metadata.title.trim(),
     alt: metadata.alt.trim(),
-    category: metadata.category ?? "General",
+    category: metadata.category ?? "Outreach Ministry",
+    subcategory: metadata.subcategory ? metadata.subcategory.trim() : null,
     featured: metadata.featured === "true" || metadata.featured === true,
   });
 };
@@ -28,6 +29,7 @@ const updatePhoto = async (id, data) => {
   if (data.title !== undefined) updateData.title = data.title.trim();
   if (data.alt !== undefined) updateData.alt = data.alt.trim();
   if (data.category !== undefined) updateData.category = data.category;
+  if (data.subcategory !== undefined) updateData.subcategory = data.subcategory ? data.subcategory.trim() : null;
   if (data.featured !== undefined)
     updateData.featured = data.featured === "true" || data.featured === true;
   return await photoRepository.update(id, updateData);

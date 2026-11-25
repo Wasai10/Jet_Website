@@ -485,3 +485,13 @@
 .blog-content figure { margin: 1.5rem 0; text-align: center; }
 .blog-content figcaption { font-size: 0.8rem; color: var(--muted-foreground); margin-top: 0.5rem; }
 .swal2-loader { border-color: #0096FF transparent #0096FF transparent !important; }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

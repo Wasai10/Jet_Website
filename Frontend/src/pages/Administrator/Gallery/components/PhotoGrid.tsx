@@ -54,18 +54,28 @@ export default function PhotoGrid({ photos, onEdit, onDelete }: Props) {
             </div>
           )}
 
-          {/* Category badge — shows on hover */}
-          <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <span className="bg-[#0096FF]/85 backdrop-blur-sm text-white text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full">
+          {/* Category & Subcategory badges — shows on hover */}
+          <div className="absolute top-2 right-2 z-10 flex flex-col items-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span className="bg-[#0096FF]/90 backdrop-blur-sm text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full shadow">
               {photo.category}
             </span>
+            {photo.subcategory && photo.subcategory !== photo.category && (
+              <span className="bg-black/75 border border-white/20 backdrop-blur-sm text-white text-[8px] font-medium px-2 py-0.5 rounded-full shadow">
+                {photo.subcategory}
+              </span>
+            )}
           </div>
 
           {/* Caption + action buttons */}
           <div className="absolute bottom-0 left-0 right-0 p-2.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <p className="text-white text-[11px] font-semibold leading-tight truncate mb-2">
+            <p className="text-white text-[11px] font-semibold leading-tight truncate mb-1">
               {photo.title}
             </p>
+            {photo.subcategory && (
+              <p className="text-white/70 text-[9px] truncate mb-2">
+                {photo.subcategory}
+              </p>
+            )}
             <div className="flex gap-1.5">
               <button
                 onClick={(e) => { e.stopPropagation(); onEdit(photo); }}

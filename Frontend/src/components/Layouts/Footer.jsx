@@ -118,7 +118,7 @@ export default function Footer() {
 
                 <div className="mt-16 pt-8 border-t border-foreground/10 flex flex-col items-center justify-between">
                     <p className="text-center text-foreground/50 text-xs tracking-wider font-light">
-                        © 2026 JET Ministries International. All rights reserved.
+                        © 2026 JET Ministries International · Registered as Stella Generation Kenya. All rights reserved.
                     </p>
                 </div>
             </div>

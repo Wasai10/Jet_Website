@@ -6,6 +6,8 @@ import {
   type PhotoCategory,
   type UploadPhotoMetadata,
   type UpdatePhotoPayload,
+  GALLERY_STRUCTURE,
+  MAIN_CATEGORIES,
 } from "@/api/gallery.service";
 
 export interface UploadItem {
@@ -16,8 +18,9 @@ export interface UploadItem {
 interface Props {
   open: boolean;
   photo: Photo | null;
-  categories: string[];
+  categories?: string[];
   defaultCategory?: string;
+  defaultSubcategory?: string;
   onClose: () => void;
   onUpload: (items: UploadItem[]) => Promise<void>;
   onUpdate: (id: string, payload: UpdatePhotoPayload) => Promise<void>;
@@ -33,7 +36,16 @@ const filenameToTitle = (f: File) =>
     .replace(/[-_]/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
-export default function PhotoModal({ open, photo, categories, defaultCategory, onClose, onUpload, onUpdate }: Props) {
+export default function PhotoModal({
+  open,
+  photo,
+  categories: categoriesProp = MAIN_CATEGORIES,
+  defaultCategory,
+  defaultSubcategory,
+  onClose,
+  onUpload,
+  onUpdate,
+}: Props) {
   const isCreate = open && photo === null;
 
   const [files, setFiles] = useState<File[]>([]);
@@ -42,6 +54,7 @@ export default function PhotoModal({ open, photo, categories, defaultCategory, o
   const [title, setTitle] = useState("");
   const [alt, setAlt] = useState("");
   const [category, setCategory] = useState<PhotoCategory>("");
+  const [subcategory, setSubcategory] = useState<string>("");
   const [featured, setFeatured] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -61,11 +74,30 @@ export default function PhotoModal({ open, photo, categories, defaultCategory, o
     setDragging(false);
     setTitle(photo?.title ?? "");
     setAlt(photo?.alt ?? "");
-    setCategory(photo?.category ?? defaultCategory ?? categories[0] ?? "");
+
+    const initialCategory = photo?.category ?? defaultCategory ?? MAIN_CATEGORIES[0] ?? "";
+    setCategory(initialCategory);
+
+    const activeConfig = GALLERY_STRUCTURE.find((c) => c.name === initialCategory);
+    const initialSubcategory = photo?.subcategory ?? defaultSubcategory ?? activeConfig?.subcategories[0] ?? "";
+    setSubcategory(initialSubcategory);
+
     setFeatured(photo?.featured ?? false);
     setError("");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [photo, open]);
+
+  const handleCategorySelect = (selectedCat: string) => {
+    setCategory(selectedCat);
+    const config = GALLERY_STRUCTURE.find((c) => c.name === selectedCat);
+    if (config && config.subcategories.length > 0) {
+      if (!config.subcategories.includes(subcategory)) {
+        setSubcategory(config.subcategories[0]);
+      }
+    } else {
+      setSubcategory("");
+    }
+  };
 
   const addFiles = (incoming: File[]) => {
     const images = incoming.filter((f) => f.type.startsWith("image/"));
@@ -112,6 +144,7 @@ export default function PhotoModal({ open, photo, categories, defaultCategory, o
             title: isMulti ? filenameToTitle(f) : title.trim(),
             alt: alt.trim(),
             category,
+            subcategory: subcategory || undefined,
             featured: i === 0 ? featured : false,
           },
         }));
@@ -121,6 +154,7 @@ export default function PhotoModal({ open, photo, categories, defaultCategory, o
           title: title.trim(),
           alt: alt.trim(),
           category,
+          subcategory: subcategory || null,
           featured,
         });
       }
@@ -348,10 +382,10 @@ export default function PhotoModal({ open, photo, categories, defaultCategory, o
                   />
                 </div>
 
-                {/* Category */}
+                {/* Main Category */}
                 <div className="space-y-1.5">
                   <label className={labelCls}>
-                    Category
+                    Main Category
                     {isMulti && (
                       <span className="ml-1 normal-case text-muted-foreground/50 font-normal tracking-normal">
                         (shared)
@@ -359,14 +393,14 @@ export default function PhotoModal({ open, photo, categories, defaultCategory, o
                     )}
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {categories.map((cat) => (
+                    {categoriesProp.map((cat) => (
                       <button
                         key={cat}
                         type="button"
-                        onClick={() => setCategory(cat)}
+                        onClick={() => handleCategorySelect(cat)}
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
                           category === cat
-                            ? "bg-primary/15 border-primary/40 text-primary"
+                            ? "bg-primary/15 border-primary/40 text-primary font-bold"
                             : "bg-card border-border text-muted-foreground hover:text-foreground hover:bg-muted/50"
                         }`}
                       >
@@ -375,6 +409,41 @@ export default function PhotoModal({ open, photo, categories, defaultCategory, o
                     ))}
                   </div>
                 </div>
+
+                {/* Subcategory */}
+                {(() => {
+                  const activeConfig = GALLERY_STRUCTURE.find((c) => c.name === category);
+                  const subcats = activeConfig?.subcategories || [];
+                  if (subcats.length === 0) return null;
+                  return (
+                    <div className="space-y-1.5">
+                      <label className={labelCls}>
+                        Subcategory
+                        {isMulti && (
+                          <span className="ml-1 normal-case text-muted-foreground/50 font-normal tracking-normal">
+                            (shared)
+                          </span>
+                        )}
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {subcats.map((sub) => (
+                          <button
+                            key={sub}
+                            type="button"
+                            onClick={() => setSubcategory(sub)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                              subcategory === sub
+                                ? "bg-[#0096FF]/20 border-[#0096FF]/50 text-[#0096FF] font-bold shadow-sm"
+                                : "bg-card border-border text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                            }`}
+                          >
+                            {sub}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {/* Featured toggle — hidden in multi mode */}
                 {!isMulti && (

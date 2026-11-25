@@ -56,18 +56,54 @@ async function optimizeGalleryImage(file: File): Promise<File> {
   throw new Error("This image could not be reduced enough to upload. Please resize it and try again.");
 }
 
-export const PHOTO_CATEGORIES = [
-  "Ossen Girls Mission",
-  "Impact Conference",
-  "Vision Summit",
+// ── Gallery Categories Structure ─────────────────────────────────────────────
+
+export interface GalleryCategoryConfig {
+  id: string;
+  name: string;
+  subcategories: string[];
+}
+
+export const GALLERY_STRUCTURE: GalleryCategoryConfig[] = [
+  {
+    id: "outreach",
+    name: "Outreach Ministry",
+    subcategories: ["Outreach and Missions"],
+  },
+  {
+    id: "womens",
+    name: "Women's Ministry",
+    subcategories: ["JET Ladies", "International Women's Day"],
+  },
+  {
+    id: "fellowships",
+    name: "House Fellowships",
+    subcategories: ["House Fellowships"],
+  },
+];
+
+export const MAIN_CATEGORIES = [
+  "Outreach Ministry",
+  "Women's Ministry",
+  "House Fellowships",
+];
+
+export const ALL_SUBCATEGORIES = [
+  "Outreach and Missions",
+  "JET Ladies",
   "International Women's Day",
-  "Abacy Feed a Widow Initiative",
-  "Kwetu home of peace",
+  "House Fellowships",
+];
+
+// Backwards-compatible category list for dropdowns
+export const PHOTO_CATEGORIES = [
+  "Outreach Ministry",
+  "Women's Ministry",
+  "House Fellowships",
 ];
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-// Category is now a plain string — populated dynamically from event titles.
 export type PhotoCategory = string;
 
 export interface Photo {
@@ -77,6 +113,7 @@ export interface Photo {
   title: string;
   alt: string;
   category: PhotoCategory;
+  subcategory?: string | null;
   featured: boolean;
   createdAt: string;
   updatedAt: string;
@@ -86,6 +123,7 @@ export interface UploadPhotoMetadata {
   title: string;
   alt: string;
   category?: PhotoCategory;
+  subcategory?: string;
   featured?: boolean;
 }
 
@@ -93,6 +131,7 @@ export interface UpdatePhotoPayload {
   title?: string;
   alt?: string;
   category?: PhotoCategory;
+  subcategory?: string | null;
   featured?: boolean;
 }
 
@@ -124,8 +163,11 @@ async function fetchWithAuth(url: string, init: RequestInit, retry = true): Prom
 // ── Gallery API ───────────────────────────────────────────────────────────────
 
 export const galleryService = {
-  async getAll(category?: string): Promise<Photo[]> {
-    const qs = category ? `?category=${encodeURIComponent(category)}` : "";
+  async getAll(category?: string, subcategory?: string): Promise<Photo[]> {
+    const params = new URLSearchParams();
+    if (category) params.set("category", category);
+    if (subcategory) params.set("subcategory", subcategory);
+    const qs = params.toString() ? `?${params.toString()}` : "";
     const data = await request<{ photos: Photo[] }>("GET", `/gallery${qs}`);
     return data.photos;
   },
@@ -142,6 +184,7 @@ export const galleryService = {
     form.append("title", metadata.title);
     form.append("alt", metadata.alt);
     if (metadata.category) form.append("category", metadata.category);
+    if (metadata.subcategory) form.append("subcategory", metadata.subcategory);
     if (metadata.featured !== undefined) form.append("featured", String(metadata.featured));
 
     const res = await fetchWithAuth(`${BASE_URL}/gallery`, { method: "POST", body: form });

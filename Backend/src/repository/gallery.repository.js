@@ -1,8 +1,11 @@
 const prisma = require("../configs/db");
 
-const findAll = async (category) => {
+const findAll = async (category, subcategory) => {
+  const where = {};
+  if (category) where.category = category;
+  if (subcategory) where.subcategory = subcategory;
   return await prisma.photo.findMany({
-    where: category ? { category } : undefined,
+    where: Object.keys(where).length ? where : undefined,
     orderBy: { createdAt: "desc" },
   });
 };
