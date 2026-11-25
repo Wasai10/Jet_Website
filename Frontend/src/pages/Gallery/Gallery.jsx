@@ -553,7 +553,7 @@ export default function Gallery() {
                   <img
                     src={photo.url}
                     alt={photo.alt}
-                    className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-104"
+                    className="w-full h-auto max-h-52 sm:max-h-none object-cover transition-transform duration-500 group-hover:scale-104"
                     loading="lazy"
                   />
 

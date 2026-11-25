@@ -156,7 +156,7 @@ export default function Events() {
   return (
     <section
       id="events"
-      className="relative w-full py-20 md:py-28 bg-background dark:bg-[#00111F] text-foreground overflow-hidden"
+      className="relative w-full py-12 sm:py-20 md:py-28 bg-background dark:bg-[#00111F] text-foreground overflow-hidden"
     >
       {/* Background glow blobs */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-[radial-gradient(circle,rgba(0,150,255,0.06),transparent_60%)] pointer-events-none" />
@@ -171,7 +171,7 @@ export default function Events() {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-6">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
 
         {/* ── Section header ── */}
         <motion.div

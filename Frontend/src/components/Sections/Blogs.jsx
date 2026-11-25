@@ -186,13 +186,13 @@ export default function Blogs() {
   return (
     <section
       id="blogs"
-      className="relative w-full py-20 md:py-28 bg-background text-foreground overflow-hidden"
+      className="relative w-full py-12 sm:py-20 md:py-28 bg-background text-foreground overflow-hidden"
     >
       {/* Background glow blobs */}
       <div className="absolute top-1/4 left-0 w-96 h-96 bg-[radial-gradient(circle,rgba(0,150,255,0.04),transparent_60%)] pointer-events-none -translate-x-1/2" />
       <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-[radial-gradient(circle,rgba(135,206,235,0.03),transparent_60%)] pointer-events-none translate-x-1/2" />
 
-      <div className="relative max-w-7xl mx-auto px-6">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
 
         {/* ── Section header ── */}
         <div className="text-center mb-16 md:mb-20">

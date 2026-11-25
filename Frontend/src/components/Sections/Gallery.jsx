@@ -4,7 +4,7 @@ import { X, ZoomIn, ChevronLeft, ChevronRight, Images, ImageOff, ArrowRight, Che
 import { motion, AnimatePresence } from 'framer-motion'
 import { galleryService } from '@/api/gallery.service'
 
-const PREVIEW_LIMIT = 6
+const PREVIEW_LIMIT = 4
 
 // ── Skeleton ──────────────────────────────────────────────────────────────────
 
@@ -347,7 +347,7 @@ export default function Gallery() {
                   <img
                     src={photo.url}
                     alt={photo.alt}
-                    className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-32 sm:h-44 md:h-52 object-cover transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
                   />
 

@@ -4,7 +4,7 @@ import { Eye, Target, Users, Heart } from 'lucide-react'
 
 export default function About() {
     return (
-        <section id="about" className="relative w-full py-20 md:py-32 bg-slate-50 dark:bg-[#001726] text-foreground overflow-hidden">
+        <section id="about" className="relative w-full py-12 sm:py-20 md:py-32 bg-slate-50 dark:bg-[#001726] text-foreground overflow-hidden">
             {/* Background design elements */}
             <div className="absolute top-1/4 right-0 w-96 h-96 bg-[radial-gradient(circle,rgba(0,150,255,0.05),transparent_60%)] pointer-events-none" />
             <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-[radial-gradient(circle,rgba(135,206,235,0.05),transparent_60%)] pointer-events-none" />
@@ -27,7 +27,7 @@ export default function About() {
                 </svg>
             </div>
 
-            <div className="relative max-w-7xl mx-auto px-6">
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                 {/* FIRST ROW: Visuals / Image & Narrative */}
                 <motion.div
                     initial="hidden"
@@ -36,7 +36,7 @@ export default function About() {
                     variants={{
                         visible: { transition: { staggerChildren: 0.2 } }
                     }}
-                    className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-8 md:mb-10"
+                    className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center mb-8 md:mb-10"
                 >
 
                     {/* LEFT COLUMN: Visuals / Image Group */}
@@ -45,7 +45,7 @@ export default function About() {
                             hidden: { opacity: 0, x: -40 },
                             visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
                         }}
-                        className="lg:col-span-5 relative"
+                        className="lg:col-span-5 relative order-2 lg:order-1"
                     >
                         {/* Main Image Frame */}
                         <div className="relative rounded-2xl overflow-hidden border border-foreground/10 shadow-2xl group">
@@ -53,8 +53,13 @@ export default function About() {
                             <img
                                 src="https://res.cloudinary.com/dxeuvtxys/image/upload/q_auto/f_auto/v1779201944/Jet_team_cprlcf.jpg"
                                 alt="JET Ministries Team"
-                                className="w-full h-[450px] object-cover object-center transform transition-transform duration-700 group-hover:scale-105"
+                                className="w-full h-48 sm:h-64 lg:h-[380px] object-cover object-center transform transition-transform duration-700 group-hover:scale-105"
                             />
+                            {/* Floating Badge */}
+                            <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/65 backdrop-blur-md border border-white/20 text-white text-[11px] sm:text-xs font-semibold">
+                                <Users className="w-3.5 h-3.5 text-[#0096FF]" />
+                                <span>Our Ministry Family</span>
+                            </div>
                         </div>
                     </motion.div>
 
@@ -64,20 +69,20 @@ export default function About() {
                             hidden: { opacity: 0, x: 40 },
                             visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
                         }}
-                        className="lg:col-span-7 flex flex-col space-y-6"
+                        className="lg:col-span-7 flex flex-col space-y-4 sm:space-y-6 order-1 lg:order-2"
                     >
                         {/* Eyebrow tag */}
-                        <span className="text-[#87CEEB] dark:text-[#87CEEB] text-[#0096FF] text-xs font-semibold uppercase tracking-widest">
+                        <span className="text-[#0096FF] dark:text-[#87CEEB] text-xs font-semibold uppercase tracking-widest">
                             About JET Ministries
                         </span>
 
                         {/* Heading */}
-                        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground leading-tight">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground leading-tight">
                             Transforming Lives, Building Community, and Spreading Hope
                         </h2>
 
                         {/* Introductory Narrative */}
-                        <p className="text-foreground/80 text-[16px] leading-relaxed font-normal">
+                        <p className="text-foreground/80 text-sm sm:text-[16px] leading-relaxed font-normal">
                             JET Ministries International is a community of believers dedicated to experiencing God's love and sharing it with the world. We believe that through fellowship, worship, and study, we grow together as a family in Christ to impact our society positively.
                         </p>
 
